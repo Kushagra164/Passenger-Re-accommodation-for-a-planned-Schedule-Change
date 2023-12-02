@@ -1,0 +1,117 @@
+#define uuid int
+#define CARRIER_CODE_LENGTH 2
+#define CITY_CODE_LENGTH 3
+#define downline_consider true
+#define default_schedule_scaling
+#define allotment_scaling 
+# FC:25 BC:20 PC:15 EC:10
+
+
+First Class: F,P
+Business Class: C,J,Z
+Premium Class: Q,R,S,T,H,M
+Economy Class: Y,A,B,D,E,G,I,K,L,N,O,U,V,W,X
+
+uuidGenerator{
+	forwardMap: map<ID: string, uuid: int>
+	revMap: map<uuid:int , ID: string>
+	
+	int getID()
+	string getString()
+}
+
+Schedule{
+	ScheduleID: uuid;
+	CarrierCD: char[CARRIER_CODE_LENGTH];
+	FlightNum: int;
+	EquipmentNo: pair<AircraftType: string,AircraftTailNo: string>;
+	DepartureTime: DateTime;
+	Arrivaltime: DateTime;
+	StartDate: Date;
+	EndDate: Date;
+	Status: bool;   //0->planned  1->scheduled
+	FlightPattern: string;
+	DepartureDates: vector<InventoryID>;
+};
+
+scheduleMap: map<ScheduleId: uuid, schedule: Schedule*>
+
+flightNumberMap: map<FlightNum: int,pair<src: char[CITY_CODE_LENGTH],dest: char[CITY_CODE_LENGTH]>> 
+cityToFlightNumberMap: map<pair<src: char[CITY_CODE_LENGTH],dest: char[CITY_CODE_LENGTH]>,FlightNum: int>
+
+Inventory{
+	InventoryId: uuid;
+	DepartureDate: Date;
+	ArrivalDate: Date;
+
+	TotalCapacity: int;
+	TotalInventory: int;
+	BookedInventory: int;
+
+	FCTotalCapacity: int;
+	FCTotalInventory: int;
+	FCBookedInventory: int;
+	
+	BCTotalCapacity: int;
+	BCTotalInventory: int;
+	BCBookedInventory: int;
+
+	PCTotalCapacity: int;
+	PCTotalInventory: int;
+	PCBookedInventory: int;
+	
+	ECTotalCapacity: int;
+	ECTotalInventory: int;
+	ECBookedInventory: int;
+};
+
+inventoryMap: map<InventoryId: uuid, inventory: Inventory*>
+
+
+inventoryToScheduleMap: map<InventoryId: uuid,ScheduleId: uuid>
+
+Passenger{
+	PassengerID: uuid;
+	LastName: string;
+	FirstName: string;
+	Nationality: string;
+	PhoneNum: string;
+	Email: string;
+	DocID: string;
+	DocType: string;
+	SpecialName1: enum;
+	SpecialName2: enum;
+	SSRCode: enum;
+};
+passengerMap: map<PassengerID: uuid, Passenger*>
+passengerToPnrMap: map<PassengerID: uuid, PnrID: uuid>
+
+Pnr{
+	PnrID: uuid;
+	CreationDate: Date;
+	PaxCnt: int;
+	Passengers: vector<PassengerID>;
+	Journeys: vector<JourneyID>;
+};
+pnrMap: map<PnrID: uuid, Pnr*>
+
+Journey{
+	JourneyID: uuid;
+	ActionCD: enum;
+	classCD: enum;
+	Src: char[CITY_CODE_LENGTH];
+	Dest: char[CITY_CODE_LENGTH];
+	flights: vector<InventoryID>;
+};
+
+journeyMap: map<JourneyID: uuid, Journey*>
+
+journeyToPnrMap: map<JourneyID: uuid, PnrID: uuid>
+
+CancelledFlights: Set<InventoryID>
+DelayedFlights: map<InventoryID,Time>
+
+
+
+
+
