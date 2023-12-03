@@ -1,18 +1,20 @@
 #define uuid int
 #define CARRIER_CODE_LENGTH 3              //to accommodate null pointer at the end
-#define CITY_CODE_LENGTH 4
+#define CITY_CODE_LENGTH 4                 //to accommodate null pointer at the end
 #define downline_consider true
 #define default_schedule_scaling
 #define allotment_scaling
+#define SSR_Score 2
+#define PAX_Score 1
  
-# FC:25 BC:20 PC:15 EC:10
-
 enum ActionCDs{HK,PD};
 enum ClassCDs{FC,BC,PC,EC};
 
 enum SpecialNames1 {INS,INF,CHD,ADT,UNN,S65};
 enum SpecialNames2 {NRPS,NRSA};
 enum SSRCodes {WCHR,WCHS,WCHC,LANG,MAAS,UNMR,BLND,DEAF,EXST,MEAL,NSST};
+
+classScoresMap: map<CLASSCDs: enum, score: int>    (FC:25, BC:20, PC:15, EC:10)
 
 
 First Class: F,P
@@ -125,6 +127,10 @@ journeyToPnrMap: map<JourneyID: uuid, PnrID: uuid>
 
 CancelledFlights: Set<InventoryID>
 DelayedFlights: map<InventoryID,Time>
+
+
+
+
 
 
 
