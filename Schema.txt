@@ -1,16 +1,31 @@
 #define uuid int
-#define CARRIER_CODE_LENGTH 2
-#define CITY_CODE_LENGTH 3
+#define CARRIER_CODE_LENGTH 3              //to accommodate null pointer at the end
+#define CITY_CODE_LENGTH 4
 #define downline_consider true
 #define default_schedule_scaling
-#define allotment_scaling 
+#define allotment_scaling
+ 
 # FC:25 BC:20 PC:15 EC:10
+
+enum ActionCDs{HK,PD};
+enum ClassCDs{FC,BC,PC,EC};
+
+enum SpecialNames1 {INS,INF,CHD,ADT,UNN,S65};
+enum SpecialNames2 {NRPS,NRSA};
+enum SSRCodes {WCHR,WCHS,WCHC,LANG,MAAS,UNMR,BLND,DEAF,EXST,MEAL,NSST};
 
 
 First Class: F,P
 Business Class: C,J,Z
 Premium Class: Q,R,S,T,H,M
 Economy Class: Y,A,B,D,E,G,I,K,L,N,O,U,V,W,X
+
+cabinToClassMap: map<CabinID: char,CLS_ID: string>
+
+flightToInventoryMap: map<pair<FlightNum: int,DEP_DTMZ: DateTime>,InventoryID: uuid>;
+
+InventoryID: int getFlight(FLT_NUM: int,DepartureDTMZ: DateTime){
+}
 
 uuidGenerator{
 	forwardMap: map<ID: string, uuid: int>
@@ -25,8 +40,8 @@ Schedule{
 	CarrierCD: char[CARRIER_CODE_LENGTH];
 	FlightNum: int;
 	EquipmentNo: pair<AircraftType: string,AircraftTailNo: string>;
-	DepartureTime: DateTime;
-	Arrivaltime: DateTime;
+	DepartureTime: Time;
+	Arrivaltime: Time;
 	StartDate: Date;
 	EndDate: Date;
 	Status: bool;   //0->planned  1->scheduled
@@ -36,8 +51,8 @@ Schedule{
 
 scheduleMap: map<ScheduleId: uuid, schedule: Schedule*>
 
-flightNumberMap: map<FlightNum: int,pair<src: char[CITY_CODE_LENGTH],dest: char[CITY_CODE_LENGTH]>> 
-cityToFlightNumberMap: map<pair<src: char[CITY_CODE_LENGTH],dest: char[CITY_CODE_LENGTH]>,FlightNum: int>
+flightNumberMap: map<FlightNum: int,pair<src: char*,dest: char*>> 
+cityToFlightNumberMap: map<pair<src: char*,dest: char*>,FlightNum: int>
 
 Inventory{
 	InventoryId: uuid;
@@ -98,7 +113,7 @@ pnrMap: map<PnrID: uuid, Pnr*>
 Journey{
 	JourneyID: uuid;
 	ActionCD: enum;
-	classCD: enum;
+	ClassCD: enum;
 	Src: char[CITY_CODE_LENGTH];
 	Dest: char[CITY_CODE_LENGTH];
 	flights: vector<InventoryID>;
