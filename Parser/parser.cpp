@@ -127,11 +127,11 @@ int main() {
         string InventoryID;
         string ScheduleID;
         Date DepartureDate, ArrivalDate;
-        int TotalCapacity, TotalInventory,BookedInventory;
-        int FCTotalCapacity, FCTotalInventory,FCBookedInventory;
-        int BCTotalCapacity, BCTotalInventory,BCBookedInventory;
-        int PCTotalCapacity, PCTotalInventory,PCBookedInventory;
-        int ECTotalCapacity, ECTotalInventory,ECBookedInventory;
+        int TotalCapacity, TotalInventory;
+        int FCTotalCapacity, FCTotalInventory;
+        int BCTotalCapacity, BCTotalInventory;
+        int PCTotalCapacity, PCTotalInventory;
+        int ECTotalCapacity, ECTotalInventory;
 
         string tempString;
 
@@ -170,7 +170,7 @@ int main() {
 
         getline(inputString, tempString, ','); TotalCapacity = atoi(tempString.c_str());tempString="";
         getline(inputString, tempString, ','); TotalInventory = atoi(tempString.c_str());tempString="";
-        getline(inputString, tempString, ','); BookedInventory = atoi(tempString.c_str());tempString="";
+        getline(inputString, tempString, ',');tempString="";
 
         getline(inputString, tempString, ',');
         tempString="";
@@ -184,23 +184,23 @@ int main() {
         getline(inputString, tempString, ','); ECTotalCapacity = atoi(tempString.c_str());tempString="";
 
         getline(inputString, tempString, ','); FCTotalInventory = atoi(tempString.c_str());tempString="";
-        getline(inputString, tempString, ','); FCBookedInventory = atoi(tempString.c_str());tempString="";
+        getline(inputString, tempString, ',');tempString="";
         getline(inputString, tempString, ',');tempString="";
         getline(inputString, tempString, ',');tempString="";
 
 
         getline(inputString, tempString, ','); BCTotalInventory = atoi(tempString.c_str());tempString="";
-        getline(inputString, tempString, ','); BCBookedInventory = atoi(tempString.c_str());tempString="";
+        getline(inputString, tempString, ',');tempString="";
         getline(inputString, tempString, ',');tempString="";
         getline(inputString, tempString, ',');tempString="";
 
         getline(inputString, tempString, ','); PCTotalInventory = atoi(tempString.c_str());tempString="";
-        getline(inputString, tempString, ','); PCBookedInventory = atoi(tempString.c_str());tempString="";
+        getline(inputString, tempString, ',');tempString="";
         getline(inputString, tempString, ',');tempString="";
         getline(inputString, tempString, ',');tempString="";
 
         getline(inputString, tempString, ','); ECTotalInventory = atoi(tempString.c_str());tempString="";
-        getline(inputString, tempString, ','); ECBookedInventory = atoi(tempString.c_str());tempString="";
+        getline(inputString, tempString, ',');tempString="";
         getline(inputString, tempString, ',');tempString="";
         getline(inputString, tempString, ',');tempString="";
 
@@ -216,7 +216,7 @@ int main() {
         }
 
         line = "";
-        Inventory* I= new Inventory(uuid, DepartureDate, ArrivalDate, TotalCapacity, TotalInventory, BookedInventory, FCTotalCapacity, FCTotalInventory, FCBookedInventory, BCTotalCapacity, BCTotalInventory, BCBookedInventory, PCTotalCapacity, PCTotalInventory, PCBookedInventory, ECTotalCapacity, ECTotalInventory, ECBookedInventory );
+        Inventory* I= new Inventory(uuid, DepartureDate, ArrivalDate, TotalCapacity, TotalInventory,0, FCTotalCapacity, FCTotalInventory,0, BCTotalCapacity, BCTotalInventory,0, PCTotalCapacity, PCTotalInventory,0, ECTotalCapacity, ECTotalInventory, 0);
 
         inventoryMap[uuid]=I;
 
@@ -307,16 +307,22 @@ int main() {
 
         int inv_id=getFlight(FLT_NUM,DEP_DTMZ);
 
+        Inventory I=inventoryMap[inv_id];
+
+        int x=getClassCode(cabinToClassMap[CLS_CD];
+
+        if(x==0) x=4;
+
         if(flag && (SEG_SEQ==prev_seg_seq)){
             Journey* J=journeyMap[uuid];
             J->flights.push_back(inv_id);
             strncpy(J->Dest,DEST_CD,CITY_CODE_LENGTH);
-            J->ClassCD = static_cast <ClassCDs> (min(J->ClassCD,static_cast <ClassCDs> (getClassCode(cabinToClassMap[CLS_CD]))));
+            J->ClassCD = static_cast <ClassCDs> (min(J->ClassCD,static_cast <ClassCDs> (x)));
         }
         else{
             if(SEG_SEQ<prev_seg_seq) prev_seg_seq=1;
             else prev_seg_seq++;
-            Journey* J = new Journey(uuid,ACTION_CD,static_cast <ClassCDs> (getClassCode(cabinToClassMap[CLS_CD])),ORIG_CD,DEST_CD);
+            Journey* J = new Journey(uuid,ACTION_CD,static_cast <ClassCDs> (x),ORIG_CD,DEST_CD);
             journeyMap[uuid] = J;
             J->flights.push_back(inv_id);
             pnrMap[pnr_id]->Journeys.push_back(uuid);
@@ -381,9 +387,94 @@ int main() {
 
         Passenger* P = new Passenger(uuid,LastName,FirstName,Nationality,PhoneNum,Email,DocID,DocType,SPECIAL_NAME_CD1,SPECIAL_NAME_CD2,SSR_CODE_CD1);
 
+        if(true){                                                            //SSR_CODE_CD1 != 1
+            Pnr pnr=pnrMap[pnr_id];
+
+            for(int j_id: pnr.Journeys){
+                for(int inv_id: journeyMap[j_id].flights){
+                    Inventory I=inventoryMap[inv_id];
+                    I.BookedInventory++;
+                    int x=journeyMap[j_id].ClassCD;
+                    if(x==1) I.FCBookedInventory++;
+                    else if(x==2) I.BCBookedInventory++;
+                    else if(x==3) I.PCBookedInventory++;
+                    else if(x==4) I.ECBookedInventory++;
+                }
+            }
+        }
+
         passengerMap[uuid] = P;
 
         uuid++;
     }
 
+
+
+    // Graph Creation
+    int m1=graphWUGenerator();
+    int m2=graphUVGenerator();
+    int m3=graphWVGenerator();
+
+
+    //Output File Creation for QUBO
+
+    ofstream fw("graph.txt",ofstream::out);
+
+    int modU=uIndexGenerator.getSize();
+    int modV=vIndexGenerator.getSize();
+    int modW=wIndexGenerator.getSize();
+
+    fw<<modU<<" "<<modV<<" "<<modW<<"\n";
+
+    fw<<m1<<"\n";
+
+    for(int u=0;u<modU;u++){
+        for(auto x:graphUV[u]){
+            int v=x.first;
+            long long weight=x.second;
+            fw<<u<<" "<<v<<" "<<weight<<"\n";
+        }
+    }
+
+    for(int w=0;w<modW;w++){
+        for(auto x:graphWV[w]){
+            int v=x.first;
+            long long weight=x.second;
+            fw<<w<<" "<<v<<" "<<weight<<"\n";
+        }
+    }
+
+    for(int w=0;w<modW;w++){
+        for(int u:graphWU[w]){
+            fw<<w<<" "<<u<<"\n";
+        }
+    }
+
+    for(int u=0;u<modU;u++){
+        int j_id = uIndexGenerator.getID(u);
+        int pax_cnt=pnrMap[journeyToPnrMap[j_id]].PaxCnt;
+        fw<<pax_cnt<<" ";
+    }
+    fw<<"\n";
+
+    for(int v=0;v<modV;v++){
+        pair<int,ClassCDs>  p= uIndexGenerator.getID(v);
+        int avl_inv;
+
+        int inv_id=p.first;
+
+        if(p.second==1) avl_inv = inventoryMap[inv_id].FCTotalInventory - inventoryMap[inv_id].FCBookedInventory;
+        else if(p.second==2) avl_inv = inventoryMap[inv_id].BCTotalInventory - inventoryMap[inv_id].BCBookedInventory;
+        else if(p.second==3) avl_inv = inventoryMap[inv_id].PCTotalInventory - inventoryMap[inv_id].PCBookedInventory;
+        else avl_inv = inventoryMap[inv_id].ECTotalInventory - inventoryMap[inv_id].ECBookedInventory;
+
+        fw<<avl_inv<<" ";
+    }
+    fw<<"\n";
+
+    fw.close();
+
+
 }
+
+
