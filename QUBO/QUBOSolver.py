@@ -51,12 +51,12 @@ def main():
 
         # Do something with the results, e.g., write to output files
         
-        with open(OutputFilePath, "w") as file 
-        for test_case_number, result in results:
-            file.writelines(str(test_case_number))
-            # print(test_case_number)
-            for i in range(no_samples):
-              file.writelines(str(result[i].first.sample))
+        with open(OutputFilePath, "w") as file:
+            for test_case_number, result in results:
+                file.writelines(str(test_case_number))
+                # print(test_case_number)
+                for i in range(no_samples):
+                    file.writelines(str(result[i].first.sample))
 
 if __name__ == "__main__":
     main()
