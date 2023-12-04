@@ -6,8 +6,8 @@ class Schedule{
 private:
     int ScheduleID;
     char CarrierCD[CARRIER_CODE_LENGTH];
-    pair<string,string> EquipmentNo;    //pair<AircraftType,AircraftTailNo>
 public:
+    pair<string,string> EquipmentNo;    //pair<AircraftType,AircraftTailNo>
     Time DepartureTime;
     Time ArrivalTime;
     Date StartDate;
