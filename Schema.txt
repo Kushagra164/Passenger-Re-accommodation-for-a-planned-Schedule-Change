@@ -4,8 +4,25 @@
 #define downline_consider true
 #define default_schedule_scaling
 #define allotment_scaling
-#define SSR_Score 2
-#define PAX_Score 1
+#define SSR_SCORE 2
+#define PAX_SCORE 1
+#define MAXIMUM_ALLOWED_TIME_DIFF Time(144, 0)
+#define ARRIVAL_DELAY_LT_6_SCORE 7
+#define ARRIVAL_DELAY_LT_12_SCORE 5
+#define ARRIVAL_DELAY_LT_24_SCORE 4
+#define ARRIVAL_DELAY_LT_48_SCORE 3
+#define EQUIPMENT_SCORE 5
+#define CITYPAIRS_SCORE 4
+#define DEPARTURE_DELAY_LT_6_SCORE 7
+#define DEPARTURE_DELAY_LT_12_SCORE 5
+#define DEPARTURE_DELAY_LT_24_SCORE 4
+#define DEPARTURE_DELAY_LT_48_SCORE 3
+
+
+bool CLASS_UPGRADE = true;
+bool CLASS_DOWNGRADE = true;
+
+
  
 enum ActionCDs{HK,PD};
 enum ClassCDs{FC,BC,PC,EC};
