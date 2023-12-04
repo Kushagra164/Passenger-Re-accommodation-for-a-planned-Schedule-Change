@@ -183,8 +183,15 @@ public:
         minute = value;
         return *this;
     }
+    Time operator *=(int rhs) {
+        Time tmp = *this;
+        while (--rhs) *this += tmp;
+        return *this;
+
+    }
     Time operator-(Time rhs) const{ return Time(*this) -= rhs; }
     Time operator+(Time rhs) const{ return Time(*this) += rhs; }
+    Time operator*(int rhs) const{ return Time(*this) *= rhs; }
     tuple<int, int, int> to_tuple() const{ return make_tuple(days, hour, minute); }
     string to_string(bool with_days = false){
         string d = "";
@@ -199,6 +206,8 @@ public:
         return d + h + ":" + m;
     }
 };
+
+Time abs(Time t){ return t < Time(0, 0) ? Time(0, 0) - t: t; }
 
 class DateTime {
 public:
