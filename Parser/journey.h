@@ -1,13 +1,15 @@
 #include<bits/stdc++.h>
 #define CITY_CODE_LENGTH 4
-enum ActionCDs{HK,PD};
-enum ClassCDs{FC,BC,PC,EC};
+
+enum ActionCDs{NIL4,HK,PD};
+enum ClassCDs{NIL5,FC,BC,PC,EC};
 
 int getClassCode(string str){
-    if(str=="FC") return 0;
-    else if(str=="BC") return 1;
-    else if(str=="PC") return 2;
-    else return 3;
+    if(str=="FC") return 1;
+    else if(str=="BC") return 2;
+    else if(str=="PC") return 3;
+    else if(str=="EC") return 4;
+    else return 0;
 }
 
 class Journey{
