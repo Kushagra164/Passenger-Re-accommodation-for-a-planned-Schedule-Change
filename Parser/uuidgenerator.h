@@ -13,7 +13,7 @@ public:
     string getString(int uuid){
         if(revMap.find(uuid)!= revMap.end())
             return revMap[uuid];
-        return "Does Not Exist!!";
+        assert(false);
     }
 };
 uuidGenerator scheduleUuidGenerator;
