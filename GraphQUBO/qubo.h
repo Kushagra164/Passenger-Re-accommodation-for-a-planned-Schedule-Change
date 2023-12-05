@@ -4,6 +4,15 @@
 using namespace std;
 class qubo{
     vector<vector<long long> > Q;
+    //upper triangulation
+    void adjust(){
+        for(int i=0;i<Q.size();++i){
+            for(int j=0;j<i;++j){
+                Q[j][i]+=Q[i][j];
+                Q[i][j]=0;
+            }
+        }
+    }
     public:
         qubo(int _n){
             Q.resize(_n);
@@ -24,28 +33,17 @@ class qubo{
         void add(int i,int j,long long val){
             Q[i][j]+=val;
         }
-        void adjust(){
-            for(int i=0;i<Q.size();++i){
-                for(int j=0;j<i;++j){
-                    Q[j][i]+=Q[i][j];
-                    Q[i][j]=0;
-                }
-            }
-            for(int i=0;i<Q.size();++i){
-                for(int j=0;j<Q.size();++j){
-                    Q[i][j] = -Q[i][j];
-                }
-            }
-        }
         int size(){
             return Q.size();
         }
         friend ofstream& operator << (ofstream&,qubo& q);
 };
 ofstream& operator << (ofstream &out, qubo &q){
+    q.adjust();
+    //printing -Q
     for(auto &row: q.Q){
         for(auto &elem: row){
-            out<<elem<<" ";
+            out<<(-elem)<<" ";
         }
         out<<"\n";
     }
