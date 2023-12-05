@@ -32,9 +32,9 @@ def solve_qubo(test_case, no_samples, api_key):
     return test_case_number, Assignments
 
 def main():
-    api_key = "DEV-176ed0ee355048851df48e48b37970206f5ead88"
-    input_file_path = "Input.txt"
-    OutputFilePath = "Output.txt"
+    api_key = "DEV-e1a717bce213b6c8f2d454b9d2d1347bcb20ced9"
+    input_file_path = "quboInput.txt"
+    OutputFilePath = "quboOutput.txt"
     no_samples = 5  # Set the number of samples
 
     test_cases = read_test_cases(input_file_path)
@@ -50,13 +50,16 @@ def main():
         results = [future.result() for future in futures]
 
         # Do something with the results, e.g., write to output files
-        
         with open(OutputFilePath, "w") as file:
+            file.write(str(len(test_cases))+" "+str(no_samples)+"\n")
             for test_case_number, result in results:
-                file.writelines(str(test_case_number))
-                # print(test_case_number)
+                n = len(result[0].first.sample)
+                file.write(str(n)+"\n")
                 for i in range(no_samples):
-                    file.writelines(str(result[i].first.sample))
+                    for j in range(n):
+                        file.write(str(result[i].first.sample[j]))
+                    file.write("\n")
+            file.close()
 
 if __name__ == "__main__":
     main()
