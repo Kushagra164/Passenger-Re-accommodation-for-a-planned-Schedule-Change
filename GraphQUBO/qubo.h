@@ -41,6 +41,7 @@ class qubo{
 ofstream& operator << (ofstream &out, qubo &q){
     q.adjust();
     //printing -Q
+    out<<q.Q.size()<<"\n";
     for(auto &row: q.Q){
         for(auto &elem: row){
             out<<(-elem)<<" ";

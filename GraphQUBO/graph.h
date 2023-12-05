@@ -36,7 +36,7 @@ void unweightedInput(int offsetU, int offsetV,vector<vector<pair<int,long long>>
 void mappingOutput(ofstream& output, map<pair<int,int>,int> m){
     output<<m.size()<<"\n";
     for(auto p:m){
-        cout<<p.F.F<<" "<<p.F.S<<" "<<p.S<<"\n";
+        output<<p.F.F<<" "<<p.F.S<<" "<<p.S<<"\n";
     }
 }
 map<int,pair<int,int> > mapInput(ifstream& input){
