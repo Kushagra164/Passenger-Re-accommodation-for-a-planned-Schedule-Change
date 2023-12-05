@@ -1,55 +1,14 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<fstream>
+#include<vector>
+#include<map>
+#include<functional>
+#include "qubo.h"
 #define mp  make_pair
 #define F   first
 #define S   second
 #define ll  long long
 using namespace std;
-class qubo{
-    vector<vector<long long> > a;
-    public:
-        qubo(int _n){
-            a.resize(_n);
-            for(auto &x:a)
-                x.resize(_n);
-        }
-        qubo(){}
-        int addVariable(long long x = 0){
-            for(auto &row:a)
-                row.push_back(0);
-            vector<long long> temp(a.size());
-            temp.push_back(x);
-            a.push_back(temp);
-            return a.size()-1;
-        }
-        void add(int i,int j,long long x){
-            a[i][j]+=x;
-        }
-        void adjust(){
-            for(int i=0;i<a.size();++i){
-                for(int j=0;j<i;++j){
-                    a[j][i]+=a[i][j];
-                    a[i][j]=0;
-                }
-            }
-            for(int i=0;i<a.size();++i){
-                for(int j=0;j<a.size();++j)
-                    a[i][j] = -a[i][j];
-            }
-        }
-        void print(ofstream &out){
-            out<<a.size()<<"\n";
-            for(auto row:a){
-                for(int elem:row){
-                    out<<elem<<" ";
-                }
-                out<<"\n";
-            }
-        }
-        int size(){
-            return a.size();
-        }
-
-};
 void dfs(int u,vector<vector<pair<int,long long> > > &g,vector<bool> &visit,vector<int> &cur){
     cur.push_back(u);
     visit[u] = true;
@@ -211,6 +170,6 @@ int main(int argc,char *argv[]){
     quboInput<<quboInstances.size()<<"\n";
     for(int i=1;i<=quboInstances.size();++i){
         quboInput<<i<<"\n";
-        quboInstances[i-1].print(quboInput);
+        quboInput<<quboInstances[i-1];
     }
 }
