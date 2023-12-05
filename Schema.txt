@@ -1,9 +1,7 @@
 #define uuid int
 #define CARRIER_CODE_LENGTH 3              //to accommodate null pointer at the end
 #define CITY_CODE_LENGTH 4                 //to accommodate null pointer at the end
-#define downline_consider true
-#define default_schedule_scaling
-#define allotment_scaling
+#define DOWNLINE_CONSIDER true
 #define SSR_SCORE 2
 #define PAX_SCORE 1
 #define MAXIMUM_ALLOWED_TIME_DIFF Time(144, 0)
@@ -17,15 +15,13 @@
 #define DEPARTURE_DELAY_LT_12_SCORE 5
 #define DEPARTURE_DELAY_LT_24_SCORE 4
 #define DEPARTURE_DELAY_LT_48_SCORE 3
-
-
-bool CLASS_UPGRADE = true;
-bool CLASS_DOWNGRADE = true;
-
+#define CLASS_UPGRADE true
+#define CLASS_DOWNGRADE true
 
  
 enum ActionCDs{HK,PD};
 enum ClassCDs{FC,BC,PC,EC};
+enum Status{SCHEDULED, PLANNED, CANCELLED, DELAYED};
 
 enum SpecialNames1 {INS,INF,CHD,ADT,UNN,S65};
 enum SpecialNames2 {NRPS,NRSA};
@@ -63,7 +59,7 @@ Schedule{
 	Arrivaltime: Time;
 	StartDate: Date;
 	EndDate: Date;
-	Status: bool;   //0->planned  1->scheduled
+	Status: enum;   //0->scheduled  1->planned 2->cancelled 3->delayed
 	FlightPattern: string;
 	DepartureDates: vector<InventoryID>;
 };
