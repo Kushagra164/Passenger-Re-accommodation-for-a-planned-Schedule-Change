@@ -1,6 +1,14 @@
 #define CARRIER_CODE_LENGTH 3            //plus 1 to accomodate null character
 #define CITY_CODE_LENGTH 4
-#include<bits/stdc++.h>
+
+enum Statuses{SCHEDULED,PLANNED,CANCELLED,DELAYED};
+
+int getStatusCode(string str){
+    if(str=="Scheduled") return 0;
+    else if(str=="Planning") return 1;
+    else if(str=="Cancelled") return 2;
+    else if(str=="Delayed") return 3;
+}
 
 class Schedule{
 private:
@@ -14,10 +22,10 @@ public:
     Date EndDate;
     string FlightPattern;
     int FlightNum;
-    bool Status;                        //{true: Scheduled , false: Planned}
+    Statuses Status;                        //{true: Scheduled , false: Planned}
     vector<int> DepartureDates;         // vector<InventoryID>
 
-    Schedule(int uuid,char carrier_cd[CARRIER_CODE_LENGTH], pair<string,string> &equipment_no,Time dep_time, Time arr_time, Date start_date, Date end_date, string flight_pattern, int flight_num, bool status){
+    Schedule(int uuid,char carrier_cd[CARRIER_CODE_LENGTH], pair<string,string> &equipment_no,Time dep_time, Time arr_time, Date start_date, Date end_date, string flight_pattern, int flight_num, Statuses status){
         ScheduleID=uuid;
         strncpy(CarrierCD,carrier_cd,CARRIER_CODE_LENGTH);
         EquipmentNo=equipment_no;

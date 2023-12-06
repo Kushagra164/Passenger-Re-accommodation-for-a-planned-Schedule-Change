@@ -5,8 +5,10 @@
 using namespace std;
 #include "master.h"
 
-int main() {                             //int argc,char *argv
+int main() {
     //Parsing of Schedule File
+
+    cerr<<__LINE__<<"aaaa"<<endl;
 
     ifstream scheduleFile;
     scheduleFile.open("schedule1.csv");                  //argv[1]
@@ -426,11 +428,8 @@ int main() {                             //int argc,char *argv
         uuid++;
         //cerr<<__LINE__<<endl;
     }
-
-
-
-     //Graph Creation
-     int m1=0;
+    //Graph Creation
+    int m1=0;
     int m6=graphWUGenerator();
     pair<int,int> p=graphUVandDVGenerator();
     int m2=p.first;
@@ -439,82 +438,52 @@ int main() {                             //int argc,char *argv
     int m5=graphWDGenerator();
 
 
-    //Output File Creation for QUBO
+    //Output File Generation
+    freopen("edges.txt",  "r", stdin);
+    ofstream fw("output.txt",ofstream::out);
 
-    ofstream fw("graph.txt",ofstream::out);
+    int no_of_samples;
+    cin>>no_of_samples;
 
-//    cerr<<CancelledFlights.size()<<"\n";
-//    for(int inv_id:CancelledFlights){
-//        cerr<<inventoryUuidGenerator.getString(inv_id)<<endl;
-//    }
+    for(int i=0;i<no_of_samples;i++){
 
-    int modU=uIndexGenerator.getSize();
-    int modC=0;
-    int modV=vIndexGenerator.getSize();
-    int modD=dIndexGenerator.getSize();
-    int modW=wIndexGenerator.getSize();
+        fw<<"Solution"<<i+1<<endl;
 
-    fw<<modU<<" "<<modC<<" "<<modV<<" "<<modD<<" "<<modW<<"\n";
+        int no_of_uc_edges;
+        cin>>no_of_uc_edges;
+        for(int j=0;j<no_of_uc_edges;j++){
+            int u,c;
+            cin>>u>>c;
 
-    fw<<m1<<"\n";
+            int j_id = uIndexGenerator.getID(u);
 
-    fw<<m2<<"\n";
-    for(int u=0;u<modU;u++){
-        for(auto x:graphUV[u]){
-            int v=x.first;
-            long long weight=x.second;
-            fw<<u<<" "<<v<<" "<<weight<<"\n";
+        }
+
+
+
+        int no_of_uv_edges;
+        cin>>no_of_uv_edges;
+        for(int j=0;j<no_of_uv_edges;j++){
+            int u,v;
+            cin>>u>>v;
+
+            int j_id = uIndexGenerator.getID(u);
+            cerr<<__LINE__<<" "<<j_id<<endl;
+            pair<int,ClassCDs> p=vIndexGenerator.getID(v);
+            cerr<<__LINE__<<" "<<journeyToPnrMap[j_id]<<endl;
+            fw<<pnrUuidGenerator.getString(journeyToPnrMap[j_id])<<" "<<inventoryUuidGenerator.getString(p.first)<<" "<<p.second<<endl;
+        }
+
+        int no_of_wd_edges;
+        cin >> no_of_wd_edges;
+        for (int iter = 0; iter < no_of_wd_edges; ++iter){
+            int w, d;
+            cin >> w >> d;
+            int winvId = wIndexGenerator.getID(w);
+            int dinvId = dIndexGenerator.getID(d);
+            fw << inventoryUuidGenerator.getString(winvId) << " " << inventoryUuidGenerator.getString(dinvId)<<endl;
         }
     }
-
-    fw<<m3<<"\n";
-
-
-    fw<<m4<<"\n";
-    for(int d=0;d<modD;d++){
-        for(int v:graphDV[d]){
-            fw<<d<<" "<<v<<"\n";
-        }
-    }
-
-    fw<<m5<<"\n";
-    for(int w=0;w<modW;w++){
-        for(int d:graphWD[w]){
-            fw<<w<<" "<<d<<"\n";
-        }
-    }
-    fw<<m6<<"\n";
-    for(int w=0;w<modW;w++){
-        for(int u:graphWU[w]){
-            fw<<w<<" "<<u<<"\n";
-        }
-    }
-
-    for(int u=0;u<modU;u++){
-        int j_id = uIndexGenerator.getID(u);
-        int pax_cnt=pnrMap[journeyToPnrMap[j_id]]->PaxCnt;
-        fw<<pax_cnt<<" ";
-    }
-    fw<<"\n";
-
-    for(int v=0;v<modV;v++){
-        pair<int,ClassCDs>  p= vIndexGenerator.getID(v);
-        int avl_inv;
-
-        int inv_id=p.first;
-
-        if(p.second==1) avl_inv = inventoryMap[inv_id]->FCTotalInventory - inventoryMap[inv_id]->FCBookedInventory;
-        else if(p.second==2) avl_inv = inventoryMap[inv_id]->BCTotalInventory - inventoryMap[inv_id]->BCBookedInventory;
-        else if(p.second==3) avl_inv = inventoryMap[inv_id]->PCTotalInventory - inventoryMap[inv_id]->PCBookedInventory;
-        else avl_inv = inventoryMap[inv_id]->ECTotalInventory - inventoryMap[inv_id]->ECBookedInventory;
-
-        fw<<avl_inv<<" ";
-    }
-    fw<<"\n";
-
     fw.close();
 
-
 }
-
-

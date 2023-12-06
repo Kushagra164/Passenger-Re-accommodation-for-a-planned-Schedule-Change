@@ -1,4 +1,3 @@
-#include<bits/stdc++.h>
 
 class graphIndexGenerator{
     map<int,int> forwardMap;
@@ -21,7 +20,7 @@ class graphIndexGenerator{
 };
 graphIndexGenerator uIndexGenerator;
 graphIndexGenerator wIndexGenerator;
-
+graphIndexGenerator dIndexGenerator;
 
 class vGraphIndexGenerator{
     map<pair<int,ClassCDs>,int> forwardMap;

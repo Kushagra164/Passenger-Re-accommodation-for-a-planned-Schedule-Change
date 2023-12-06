@@ -1,4 +1,3 @@
-#include<bits/stdc++.h>
 enum SpecialNames1 {NIL1,INS,INF,CHD,ADT,UNN,S65};
 enum SpecialNames2 {NIL2,NRPS,NRSA};
 enum SSRCodes {NIL3,WCHR,WCHS,WCHC,LANG,MAAS,UNMR,BLND,DEAF,EXST,MEAL,NSST};

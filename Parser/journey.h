@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+
 #define CITY_CODE_LENGTH 4
 
 enum ActionCDs{NIL4,HK,PD};
@@ -12,6 +12,11 @@ int getClassCode(string str){
     else return 0;
 }
 
+int getActionCode(string str){
+    if(str=="HK") return 1;
+    else if(str=="PD") return 2;
+    else return 0;
+}
 class Journey{
 private:
     int JourneyID;

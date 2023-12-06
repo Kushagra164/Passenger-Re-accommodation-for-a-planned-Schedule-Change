@@ -7,14 +7,53 @@
 #include "passenger.h"
 #include "graphindexgenerator.h"
 #include "constraints.h"
-#include <bits/stdc++.h>
 
 using namespace std;
 
 map<char,string> cabinToClassMap;
 
+template <typename T>
+class default_vector : public vector<T> {
+public:
+    using vector<T>::vector;
+    void set_default_value(const T &val) {
+        default_value = val;
+    }
+    const T& operator[](int i) const {
+        return index_out_of_bounds(i) ? default_value : vector<T>::operator[](i);
+    }
+    T& operator[](int i) {
+        if (index_out_of_bounds(i)) resize(i + 1);
+        return vector<T>::operator[](i);
+    }
+    const T& at(int i) const {
+        return (*this)[i];
+    }
+    T& at(int i) {
+        return (*this)[i];
+    }
+    T get_or_default(int i) const {
+        return index_out_of_bounds(i) ? default_value : vector<T>::operator[](i);
+    }
+    T get_or_default(int i, T tmp_default_value) const {
+        return index_out_of_bounds(i) ? tmp_default_value : vector<T>::operator[](i);
+    }
+    int size() {
+        return vector<T>::size();
+    }
+    void resize(int n) {
+        vector<T>::resize(n, default_value);
+    }
+private:
+    T default_value;
+    bool index_out_of_bounds(unsigned int i) const {
+        return i >= vector<T>::size();
+    }
+};
+
 
 // Map to get the corresponding InventoryID for a pair of Flight Number and Departure DTMZ
+// Used while parsing passenger booking details and creating Journey
 
 map<pair<int,DateTime>,int> flightToInventoryMap;       //map< pair<FlightNum,DEP_DTMZ> , InventoryID >
 bool precalc = true;
@@ -27,6 +66,7 @@ void _fn(){
         Schedule *S = scheduleMap[s_id];
 
         DateTime DepDTMZ(I.DepartureDate,S->DepartureTime);
+        //cerr << __LINE__ << " " << DepDTMZ.to_string() << "\n";
 
         flightToInventoryMap[make_pair(S->FlightNum,DepDTMZ)] = inv_id;
     }
@@ -38,38 +78,68 @@ int getFlight(int FLT_NUM,DateTime DepartureDTMZ){
         _fn();
         precalc = false;
     }
-    if (! flightToInventoryMap[make_pair(FLT_NUM,DepartureDTMZ)])
+    //cerr << __LINE__ << " " << FLT_NUM << " " << DepartureDTMZ.to_string() << "\n";
+    for (auto &f: flightToInventoryMap){
+        auto [a, b] = f.first;
+        //cerr << __LINE__ << " " << a << " " << b.to_string() << " " << f.second << "\n";
+    }
+    if (! flightToInventoryMap.count(make_pair(FLT_NUM,DepartureDTMZ)))
         return -1;
 
     return flightToInventoryMap[make_pair(FLT_NUM,DepartureDTMZ)];
 }
 
 
-// Given a set of cancelled flights, function to generate set of affected journeys and graphWU
+// Given a set of cancelled flights and map of delayed flights,
+// function to generate set of affected journeys and graphWU
 
-vector<int> CancelledFlights;
+set<int> CancelledFlights;                   //set<InventoryID>
+map<int,Time> DelayedFlights;                //map<InventoryID,Time delay>
 
-vector<vector<int>> graphWU;                 //Unweighted graph from InventoryID(s) of Cancelled Flights to Affected JourneyID(s)
+default_vector <vector<int>> graphWU;                 //Unweighted graph from InventoryID(s) of Cancelled Flights to Affected JourneyID(s)
 vector<int> AffectedJourneys;                //Nodes U
+
+Time getArrDepTimeDiff(int c_inv_id,int n_inv_id){
+    DateTime curr = DateTime(inventoryMap[c_inv_id]->DepartureDate,scheduleMap[inventoryToScheduleMap[c_inv_id]]->ArrivalTime);
+    DateTime next = DateTime(inventoryMap[n_inv_id]->DepartureDate,scheduleMap[inventoryToScheduleMap[n_inv_id]]->DepartureTime);
+
+    return next-curr;
+}
 
 int graphWUGenerator(){
     int n_edges=0;
 
+    //cerr<<__LINE__<<" "<<journeyMap.size()<<endl;
     for(auto x:journeyMap){
-        Journey J = x.second;
+        Journey* J = x.second;
+        int j_id = x.first;
 
-        bool flag=false;
-        for(int inv_id:J.flights){
-            if(CancelledFlights.find(inv_id)!=CancelledFlights.end()){
-                int w_idx = wIndexGenerator.getIndex(inv_id);
-                int j_id = x.first;
+        //cerr<<inventoryUuidGenerator.getString(J->flights[0])<<endl;
 
-                int u_idx = uIndexGenerator.getIndex(j_id);
+        if((J->flights.size()==1) && (CancelledFlights.find(J->flights[0])!=CancelledFlights.end())){
+            int w_idx = wIndexGenerator.getIndex(J->flights[0]);
 
-                graphWU[w_idx].push_back(u_idx);
-                n_edges++;
+            int u_idx = uIndexGenerator.getIndex(j_id);
 
-                if(!flag) AffectedJourneys.push_back(j_id),flag=true;
+            AffectedJourneys.push_back(j_id);
+
+            graphWU[w_idx].push_back(u_idx);
+            n_edges++;
+        }
+        else{
+            for(int i=0;i<J->flights.size();i++){
+                if(DelayedFlights.find(J->flights[i])!=DelayedFlights.end()){
+                    bool cond1 = (DelayedFlights[J->flights[i]] > Time(72,0));
+
+                    bool cond2 = false;
+                    if((i+1)<J->flights.size()) cond2= (getArrDepTimeDiff(J->flights[i],J->flights[i+1]) > Time(1,0));
+
+                    if(cond1 || cond2){
+                        int u_idx = uIndexGenerator.getIndex(j_id);
+                        AffectedJourneys.push_back(j_id);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -82,32 +152,33 @@ int graphWUGenerator(){
 
 int pnrScore(int journeyId, ClassCDs proposed = ClassCDs::NIL5){
     Journey* journey = journeyMap[journeyId];
-    Pnr pnr = pnrMap[journeyToPnrMap[journeyId]];
+    Pnr* pnr = pnrMap[journeyToPnrMap[journeyId]];
     if (proposed == ClassCDs::NIL5) proposed = journey->ClassCD;
     int pnr_score = 0;
-    for (auto &passenger_id: pnr.Passengers){
+    for (auto &passenger_id: pnr->Passengers){
         Passenger* passenger = passengerMap[passenger_id];
         pnr_score += passenger->SSRCode ? SSR_SCORE: 0;
         pnr_score += PAX_SCORE;
     }
     pnr_score += classScoresMap[proposed];
 
+    cerr<<__LINE__<<" "<<pnr_score<<endl;
+
     return pnr_score;
 }
 
-
-// Generation of graphUV
+//Flight Score function
 
 Time getDepTimeDiff(int o_inv_id,int p_inv_id){
-    DateTime original = DateTime(inventoryMap[o_inv_id].DepartureDate,scheduleMap[inventoryToScheduleMap[o_inv_id]].DepartureTime);
-    DateTime proposed = DateTime(inventoryMap[p_inv_id].DepartureDate,scheduleMap[inventoryToScheduleMap[p_inv_id]].DepartureTime);
+    DateTime original = DateTime(inventoryMap[o_inv_id]->DepartureDate,scheduleMap[inventoryToScheduleMap[o_inv_id]]->DepartureTime);
+    DateTime proposed = DateTime(inventoryMap[p_inv_id]->DepartureDate,scheduleMap[inventoryToScheduleMap[p_inv_id]]->DepartureTime);
 
     return abs(original - proposed);
 }
 
 Time getArrTimeDiff(int o_inv_id,int p_inv_id){
-    DateTime original = DateTime(inventoryMap[o_inv_id].ArrivalDate,scheduleMap[inventoryToScheduleMap[o_inv_id]].ArrivalTime);
-    DateTime proposed = DateTime(inventoryMap[p_inv_id].ArrivalDate,scheduleMap[inventoryToScheduleMap[p_inv_id]].ArrivalTime);
+    DateTime original = DateTime(inventoryMap[o_inv_id]->ArrivalDate,scheduleMap[inventoryToScheduleMap[o_inv_id]]->ArrivalTime);
+    DateTime proposed = DateTime(inventoryMap[p_inv_id]->ArrivalDate,scheduleMap[inventoryToScheduleMap[p_inv_id]]->ArrivalTime);
 
     return abs(original - proposed);
 }
@@ -120,68 +191,15 @@ bool validSolution(int originalId, int proposedId){
 
 bool checkInventory(int pax_cnt ,int inv_id,int x){
     int avl_inv;
-    if(x==1) avl_inv = inventoryMap[inv_id].FCTotalInventory - inventoryMap[inv_id].FCBookedInventory;
-    else if(x==2) avl_inv = inventoryMap[inv_id].BCTotalInventory - inventoryMap[inv_id].BCBookedInventory;
-    else if(x==3) avl_inv = inventoryMap[inv_id].PCTotalInventory - inventoryMap[inv_id].PCBookedInventory;
-    else avl_inv = inventoryMap[inv_id].ECTotalInventory - inventoryMap[inv_id].ECBookedInventory;
+    if(x==1) avl_inv = inventoryMap[inv_id]->FCTotalInventory - inventoryMap[inv_id]->FCBookedInventory;
+    else if(x==2) avl_inv = inventoryMap[inv_id]->BCTotalInventory - inventoryMap[inv_id]->BCBookedInventory;
+    else if(x==3) avl_inv = inventoryMap[inv_id]->PCTotalInventory - inventoryMap[inv_id]->PCBookedInventory;
+    else avl_inv = inventoryMap[inv_id]->ECTotalInventory - inventoryMap[inv_id]->ECBookedInventory;
 
     if(pax_cnt<=avl_inv) return true;
 
     return false;
 }
-
-vector<vector<pair<int,long long>>> graphUV;     //Weighted graph from affected JourneyID(s) to possible flight solution InventoryID(s) cum ClassCD
-
-int graphUVGenerator(){
-    int n_edges=0;
-
-    for(int j_id:AffectedJourneys){
-        int u_idx = uIndexGenerator.getIndex(j_id);
-        int o_inv_id = journeyMap[j_id].flights[0];
-
-        for(auto x:inventoryMap){
-            if((CancelledFlights.find(x.first)==CancelledFlights.end()) && validSolution(o_inv_id,x.first)){
-                int pax_cnt = journeyMap[journeyToPnrMap[j_id]].PaxCnt;
-                int cls_cd = journeyMap[j_id].ClassCD;
-
-                int orig_score = pnrScore(j_id,journeyMap[j_id].ClassCD);
-
-                if(checkInventory(pax_cnt,x.first,cls_cd)){
-                    int v_idx = vIndexGenerator.getIndex(make_pair{x.first,journeyMap[j_id].ClassCD});
-                    long long score = 1ll*orig_score*orig_score;
-                    graphUV[u_idx].push_back(make_pair(v_idx,score));
-                    n_edges++;
-                }
-
-                if(CLASS_UPGRADE_ALLOWED){
-                    for(int i=1;i<cls_cd;i++){
-                        if(checkInventory(pax_cnt,x.first,i)){
-                            int v_idx = vIndexGenerator.getIndex(make_pair{x.first,static_cast <ClassCDs> (i)});
-                            long long score = 1ll*orig_score* pnrScore(j_id,static_cast <ClassCDs> (i));
-                            graphUV[u_idx].push_back(make_pair(v_idx,score));
-                            n_edges++;
-                        }
-                    }
-                }
-
-                if(CLASS_DOWNGRADE_ALLOWED){
-                    for(int i=cls_cd+1;i<=4;i++){
-                        if(checkInventory(pax_cnt,x.first,i)){
-                            int v_idx = vIndexGenerator.getIndex(make_pair{x.first,static_cast <ClassCDs> (i)});
-                            long long score = 1ll*orig_score* pnrScore(j_id,static_cast <ClassCDs> (i));
-                            graphUV[u_idx].push_back(make_pair(v_idx,score));
-                            n_edges++;
-                        }
-                    }
-                }
-
-            }
-        }
-    }
-    return n_edges;
-}
-
-//Flight Score function
 
 long long getFlightScore(int originalinvId, int proposedinvId){
     long long score = 0;
@@ -201,28 +219,105 @@ long long getFlightScore(int originalinvId, int proposedinvId){
     score += CITYPAIRS_SCORE;
     score += scheduleMap[inventoryToScheduleMap[originalinvId]]->EquipmentNo ==
              scheduleMap[inventoryToScheduleMap[proposedinvId]]->EquipmentNo ? EQUIPMENT_SCORE: 0;
+    cerr<<__LINE__<<" "<<score<<endl;
     return score;
 }
 
-// Generation of graphWV
+// Generation of graphUV and graphDV
+
+default_vector <vector<pair<int,long long>>> graphUV;     //Weighted graph from affected JourneyID(s) to possible flight solution InventoryID(s) cum ClassCD
+default_vector <vector<int>> graphDV;                     //Unweighted graph from flight Inventory ID(s) to their possible classes
+
+pair<int,int> graphUVandDVGenerator(){
+    int uv_edges=0;
+    int dv_edges=0;
+
+    for(int j_id:AffectedJourneys){
+        int u_idx = uIndexGenerator.getIndex(j_id);
+        int o_inv_id = journeyMap[j_id]->flights[0];
+
+        for(auto x:inventoryMap){
+            if((CancelledFlights.find(x.first)==CancelledFlights.end()) && validSolution(o_inv_id,x.first)){
+                int pax_cnt = pnrMap[journeyToPnrMap[j_id]]->PaxCnt;
+                int cls_cd = journeyMap[j_id]->ClassCD;
+
+                int orig_score = pnrScore(j_id,journeyMap[j_id]->ClassCD);
+
+                if(checkInventory(pax_cnt,x.first,cls_cd)){
+                    int v_idx = vIndexGenerator.getIndex(make_pair(x.first,journeyMap[j_id]->ClassCD));
+                    long long score = 1ll*orig_score*orig_score*getFlightScore(o_inv_id,x.first);
+                    graphUV[u_idx].push_back(make_pair(v_idx,score));
+                    uv_edges++;
+
+                    int d_idx=dIndexGenerator.getIndex(x.first);
+                    if(find(graphDV[d_idx].begin(),graphDV[d_idx].end(),v_idx) == graphDV[d_idx].end()){
+                        graphDV[d_idx].push_back(v_idx);
+                        dv_edges++;
+                    }
+                }
+
+                if(CLASS_UPGRADE_ALLOWED){
+                    for(int i=1;i<cls_cd;i++){
+                        if(checkInventory(pax_cnt,x.first,i)){
+                            int v_idx = vIndexGenerator.getIndex(make_pair(x.first,static_cast <ClassCDs> (i)));
+                            long long score = 1ll*orig_score*pnrScore(j_id,static_cast <ClassCDs> (i))*getFlightScore(o_inv_id,x.first);
+                            graphUV[u_idx].push_back(make_pair(v_idx,score));
+                            uv_edges++;
+
+                            int d_idx=dIndexGenerator.getIndex(x.first);
+                            if(find(graphDV[d_idx].begin(),graphDV[d_idx].end(),v_idx) == graphDV[d_idx].end()){
+                                graphDV[d_idx].push_back(v_idx);
+                                dv_edges++;
+                            }
+
+                        }
+                    }
+                }
+
+                if(CLASS_DOWNGRADE_ALLOWED){
+                    for(int i=cls_cd+1;i<=4;i++){
+                        if(checkInventory(pax_cnt,x.first,i)){
+                            int v_idx = vIndexGenerator.getIndex(make_pair(x.first,static_cast <ClassCDs> (i)));
+                            long long score = 1ll*orig_score* pnrScore(j_id,static_cast <ClassCDs> (i));
+                            graphUV[u_idx].push_back(make_pair(v_idx,score));
+                            uv_edges++;
+
+                            int d_idx=dIndexGenerator.getIndex(x.first);
+                            if(find(graphDV[d_idx].begin(),graphDV[d_idx].end(),v_idx) == graphDV[d_idx].end()){
+                                graphDV[d_idx].push_back(v_idx);
+                                dv_edges++;
+                            }
+                        }
+                    }
+                }
 
 
-vector<vector<pair<int, long long>>> graphWV;   //Weighted graph from cancelled flight InventoryID(s) to possible flight solution InventoryID(s) cum ClassCD
+            }
+        }
+    }
+    return make_pair(uv_edges,dv_edges);
+}
 
-int graphWVGenerator(){
+
+
+// Generation of graphWD
+
+
+default_vector <vector<int>> graphWD;   //Unweighted graph from cancelled flight InventoryID(s) to possible flight solution InventoryID(s)
+
+int graphWDGenerator(){
     int n_edges=0;
 
     for (int c_inv_id: CancelledFlights){
         int w_idx = wIndexGenerator.getIndex(c_inv_id);
-
+        //cerr <<"Graph: " << w_idx << "\n";
         for (auto p_inv: inventoryMap){
+            //cerr << p_inv.first << "\n";
             if ((CancelledFlights.find(p_inv.first) == CancelledFlights.end()) && (validSolution(p_inv.first, c_inv_id))){
-                for(int i=1;i<=4;i++){
-                    int v_idx = vIndexGenerator.getIndex(make_pair{p_inv.first,static_cast <ClassCDs> (i)});
-                    long long score = 1ll*getFlightScore(c_inv_id,p_inv.first);
-                    graphWV[w_idx] = make_pair(v_idx,score);
-                    n_edges++;
-                }
+                //cerr << __LINE__ << " " << i << "\n";
+                int d_idx = dIndexGenerator.getIndex(p_inv.first);
+                graphWD[w_idx].push_back(d_idx);
+                n_edges++;
             }
         }
     }
