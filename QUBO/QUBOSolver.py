@@ -58,7 +58,7 @@ def main():
         results = [future.result() for future in futures]
 
         # Do something with the results, e.g., write to output files
-        with open(OutputFilePath, "w") as file:
+        with open(output_file_path, "w") as file:
             file.write(str(len(test_cases))+" "+str(no_samples)+"\n")
             for test_case_number, result in results:
                 n = len(result[0].first.sample)
