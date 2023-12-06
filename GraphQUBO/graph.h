@@ -16,7 +16,7 @@ void weightedInput(int offsetU, int offsetV,vector<vector<pair<int,long long>>> 
         u += offsetU;
         v += offsetV;
         g[u].push_back(mp(v, w));
-        g[v].push_back(mp(u, -1));
+        g[v].push_back(mp(u, 1));
     }
 }
 void unweightedInput(int offsetU, int offsetV,vector<vector<pair<int,long long>>> &g,ifstream& input)
@@ -30,7 +30,7 @@ void unweightedInput(int offsetU, int offsetV,vector<vector<pair<int,long long>>
         u += offsetU;
         v += offsetV;
         g[u].push_back(mp(v, 1));
-        g[v].push_back(mp(u, -1));
+        g[v].push_back(mp(u, 1));
     }
 };
 void mappingOutput(ofstream& output, map<pair<int,int>,int> m){

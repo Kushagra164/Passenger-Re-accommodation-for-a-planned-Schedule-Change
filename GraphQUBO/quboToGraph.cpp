@@ -17,11 +17,12 @@ int main(int argc,char *argv[]){
     quboOutput>>T>>K;
     selectedEdges<<K<<"\n";
 
-    vector<vector<pair<int,int>>> selectedUV(K),selectedWD(K);
+    vector<vector<pair<int,int>>> selectedUC(K), selectedUV(K),selectedWD(K);
 
     for(int i=0;i<T;++i){
         int N;
         quboOutput>>N;
+        map<int,pair<int,int>> UC = mapInput(graphMapping);
         map<int,pair<int,int>> UV = mapInput(graphMapping);
         map<int,pair<int,int>> WD = mapInput(graphMapping);
 
@@ -30,7 +31,10 @@ int main(int argc,char *argv[]){
                 char b;
                 quboOutput>>b;
                 if(b=='1'){
-                    if(UV.find(r)!=UV.end()){
+                    if(UC.find(r)!=UC.end()){
+                        selectedUC[j].push_back(UC[r]);
+                    }
+                    else if(UV.find(r)!=UV.end()){
                         selectedUV[j].push_back(UV[r]);
                     }
                     else if(WD.find(r)!=WD.end()){
@@ -42,7 +46,8 @@ int main(int argc,char *argv[]){
     }
 
     for(int i=0;i<K;++i){
-        printSelectedEdges(selectedEdges,selectedUV[i]);
-        printSelectedEdges(selectedEdges,selectedWD[i]);
+        printSelectedEdges(selectedEdges, selectedUC[i]);
+        printSelectedEdges(selectedEdges, selectedUV[i]);
+        printSelectedEdges(selectedEdges, selectedWD[i]);
     }
 }

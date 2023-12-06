@@ -33,21 +33,54 @@ int main(int argc, char *argv[])
     quboInput.open(argv[2]);
     ifstream input;
     input.open(argv[3]);
-    int N = (argc > 4) ? stoi(argv[4]) : 2000;
+    int N = (argc > 4) ? stoi(argv[4]) : 60000;
     int M = (argc > 5) ? stoi(argv[5]) : 100;
 
     // input handling
-    int U, V, W, D;
-    input >> U >> V >> W >> D;
-    int T = U + V + W + D;
+    int U, C, V, D, W;
+    input >> U >> C >> V >> D >> W;
+    const int T = U + C + V + D + W;
+
     vector<
         vector<
             pair<int, long long>>>
         g(T);
-    weightedInput(0, U, g, input);        // input UV
-    weightedInput(U + V, U, g,  input);   // input WV
-    unweightedInput(U + V, 0, g, input);  // input WU
-    unweightedInput(U+V+W, U, g, input);  // input DV
+    
+    const int offsetU = 0;
+    const int offsetC = U;
+    const int offsetV = U + C;
+    const int offsetD = offsetV + V;
+    const int offsetW = offsetD + D;
+
+    function<int(int,int,int)> get = [](int ind,int L,int R){
+        return ((ind>=L)&&(ind<R))?(ind-L):-1; 
+    };
+    function<int(int)> getU = [&](int x){
+        return get(x, offsetU, offsetC);
+    };
+
+    function<int(int)> getC = [&](int x){
+        return get(x, offsetC, offsetV);
+    };
+
+    function<int(int)> getV = [&](int x){
+        return get(x, offsetV, offsetD);
+    };
+
+    function<int(int)> getD = [&](int x){
+        return get(x, offsetD, offsetW);
+    };
+
+    function<int(int)> getW = [&](int x){
+        return get(x, offsetW, T);
+    };
+
+    weightedInput(offsetU, offsetC, g, input);          // input UC
+    weightedInput(offsetU, offsetV, g, input);          // input UV
+    unweightedInput(offsetC, offsetV, g, input);        // input CV
+    unweightedInput(offsetD, offsetV, g, input);        // input DV
+    unweightedInput(offsetW, offsetD, g, input);        // input WD
+    unweightedInput(offsetW, offsetU, g, input);        // input WU
 
     vector<int> wU(U), wV(V);
     for (auto &x : wU)
@@ -70,21 +103,31 @@ int main(int argc, char *argv[])
             qubo Q;
             eqConstraints eq;
             ineqConstraints inq;
-            map<pair<int, int>, int> mappingUV, mappingWD;
+            map<pair<int, int>, int> mappingUC, mappingUV, mappingWD;
 
-            // handling UV
-            // [TODO: sarthak handle UVC]
+            // handling U
             for (int x : cur)
             {
-                if (x < U)
+                int u = getU(x);
+                if (u!=-1)
                 {
                     vector<int> curInd;
                     for (auto e : g[x])
                     {
-                        if ((e.F >= U) && (e.F < (U + V)))
+                        //handling C
+                        int c = getC(e.F);
+                        if(c!=-1)
                         {
                             val += e.S;
-                            curInd.push_back(mappingUV[mp(x, e.F - U)] = Q.addVariable(e.S));
+                            curInd.push_back(mappingUC[mp(u, c)] = Q.addVariable(e.S));
+                        }
+
+                        //handling V
+                        int v = getV(e.F);
+                        if(v!=-1)
+                        {
+                            val += e.S;
+                            curInd.push_back(mappingUV[mp(u, v)] = Q.addVariable(e.S));
                         }
                     }
 
@@ -93,49 +136,67 @@ int main(int argc, char *argv[])
                 }
             }
 
-            // handling VU
-            //[TODO: sarthak handle VCU]
+            // handling V constraints
             for (int x : cur)
             {
-                if ((x >= U) && (x < (U + V)))
+                int v = getV(x);
+                if (v!=-1)
                 {
                     vector<int> curInq(Q.size());
                     for (auto e : g[x])
                     {
-                        if (e.F < U)
-                        {
-                            curInq[mappingUV[mp(e.F, x - U)]] = wU[e.F];
+                        // handling c
+                        int c = getC(e.F);
+                        if(c!=-1){
+                            for(auto f : g[e.F]){
+                                int u = getU(f.F);
+                                if(u!=-1){
+                                    curInq[mappingUC[mp(u,c)]] = wU[u];
+                                }
+                            }
+                        }
+
+                        // handling u
+                        int u = getU(e.F);
+                        if(u!=-1){
+                            curInq[mappingUV[mp(u,v)]] = wU[u];
                         }
                     }
-                    inq.add(curInq,wV[x-U]);
+                    inq.add(curInq,wV[v]);
                 }
             }
 
-            // handling WV
+            // handling W
             for (int x : cur)
             {
-                if ((x >= (U + V))&&(x<(U+V+W)))
+                int w = getW(x);
+                if (w!=-1)
                 {
+                    //getting all U
                     vector<int> curU;
                     for (auto e : g[x])
                     {
-                        if (e.F < U)
-                            curU.push_back(e.F);
+                        int u = getU(e.F);
+                        if (u!=-1)
+                            curU.push_back(u);
                     }
+
                     vector<int> curVar;
                     for (auto e : g[x])
                     {
-                        if (e.F >= (U+V+W))
+                        int d = getD(e.F);
+                        if (d!=-1)
                         {
-                            curVar.push_back(mappingWD[mp(x - U - V, e.F - U - V - W)] = Q.addVariable());
-                            for(auto v : g[e.F]){
-                                if((v.F<(U+V))&&(v.F>=U)){
+                            curVar.push_back(mappingWD[mp(w, d)] = Q.addVariable());
+                            for(auto f : g[e.F]){
+                                int v = getV(f.F);
+                                if(v!=-1){
                                     for (int u : curU)
                                     {
-                                        if (mappingUV.find(mp(u, v.F - U)) != mappingUV.end())
+                                        if (mappingUV.find(mp(u, v)) != mappingUV.end())
                                         {
-                                            Q.add(mappingUV[mp(u, v.F - U)], curVar.back(), e.S*1ll*M);
-                                            val += (e.S*M);
+                                            Q.add(mappingUV[mp(u, v)], curVar.back(), wU[u]*1ll*M);
+                                            val += (wU[u]*1ll*M);
                                         }
                                     }
                                 }
@@ -150,10 +211,12 @@ int main(int argc, char *argv[])
             eq.adjustToQubo(Q,val+1);
             quboInstances.push_back(Q);
 
+            mappingOutput(graphMapping, mappingUC);
             mappingOutput(graphMapping, mappingUV);
             mappingOutput(graphMapping, mappingWD);
         }
     }
+    
     quboInput << quboInstances.size() << "\n";
     for (int i = 1; i <= quboInstances.size(); ++i)
     {
