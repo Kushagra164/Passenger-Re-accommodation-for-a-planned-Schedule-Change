@@ -139,7 +139,8 @@ journeyMap: map<JourneyID: uuid, Journey*>
 journeyToPnrMap: map<JourneyID: uuid, PnrID: uuid>
 
 CancelledFlights: Set<InventoryID>
-DelayedFlights: map<InventoryID,Time>
+DelayedFlights: map<InventoryID,Time>      //Time indicates the delay in hours
+
 
 
 
