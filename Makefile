@@ -3,7 +3,7 @@ graph-to-qubo:
 	./graphToQubo.out graphMapping.txt quboInput.txt graphUVW.txt
 
 qubo-to-graph:
-	python QUBO/QUBOSolver.py
+	python QUBO/QUBOSolver.py --api_key "DEV-e1a717bce213b6c8f2d454b9d2d1347bcb20ced9" --input_file "quboInput.txt" --output_file "quboOutput.txt"  --no_samples "2"
 
 graph-to-edges:
 	g++ ./GraphQUBO/quboToGraph.cpp -o quboToGraph.out -std=c++20
