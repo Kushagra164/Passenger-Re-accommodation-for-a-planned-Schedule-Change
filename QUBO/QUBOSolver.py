@@ -2,6 +2,7 @@
 # !pip install dwave-ocean-sdk
 from dwave.system import LeapHybridSampler
 import concurrent.futures
+import argparse
 
 # Read the QUBO input with multiple test cases
 def read_test_cases(file_path):
@@ -32,10 +33,17 @@ def solve_qubo(test_case, no_samples, api_key):
     return test_case_number, Assignments
 
 def main():
-    api_key = "DEV-e1a717bce213b6c8f2d454b9d2d1347bcb20ced9"
-    input_file_path = "quboInput.txt"
-    OutputFilePath = "quboOutput.txt"
-    no_samples = 5  # Set the number of samples
+    parser = argparse.ArgumentParser(description="Solve QUBO problems using D-Wave Leap Hybrid Solver.")
+    parser.add_argument("--api_key", required=True, help="D-Wave Leap API key")
+    parser.add_argument("--input_file", required=True, help="Path to the input file")
+    parser.add_argument("--output_file", required=True, help="Path to the output file")
+    parser.add_argument("--no_samples", type=int, default=5, help="Number of samples (default: 5)")
+    args = parser.parse_args()
+
+    api_key = args.api_key
+    input_file_path = args.input_file
+    output_file_path = args.output_file
+    no_samples = args.no_samples
 
     test_cases = read_test_cases(input_file_path)
 
