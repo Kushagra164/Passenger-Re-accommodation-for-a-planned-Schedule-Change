@@ -2,8 +2,8 @@ graph-to-qubo:
 	g++ ./GraphQUBO/graphToQubo.cpp -o graphToQubo.out -std=c++20
 	./graphToQubo.out graphMapping.txt quboInput.txt graph.txt
 
-qubo-to-graph:
-	python QUBO/QUBOSolver.py --api_key "DEV-e1a717bce213b6c8f2d454b9d2d1347bcb20ced9" --input_file "quboInput.txt" --output_file "quboOutput.txt"  --no_samples "2"
+qubo-to-binary:
+	python QUBO/QUBOSolver.py --env_file .env
 
 binary-to-edges:
 	g++ ./GraphQUBO/quboToGraph.cpp -o quboToGraph.out -std=c++20

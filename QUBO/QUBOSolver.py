@@ -1,6 +1,8 @@
 # Install Dwave Library
-# !pip install dwave-ocean-sdk
+# !pip install dwave-ocean-sdk dotenv
 from dwave.system import LeapHybridSampler
+import os
+from dotenv import load_dotenv
 import concurrent.futures
 import argparse
 
@@ -34,16 +36,15 @@ def solve_qubo(test_case, no_samples, api_key):
 
 def main():
     parser = argparse.ArgumentParser(description="Solve QUBO problems using D-Wave Leap Hybrid Solver.")
-    parser.add_argument("--api_key", required=True, help="D-Wave Leap API key")
-    parser.add_argument("--input_file", required=True, help="Path to the input file")
-    parser.add_argument("--output_file", required=True, help="Path to the output file")
-    parser.add_argument("--no_samples", type=int, default=5, help="Number of samples (default: 5)")
+    parser.add_argument("--env_file", required=True, help="env file required for api key")
     args = parser.parse_args()
 
-    api_key = args.api_key
-    input_file_path = args.input_file
-    output_file_path = args.output_file
-    no_samples = args.no_samples
+    load_dotenv(args.env_file)
+
+    api_key = os.getenv('API_KEY')
+    input_file_path = os.getenv('INPUT_FILE_PATH')
+    output_file_path = os.getenv('OUTPUT_FILE_PATH')
+    no_samples = int(os.getenv('NO_SAMPLES'))
 
     test_cases = read_test_cases(input_file_path)
 

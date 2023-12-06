@@ -1,1 +1,2 @@
-pip install dwave-ocean-sdk
+dwave-ocean-sdk
+python-dotenv
