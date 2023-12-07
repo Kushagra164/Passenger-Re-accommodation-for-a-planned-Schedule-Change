@@ -257,8 +257,6 @@ long long getConnectingFlightScore(pair<int, int> proposedinvIds, int originalin
     return score;
 }
 
-long long Totalconnectingscore(int initialInvId, )
-
 // Generation of graphUV and graphDV
 
 default_vector<vector<pair<int,long long>>> graphUV;     //Weighted graph from affected JourneyID(s) to possible flight solution InventoryID(s) cum ClassCD
