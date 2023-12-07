@@ -132,7 +132,7 @@ int graphWUGenerator(){
                     bool cond1 = (DelayedFlights[J->flights[i]] > Time(72,0));
 
                     bool cond2 = false;
-                    if((i+1)<J->flights.size()) cond2= (getArrDepTimeDiff(J->flights[i],J->flights[i+1]) > Time(1,0));
+                    if((i+1)<J->flights.size()) cond2= (getArrDepTimeDiff(J->flights[i],J->flights[i+1]) < MINIMUM_CONNECTING_TIME);
 
                     if(cond1 || cond2){
                         int u_idx = uIndexGenerator.getIndex(j_id);
@@ -185,8 +185,8 @@ Time getArrTimeDiff(int o_inv_id,int p_inv_id){
 
 bool validSolution(int originalId, int proposedId){
     return flightNumberMap[scheduleMap[inventoryToScheduleMap[originalId]]->FlightNum] ==
-           flightNumberMap[scheduleMap[inventoryToScheduleMap[originalId]]->FlightNum] and
-           (getArrTimeDiff(originalId, proposedId) + getDepTimeDiff(originalId, proposedId) <= MAXIMUM_ALLOWED_TIME_DIFF);
+           flightNumberMap[scheduleMap[inventoryToScheduleMap[proposedId]]->FlightNum] and
+           (getArrTimeDiff(originalId, proposedId) + getDepTimeDiff(originalId, proposedId) <= MAXIMUM_ALLOWED_TIME_DIFF*2);
 }
 
 bool checkInventory(int pax_cnt ,int inv_id,int x){
@@ -216,7 +216,7 @@ long long getFlightScore(int originalinvId, int proposedinvId){
     else if (DeparturetimeDiff <= Time(24, 0)) score += DEPARTURE_DELAY_LT_24_SCORE;
     else if (DeparturetimeDiff <= Time(48, 0)) score += DEPARTURE_DELAY_LT_48_SCORE;
 
-    score += CITYPAIRS_SCORE;
+    score += CITYPAIR_SCORE;
     score += scheduleMap[inventoryToScheduleMap[originalinvId]]->EquipmentNo ==
              scheduleMap[inventoryToScheduleMap[proposedinvId]]->EquipmentNo ? EQUIPMENT_SCORE: 0;
     cerr<<__LINE__<<" "<<score<<endl;
@@ -228,7 +228,7 @@ long long getFlightScore(int originalinvId, int proposedinvId){
 default_vector <vector<pair<int,long long>>> graphUV;     //Weighted graph from affected JourneyID(s) to possible flight solution InventoryID(s) cum ClassCD
 default_vector <vector<int>> graphDV;                     //Unweighted graph from flight Inventory ID(s) to their possible classes
 
-pair<int,int> graphUVandDVGenerator(){
+pair<int,int> graphUVAndGraphDVGenerator(){
     int uv_edges=0;
     int dv_edges=0;
 
@@ -298,11 +298,110 @@ pair<int,int> graphUVandDVGenerator(){
     return make_pair(uv_edges,dv_edges);
 }
 
+// Generation of graphUC and graphCV
+
+vector<int> findAllFlightsFromSrc(int o_inv_id){
+    int sch_id = inventoryToScheduleMap[o_inv_id];
+    Schedule* o_sch = scheduleMap[sch_id];
+
+    vector<int> ret;
+
+    auto [src, dest] = flightNumberMap[o_sch->FlightNum];
+    DateTime cancelledDateTime = DateTime(inventoryMap[o_inv_id]->DepartureDate, o_sch->DepartureTime);
+
+    for(auto [p_inv_id, Inv]: inventoryMap){
+        if (p_inv_id == o_inv_id) continue;
+        Schedule* p_sch = scheduleMap[inventoryToScheduleMap[p_inv_id]];
+
+        if ((CancelledFlights.find(p_inv_id)==CancelledFlights.end()) && (flightNumberMap[p_sch->FlightNum].first == src) &&
+            (flightNumberMap[p_sch->FlightNum].second != dest)){
+            if ((DateTime(Inv->DepartureDate,p_sch->DepartureTime) >= cancelledDateTime) &&
+            ((DateTime(Inv->ArrivalDate,p_sch->ArrivalTime) - cancelledDateTime) <= MAXIMUM_ALLOWED_TIME_DIFF)){
+                ret.push_back(p_inv_id);
+            }
+        }
+    }
+    return ret;
+}
+
+vector<int> findAllFlightsToDest(int o_inv_id){
+    int sch_id = inventoryToScheduleMap[o_inv_id];
+    Schedule* o_sch = scheduleMap[sch_id];
+
+    vector<int> ret;
+
+    auto [src, dest] = flightNumberMap[o_sch->FlightNum];
+    DateTime cancelledDateTime = DateTime(inventoryMap[o_inv_id]->DepartureDate, o_sch->DepartureTime);
+
+    for(auto [p_inv_id, Inv]: inventoryMap){
+        if (p_inv_id == o_inv_id) continue;
+        Schedule* p_sch = scheduleMap[inventoryToScheduleMap[p_inv_id]];
+
+        if ((CancelledFlights.find(p_inv_id)==CancelledFlights.end()) && (flightNumberMap[p_sch->FlightNum].first != src) &&
+            (flightNumberMap[p_sch->FlightNum].second == dest)){
+            if ((DateTime(Inv->ArrivalDate,p_sch->ArrivalTime) >= cancelledDateTime) &&
+            ((DateTime(Inv->ArrivalDate,p_sch->ArrivalTime) - cancelledDateTime) <= MAXIMUM_ALLOWED_TIME_DIFF)){
+                ret.push_back(p_inv_id);
+            }
+        }
+    }
+    return ret;
+}
+
+vector<pair<int,int>> makeConnections(vector<int> &from_src, vector<int> &to_dest){
+    vector<pair<int,int>> v;
+
+    for(int inv_id_1:from_src){
+        Schedule* sch1=scheduleMap[inventoryToScheduleMap[inv_id_1]];
+        for(int inv_id_2:to_dest){
+            Schedule* sch2=scheduleMap[inventoryToScheduleMap[inv_id_2]];
+            if((flightNumberMap[sch1->FlightNum].second==flightNumberMap[sch2->FlightNum].first) &&
+                    (getArrDepTimeDiff(inv_id_1,inv_id_2))>=MINIMUM_CONNECTING_TIME){
+                v.push_back(make_pair(inv_id_1,inv_id_2));
+            }
+        }
+    }
+    return v;
+}
+//
+//vector<pair<long long,vector<pair<int,ClassCDs>>>> getBest(vector<pair<int,int>> &v,int inv_id){
+//
+//}
+
+default_vector <vector<pair<int,int>>> graphUC;       //Weighted graph from affected JourneyID(s) to possible connection solutions
+default_vector <vector<int>> graphCV;       //Unweighted graph from connection solution to its solution flight Inventory ID(s)
+
+pair<int,int> graphUCAndGraphCVGenerator(){
+    int uc_edges=0;
+    int cv_edges=0;
+
+    for(int j_id:AffectedJourneys){
+        vector<int> v1=findAllFlightsFromSrc(journeyMap[j_id]->flights[0]);
+        vector<int> v2=findAllFlightsToDest(journeyMap[j_id]->flights[0]);
+        vector<pair<int,int>> v3= makeConnections(v1,v2);
+
+        vector<pair<long long,vector<pair<int,ClassCDs>>>> v4=getBest(v3,journeyMap[j_id]->flights[0]);
+
+        int u_id=uIndexGenerator.getIndex(j_id);
+
+        for(auto [wt,ids]:v4){
+            int c_id=cIndexGenerator.getIndex(ids);
+
+            graphUC[u_id].push_back(make_pair(wt,c_id));
+            uc_edges++;
+
+            for(auto x:ids){
+                int v_id=vIndexGenerator.getIndex(x);
+                graphCV[c_id].push_back(v_id);
+                cv_edges++;
+            }
+        }
+    }
+    return make_pair(uc_edges,cv_edges);
+}
 
 
 // Generation of graphWD
-
-
 default_vector <vector<int>> graphWD;   //Unweighted graph from cancelled flight InventoryID(s) to possible flight solution InventoryID(s)
 
 int graphWDGenerator(){

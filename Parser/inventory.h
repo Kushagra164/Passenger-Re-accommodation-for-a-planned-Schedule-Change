@@ -1,5 +1,3 @@
-
-
 class Inventory{
 private:
     int InventoryID;
