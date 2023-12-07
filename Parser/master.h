@@ -400,7 +400,7 @@ long long getConnectingFlightScore(pair<int, int> proposedinvIds, int originalin
     return score;
 }
 
-long long getfinalConnectingFlightScore(int journeyId, pair<int, ClassCDs> proposed1, pair<int, ClassCDs> proposed2){
+long long getFinalConnectingFlightScore(int journeyId, pair<int, ClassCDs> proposed1, pair<int, ClassCDs> proposed2){
     long long originalPnrScore = pnrScore(journeyId, journeyMap[journeyId]->ClassCD);
     auto [invid1, classcd1] = proposed1;
     auto [invid2, classcd2] = proposed2;
@@ -442,7 +442,7 @@ vector<pair<long long,vector<pair<int,ClassCDs>>>> getBest(int journeyId, vector
             }
         }
     }
-    sort(allCases.begin(), allCases.end(), [&](auto i, auto j){ return getfinalConnectingFlightScore(journeyId, i.first, i.second) > getfinalConnectingFlightScore(journeyId, j.first , j.second); });
+    sort(allCases.begin(), allCases.end(), [&](auto i, auto j){ return getFinalConnectingFlightScore(journeyId, i.first, i.second) > getFinalConnectingFlightScore(journeyId, j.first , j.second); });
     allCases.resize(min((int) MAXIMUM_ALLOWED_CONNECTIONS_PER_JOURNEY, (int) allCases.size()));
 
 
@@ -450,7 +450,7 @@ vector<pair<long long,vector<pair<int,ClassCDs>>>> getBest(int journeyId, vector
 
     for(auto cur: allCases)
     {
-        long long totalScore = getfinalConnectingFlightScore(journeyId, cur.first , cur.second);
+        long long totalScore = getFinalConnectingFlightScore(journeyId, cur.first , cur.second);
         finalCases.push_back({totalScore,{cur.first,cur.second}});
     }
 
@@ -458,7 +458,7 @@ vector<pair<long long,vector<pair<int,ClassCDs>>>> getBest(int journeyId, vector
 }
 
 
-default_vector <vector<pair<int,int>>> graphUC;       //Weighted graph from affected JourneyID(s) to possible connection solutions
+default_vector <vector<pair<int,long long>>> graphUC;       //Weighted graph from affected JourneyID(s) to possible connection solutions
 default_vector <vector<int>> graphCV;       //Unweighted graph from connection solution to its solution flight Inventory ID(s)
 
 pair<int,int> graphUCAndGraphCVGenerator(){

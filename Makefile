@@ -1,7 +1,7 @@
 excel-to-csv:
 	python Parser/excelToCsv.py	--input_file_path="./Input/inventory.xlsx"	--output_file_path="./Processing/Intermediates/inventory.csv"
 	python Parser/excelToCsv.py	--input_file_path="./Input/booking.xlsx"	--output_file_path="./Processing/Intermediates/booking.csv"
-	python Parser/excelToCsv.py	--input_file_path="./Input/passenger.xlsx"	--output_file_path="./Processing/Intermediates/passengery.csv"
+	python Parser/excelToCsv.py	--input_file_path="./Input/passenger.xlsx"	--output_file_path="./Processing/Intermediates/passenger.csv"
 	python Parser/excelToCsv.py	--input_file_path="./Input/schedule.xlsx"	--output_file_path="./Processing/Intermediates/schedule.csv"
 
 csv-to-graph:

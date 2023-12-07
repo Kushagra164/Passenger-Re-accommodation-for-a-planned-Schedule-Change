@@ -1,4 +1,0 @@
-ScheduleID,CarrierCode,FlightNumber,AircraftType,AircraftTailNumber,DepartureAirport,ArrivalAirport,DepartureTime,ArrivalTime,StartDate,EndDate,Status,Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Frequency_per_week,Frequency,NoOfDepartures,DepartureDates
-SCH-ZZ-7283355,ZZ,318,Boeing 787,VT-6785,DEL,MAA,17:00,19:00,05/25/2024,05/25/2024,Cancelled,1,0,0,0,0,0,0,1,1,1,['05/25/2024']
-SCH-ZZ-7283356,ZZ,318,Boeing 787,VT-6785,DEL,MAA,17:01,19:01,05/25/2024,05/25/2024,Scheduled,1,0,0,0,0,0,0,1,1,1,['05/25/2024']
-SCH-ZZ-7283357,ZZ,318,Boeing 787,VT-6785,DEL,MAA,17:02,19:02,05/25/2024,05/25/2024,Scheduled,1,0,0,0,0,0,0,1,1,1,['05/25/2024']

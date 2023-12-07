@@ -458,6 +458,14 @@ int main(int argc,char* argv[]) {
     fw<<modU<<" "<<modC<<" "<<modV<<" "<<modD<<" "<<modW<<"\n";
 
     fw<<m1<<"\n";
+    for(int u=0;u<modU;u++){
+        for(auto x:graphUC[u]){
+            int c=x.first;
+            long long weight=x.second;
+            fw<<u<<" "<<c<<" "<<weight<<"\n";
+        }
+    }
+
 
     fw<<m2<<"\n";
     for(int u=0;u<modU;u++){
@@ -469,6 +477,11 @@ int main(int argc,char* argv[]) {
     }
 
     fw<<m3<<"\n";
+    for(int c=0;c<modC;c++){
+        for(int v:graphCV[c]){
+            fw<<c<<" "<<v<<"\n";
+        }
+    }
 
 
     fw<<m4<<"\n";
