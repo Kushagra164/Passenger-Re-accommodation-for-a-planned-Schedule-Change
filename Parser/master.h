@@ -223,6 +223,42 @@ long long getFlightScore(int originalinvId, int proposedinvId){
     return score;
 }
 
+long long getConnectingFlightScore(int originalinvId, int proposedinvId1, int proposedinvId2){
+    long long score = 0;
+
+    Time ArrivaltimeDiff = getArrTimeDiff(originalinvId, proposedinvId2);
+    if (ArrivaltimeDiff <= Time(6, 0))       score += ARRIVAL_DELAY_LT_6_SCORE;
+    else if (ArrivaltimeDiff <= Time(12, 0)) score += ARRIVAL_DELAY_LT_12_SCORE;
+    else if (ArrivaltimeDiff <= Time(24, 0)) score += ARRIVAL_DELAY_LT_24_SCORE;
+    else if (ArrivaltimeDiff <= Time(48, 0)) score += ARRIVAL_DELAY_LT_48_SCORE;
+
+    Time DeparturetimeDiff = getDepTimeDiff(originalinvId, proposedinvId1);
+    if (DeparturetimeDiff <= Time(6, 0))       score += DEPARTURE_DELAY_LT_6_SCORE;
+    else if (DeparturetimeDiff <= Time(12, 0)) score += DEPARTURE_DELAY_LT_12_SCORE;
+    else if (DeparturetimeDiff <= Time(24, 0)) score += DEPARTURE_DELAY_LT_24_SCORE;
+    else if (DeparturetimeDiff <= Time(48, 0)) score += DEPARTURE_DELAY_LT_48_SCORE;
+
+    
+    DateTime proposed1departure = DateTime(inventoryMap[proposedinvId1]->DepartureDate,scheduleMap[inventoryToScheduleMap[proposedinvId1]]->DepartureTime);
+    DateTime proposed2departure = DateTime(inventoryMap[proposedinvId2]->DepartureDate,scheduleMap[inventoryToScheduleMap[proposedinvId2]]->DepartureTime);
+    DateTime proposed1arrival = DateTime(inventoryMap[proposedinvId1]->ArrivalDate,scheduleMap[inventoryToScheduleMap[proposedinvId1]]->ArrivalTime);
+    DateTime proposed2arrival = DateTime(inventoryMap[proposedinvId2]->ArrivalDate,scheduleMap[inventoryToScheduleMap[proposedinvId2]]->ArrivalTime);
+    Time t1 = proposed1arrival - proposed1departure;
+    Time t2 = proposed2arrival - proposed2departure;
+    Time t3 = t1 + t2;
+
+
+    score += CITYPAIRS_SCORE;
+    int score1 = scheduleMap[inventoryToScheduleMap[originalinvId]]->EquipmentNo ==
+             scheduleMap[inventoryToScheduleMap[proposedinvId1]]->EquipmentNo ? EQUIPMENT_SCORE: 0;
+    int score2 = scheduleMap[inventoryToScheduleMap[originalinvId]]->EquipmentNo ==
+             scheduleMap[inventoryToScheduleMap[proposedinvId2]]->EquipmentNo ? EQUIPMENT_SCORE: 0;
+    score += (t1.value() * score1 + t2.value() * score2) / t3.value();
+
+    cerr<<__LINE__<<" "<<score<<endl;
+    return score;
+}
+
 // Generation of graphUV and graphDV
 
 default_vector <vector<pair<int,long long>>> graphUV;     //Weighted graph from affected JourneyID(s) to possible flight solution InventoryID(s) cum ClassCD
