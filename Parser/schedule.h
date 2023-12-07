@@ -8,6 +8,7 @@ int getStatusCode(string str){
     else if(str=="Planning") return 1;
     else if(str=="Cancelled") return 2;
     else if(str=="Delayed") return 3;
+    return -1;
 }
 
 class Schedule{
