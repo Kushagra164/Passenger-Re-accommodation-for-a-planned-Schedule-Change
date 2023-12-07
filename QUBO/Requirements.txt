@@ -1,3 +1,2 @@
 dwave-ocean-sdk
 python-dotenv
-pandas
