@@ -4,8 +4,8 @@ import pandas
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("input_file_path", required=True)
-parser.add_argument("output_file_path", required=True)
+parser.add_argument("--input_file_path", required=True, help="input file")
+parser.add_argument("--output_file_path", required=True, help="output file")
 args = parser.parse_args()
 
 excelFilePath = args.input_file_path

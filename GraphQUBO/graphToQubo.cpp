@@ -33,8 +33,9 @@ int main(int argc, char *argv[])
     quboInput.open(argv[2]);
     ifstream input;
     input.open(argv[3]);
-    int N = (argc > 4) ? stoi(argv[4]) : 100000;
+    int N = (argc > 4) ? stoi(argv[4]) : 300000;
     int M = (argc > 5) ? stoi(argv[5]) : 100;
+    int L = (argc > 6) ? stoi(argv[6]) : 3;
 
     // input handling
     int U, C, V, D, W;
@@ -126,8 +127,8 @@ int main(int argc, char *argv[])
                         int v = getV(e.F);
                         if(v!=-1)
                         {
-                            val += e.S;
-                            curInd.push_back(mappingUV[mp(u, v)] = Q.addVariable(e.S));
+                            val += (e.S*L);
+                            curInd.push_back(mappingUV[mp(u, v)] = Q.addVariable(e.S*L));
                         }
                     }
 

@@ -5,13 +5,11 @@
 using namespace std;
 #include "master.h"
 
-int main() {
+int main(int argc,char* argv[]) {
     //Parsing of Schedule File
 
-    cerr<<__LINE__<<"aaaa"<<endl;
-
     ifstream scheduleFile;
-    scheduleFile.open("schedule1.csv");                  //argv[1]
+    scheduleFile.open(argv[1]);
     string line="";
     getline(scheduleFile, line);
     line ="";
@@ -114,7 +112,7 @@ int main() {
     //Parsing of Inventory File
 
     ifstream inventoryFile;
-    inventoryFile.open("inventory1.csv");                               //argv[2]
+    inventoryFile.open(argv[2]);
     line="";
     getline(inventoryFile, line);
     line ="";
@@ -238,7 +236,7 @@ int main() {
     // Parsing of Passenger Booking File
 
     ifstream bookingFile;
-    bookingFile.open("booking1.csv");                       //argv[3]
+    bookingFile.open(argv[3]);
     line = "";
     getline(bookingFile, line); line.clear();
 
@@ -355,7 +353,7 @@ int main() {
 
 
     ifstream passengerFile;
-    passengerFile.open("passenger1.csv");                   //argv[4]
+    passengerFile.open(argv[4]);
     line = "";
     getline(passengerFile, line);
     line.clear();
@@ -431,7 +429,7 @@ int main() {
     //Graph Creation
     int m1=0;
     int m6=graphWUGenerator();
-    pair<int,int> p=graphUVandDVGenerator();
+    pair<int,int> p=graphUVAndGraphDVGenerator();
     int m2=p.first;
     int m3=0;
     int m4=p.second;
@@ -439,8 +437,8 @@ int main() {
 
 
     //Output File Generation
-    freopen("edges.txt",  "r", stdin);
-    ofstream fw("output.txt",ofstream::out);
+    freopen( argv[5], "r", stdin);
+    ofstream fw(argv[6],ofstream::out);
 
     int no_of_samples;
     cin>>no_of_samples;
@@ -455,7 +453,7 @@ int main() {
             int u,c;
             cin>>u>>c;
 
-            int j_id = uIndexGenerator.getID(u);
+            //int j_id = uIndexGenerator.getID(u);
 
         }
 
@@ -469,9 +467,9 @@ int main() {
 
             int j_id = uIndexGenerator.getID(u);
             cerr<<__LINE__<<" "<<j_id<<endl;
-            pair<int,ClassCDs> p=vIndexGenerator.getID(v);
+            pair<int,ClassCDs> pr=vIndexGenerator.getID(v);
             cerr<<__LINE__<<" "<<journeyToPnrMap[j_id]<<endl;
-            fw<<pnrUuidGenerator.getString(journeyToPnrMap[j_id])<<" "<<inventoryUuidGenerator.getString(p.first)<<" "<<p.second<<endl;
+            fw<<pnrUuidGenerator.getString(journeyToPnrMap[j_id])<<" "<<inventoryUuidGenerator.getString(pr.first)<<" "<<pr.second<<endl;
         }
 
         int no_of_wd_edges;

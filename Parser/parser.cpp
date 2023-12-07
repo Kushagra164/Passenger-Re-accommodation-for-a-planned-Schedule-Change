@@ -5,11 +5,11 @@
 using namespace std;
 #include "master.h"
 
-int main() {                             //int argc,char *argv
+int main(int argc,char* argv[]) {
     //Parsing of Schedule File
 
     ifstream scheduleFile;
-    scheduleFile.open("schedule1.csv");                  //argv[1]
+    scheduleFile.open(argv[1]);
     string line="";
     getline(scheduleFile, line);
     line ="";
@@ -112,7 +112,7 @@ int main() {                             //int argc,char *argv
     //Parsing of Inventory File
 
     ifstream inventoryFile;
-    inventoryFile.open("inventory1.csv");                               //argv[2]
+    inventoryFile.open(argv[2]);
     line="";
     getline(inventoryFile, line);
     line ="";
@@ -236,7 +236,7 @@ int main() {                             //int argc,char *argv
     // Parsing of Passenger Booking File
 
     ifstream bookingFile;
-    bookingFile.open("booking1.csv");                       //argv[3]
+    bookingFile.open(argv[3]);
     line = "";
     getline(bookingFile, line); line.clear();
 
@@ -353,7 +353,7 @@ int main() {                             //int argc,char *argv
 
 
     ifstream passengerFile;
-    passengerFile.open("passenger1.csv");                   //argv[4]
+    passengerFile.open(argv[4]);
     line = "";
     getline(passengerFile, line);
     line.clear();
@@ -432,7 +432,7 @@ int main() {                             //int argc,char *argv
      //Graph Creation
      int m1=0;
     int m6=graphWUGenerator();
-    pair<int,int> p=graphUVandDVGenerator();
+    pair<int,int> p=graphUVAndGraphDVGenerator();
     int m2=p.first;
     int m3=0;
     int m4=p.second;
@@ -441,7 +441,7 @@ int main() {                             //int argc,char *argv
 
     //Output File Creation for QUBO
 
-    ofstream fw("graph.txt",ofstream::out);
+    ofstream fw(argv[5],ofstream::out);
 
 //    cerr<<CancelledFlights.size()<<"\n";
 //    for(int inv_id:CancelledFlights){

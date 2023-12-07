@@ -19,8 +19,30 @@ class graphIndexGenerator{
         }
 };
 graphIndexGenerator uIndexGenerator;
-graphIndexGenerator wIndexGenerator;
 graphIndexGenerator dIndexGenerator;
+graphIndexGenerator wIndexGenerator;
+
+class cGraphIndexGenerator{
+    map<vector<pair<int,ClassCDs>>,int> forwardMap;
+    map<int,vector<pair<int,ClassCDs>>> revMap;
+public:
+    int getIndex(vector<pair<int,ClassCDs>> id) {
+        if (forwardMap.find(id) != forwardMap.end()) return forwardMap[id];
+        revMap[forwardMap.size()] = id;
+        return forwardMap[id] = forwardMap.size();
+    }
+
+    vector<pair<int,ClassCDs>> getID(int idx){
+        if(revMap.find(idx)!= revMap.end())
+            return revMap[idx];
+        assert(false);
+    }
+
+    int getSize(){
+        return revMap.size();
+    }
+};
+cGraphIndexGenerator cIndexGenerator;
 
 class vGraphIndexGenerator{
     map<pair<int,ClassCDs>,int> forwardMap;
