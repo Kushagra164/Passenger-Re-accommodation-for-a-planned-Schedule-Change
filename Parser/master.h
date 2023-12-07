@@ -196,9 +196,7 @@ bool checkInventory(int pax_cnt ,int inv_id,int x){
     else if(x==3) avl_inv = inventoryMap[inv_id]->PCTotalInventory - inventoryMap[inv_id]->PCBookedInventory;
     else avl_inv = inventoryMap[inv_id]->ECTotalInventory - inventoryMap[inv_id]->ECBookedInventory;
 
-    if(pax_cnt<=avl_inv) return true;
-
-    return false;
+    return pax_cnt <= avl_inv;
 }
 
 long long getFlightScore(int originalinvId, int proposedinvId){
@@ -259,9 +257,11 @@ long long getConnectingFlightScore(pair<int, int> proposedinvIds, int originalin
     return score;
 }
 
+long long Totalconnectingscore(int initialInvId, )
+
 // Generation of graphUV and graphDV
 
-default_vector <vector<pair<int,long long>>> graphUV;     //Weighted graph from affected JourneyID(s) to possible flight solution InventoryID(s) cum ClassCD
+default_vector<vector<pair<int,long long>>> graphUV;     //Weighted graph from affected JourneyID(s) to possible flight solution InventoryID(s) cum ClassCD
 default_vector <vector<int>> graphDV;                     //Unweighted graph from flight Inventory ID(s) to their possible classes
 
 pair<int,int> graphUVandDVGenerator(){
