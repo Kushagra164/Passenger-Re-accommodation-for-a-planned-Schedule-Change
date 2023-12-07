@@ -221,89 +221,7 @@ long long getFlightScore(int originalinvId, int proposedinvId){
     return score;
 }
 
-long long getConnectingFlightScore(pair<int, int> proposedinvIds, int originalinvId){
-    long long score = 0;
-    auto [proposedinvId1, proposedinvId2] = proposedinvIds;
-    Time ArrivaltimeDiff = getArrTimeDiff(originalinvId, proposedinvId2);
-    if (ArrivaltimeDiff <= Time(6, 0))       score += ARRIVAL_DELAY_LT_6_SCORE;
-    else if (ArrivaltimeDiff <= Time(12, 0)) score += ARRIVAL_DELAY_LT_12_SCORE;
-    else if (ArrivaltimeDiff <= Time(24, 0)) score += ARRIVAL_DELAY_LT_24_SCORE;
-    else if (ArrivaltimeDiff <= Time(48, 0)) score += ARRIVAL_DELAY_LT_48_SCORE;
 
-    Time DeparturetimeDiff = getDepTimeDiff(originalinvId, proposedinvId1);
-    if (DeparturetimeDiff <= Time(6, 0))       score += DEPARTURE_DELAY_LT_6_SCORE;
-    else if (DeparturetimeDiff <= Time(12, 0)) score += DEPARTURE_DELAY_LT_12_SCORE;
-    else if (DeparturetimeDiff <= Time(24, 0)) score += DEPARTURE_DELAY_LT_24_SCORE;
-    else if (DeparturetimeDiff <= Time(48, 0)) score += DEPARTURE_DELAY_LT_48_SCORE;
-
-    
-    DateTime proposed1departure = DateTime(inventoryMap[proposedinvId1]->DepartureDate,scheduleMap[inventoryToScheduleMap[proposedinvId1]]->DepartureTime);
-    DateTime proposed2departure = DateTime(inventoryMap[proposedinvId2]->DepartureDate,scheduleMap[inventoryToScheduleMap[proposedinvId2]]->DepartureTime);
-    DateTime proposed1arrival = DateTime(inventoryMap[proposedinvId1]->ArrivalDate,scheduleMap[inventoryToScheduleMap[proposedinvId1]]->ArrivalTime);
-    DateTime proposed2arrival = DateTime(inventoryMap[proposedinvId2]->ArrivalDate,scheduleMap[inventoryToScheduleMap[proposedinvId2]]->ArrivalTime);
-    Time t1 = proposed1arrival - proposed1departure;
-    Time t2 = proposed2arrival - proposed2departure;
-    Time t3 = t1 + t2;
-
-
-    score += CITYPAIR_SCORE;
-    int score1 = scheduleMap[inventoryToScheduleMap[originalinvId]]->EquipmentNo ==
-             scheduleMap[inventoryToScheduleMap[proposedinvId1]]->EquipmentNo ? EQUIPMENT_SCORE: 0;
-    int score2 = scheduleMap[inventoryToScheduleMap[originalinvId]]->EquipmentNo ==
-             scheduleMap[inventoryToScheduleMap[proposedinvId2]]->EquipmentNo ? EQUIPMENT_SCORE: 0;
-    score += (t1.value() * score1 + t2.value() * score2) / t3.value();
-
-    cerr<<__LINE__<<" "<<score<<endl;
-    return score;
-}
-
-long long getfinalConnectingFlightScore(int journeyId, pair<int, ClassCDs> proposed1, pair<int, ClassCDs> proposed2){
-    long long originalPnrScore = pnrScore(journeyId, journeyMap[journeyId]->ClassCD);
-    auto [invid1, classcd1] = proposed1;
-    auto [invid2, classcd2] = proposed2;
-    long long connectingFlightScore = getConnectingFlightScore(make_pair(invid1, invid2), journeyMap[journeyId]->flights[0]);
-
-    long long newPnrScore = (pnrScore(journeyId, classcd1) + pnrScore(journeyId, classcd2)) / 2;
-
-    return originalPnrScore * newPnrScore * connectingFlightScore;
-}
-
-
-vector<pair<pair<int,ClassCDs>,pair<int,ClassCDs>>> GetKbest(int journeyId, vector<pair<int, int>> vecproposed){
-    
-    vector<pair<pair<int,ClassCDs>,pair<int,ClassCDs>>> allCases;
-
-    auto originalcls = journeyMap[journeyId]->ClassCD;
-
-    int origcls = originalcls;
-
-    for(auto [proposed1,proposed2]: vecproposed){
-        for(int cls1=1;cls1<=4;cls1++){
-            for(int cls2=1;cls2<=4;cls2++){
-                if (CLASS_DOWNGRADE_ALLOWED==0 && CLASS_UPGRADE_ALLOWED==0)
-                {
-                    if(cls1!=origcls || cls2!=origcls)
-                        continue;
-                }
-                else if(CLASS_DOWNGRADE_ALLOWED==0)
-                {
-                    if(cls1>origcls || cls2>origcls)
-                        continue;
-                }
-                else if(CLASS_UPGRADE_ALLOWED==0)
-                {
-                    if(cls1<origcls || cls2<origcls)
-                        continue;
-                }
-            
-                allCases.push_back({{proposed1,static_cast<ClassCDs>(cls1)},{proposed2,static_cast<ClassCDs>(cls2)}});
-            }
-        }
-    }
-    sort(allCases.begin(), allCases.end(), [&](auto i, auto j){ return getfinalConnectingFlightScore(journeyId, i) > getfinalConnectingFlightScore(journeyId, j); });
-    allCases.resize(min((int) MAX_CONNECTING_FLIGHTS, (int) allCases.size()));
-    return allCases; 
-}
 
 // Generation of graphUV and graphDV
 
@@ -446,41 +364,121 @@ vector<pair<int,int>> makeConnections(vector<int> &from_src, vector<int> &to_des
     return v;
 }
 
-vector<pair<long long,vector<pair<int,ClassCDs>>>> getBest(vector<pair<int,int>> &v,int inv_id){
+long long getConnectingFlightScore(pair<int, int> proposedinvIds, int originalinvId){
+    long long score = 0;
+    auto [proposedinvId1, proposedinvId2] = proposedinvIds;
+    Time ArrivaltimeDiff = getArrTimeDiff(originalinvId, proposedinvId2);
+    if (ArrivaltimeDiff <= Time(6, 0))       score += ARRIVAL_DELAY_LT_6_SCORE;
+    else if (ArrivaltimeDiff <= Time(12, 0)) score += ARRIVAL_DELAY_LT_12_SCORE;
+    else if (ArrivaltimeDiff <= Time(24, 0)) score += ARRIVAL_DELAY_LT_24_SCORE;
+    else if (ArrivaltimeDiff <= Time(48, 0)) score += ARRIVAL_DELAY_LT_48_SCORE;
 
+    Time DeparturetimeDiff = getDepTimeDiff(originalinvId, proposedinvId1);
+    if (DeparturetimeDiff <= Time(6, 0))       score += DEPARTURE_DELAY_LT_6_SCORE;
+    else if (DeparturetimeDiff <= Time(12, 0)) score += DEPARTURE_DELAY_LT_12_SCORE;
+    else if (DeparturetimeDiff <= Time(24, 0)) score += DEPARTURE_DELAY_LT_24_SCORE;
+    else if (DeparturetimeDiff <= Time(48, 0)) score += DEPARTURE_DELAY_LT_48_SCORE;
+
+
+    DateTime proposed1departure = DateTime(inventoryMap[proposedinvId1]->DepartureDate,scheduleMap[inventoryToScheduleMap[proposedinvId1]]->DepartureTime);
+    DateTime proposed2departure = DateTime(inventoryMap[proposedinvId2]->DepartureDate,scheduleMap[inventoryToScheduleMap[proposedinvId2]]->DepartureTime);
+    DateTime proposed1arrival = DateTime(inventoryMap[proposedinvId1]->ArrivalDate,scheduleMap[inventoryToScheduleMap[proposedinvId1]]->ArrivalTime);
+    DateTime proposed2arrival = DateTime(inventoryMap[proposedinvId2]->ArrivalDate,scheduleMap[inventoryToScheduleMap[proposedinvId2]]->ArrivalTime);
+    Time t1 = proposed1arrival - proposed1departure;
+    Time t2 = proposed2arrival - proposed2departure;
+    Time t3 = t1 + t2;
+
+
+    score += CITYPAIR_SCORE;
+    int score1 = scheduleMap[inventoryToScheduleMap[originalinvId]]->EquipmentNo ==
+                 scheduleMap[inventoryToScheduleMap[proposedinvId1]]->EquipmentNo ? EQUIPMENT_SCORE: 0;
+    int score2 = scheduleMap[inventoryToScheduleMap[originalinvId]]->EquipmentNo ==
+                 scheduleMap[inventoryToScheduleMap[proposedinvId2]]->EquipmentNo ? EQUIPMENT_SCORE: 0;
+    score += (t1.value() * score1 + t2.value() * score2) / t3.value();
+
+    cerr<<__LINE__<<" "<<score<<endl;
+    return score;
 }
+
+long long getfinalConnectingFlightScore(int journeyId, pair<int, ClassCDs> proposed1, pair<int, ClassCDs> proposed2){
+    long long originalPnrScore = pnrScore(journeyId, journeyMap[journeyId]->ClassCD);
+    auto [invid1, classcd1] = proposed1;
+    auto [invid2, classcd2] = proposed2;
+    long long connectingFlightScore = getConnectingFlightScore(make_pair(invid1, invid2), journeyMap[journeyId]->flights[0]);
+
+    long long newPnrScore = (pnrScore(journeyId, classcd1) + pnrScore(journeyId, classcd2)) / 2;
+
+    return originalPnrScore * newPnrScore * connectingFlightScore;
+}
+
+vector<pair<pair<int,ClassCDs>,pair<int,ClassCDs>>> getBest(int journeyId, vector<pair<int, int>> vecproposed){
+
+    vector<pair<pair<int,ClassCDs>,pair<int,ClassCDs>>> allCases;
+
+    auto originalcls = journeyMap[journeyId]->ClassCD;
+
+    int origcls = originalcls;
+
+    for(auto [proposed1,proposed2]: vecproposed){
+        for(int cls1=1;cls1<=4;cls1++){
+            for(int cls2=1;cls2<=4;cls2++){
+                if (CLASS_DOWNGRADE_ALLOWED==0 && CLASS_UPGRADE_ALLOWED==0)
+                {
+                    if(cls1!=origcls || cls2!=origcls)
+                        continue;
+                }
+                else if(CLASS_DOWNGRADE_ALLOWED==0)
+                {
+                    if(cls1>origcls || cls2>origcls)
+                        continue;
+                }
+                else if(CLASS_UPGRADE_ALLOWED==0)
+                {
+                    if(cls1<origcls || cls2<origcls)
+                        continue;
+                }
+
+                allCases.push_back({{proposed1,static_cast<ClassCDs>(cls1)},{proposed2,static_cast<ClassCDs>(cls2)}});
+            }
+        }
+    }
+    sort(allCases.begin(), allCases.end(), [&](auto i, auto j){ return getfinalConnectingFlightScore(journeyId, i) > getfinalConnectingFlightScore(journeyId, j); });
+    allCases.resize(min((int) MAXIMUM_ALLOWED_CONNECTIONS_PER_JOURNEY, (int) allCases.size()));
+    return allCases;
+}
+
 
 default_vector <vector<pair<int,int>>> graphUC;       //Weighted graph from affected JourneyID(s) to possible connection solutions
 default_vector <vector<int>> graphCV;       //Unweighted graph from connection solution to its solution flight Inventory ID(s)
 
-//pair<int,int> graphUCAndGraphCVGenerator(){
-//    int uc_edges=0;
-//    int cv_edges=0;
-//
-//    for(int j_id:AffectedJourneys){
-//        vector<int> v1=findAllFlightsFromSrc(journeyMap[j_id]->flights[0]);
-//        vector<int> v2=findAllFlightsToDest(journeyMap[j_id]->flights[0]);
-//        vector<pair<int,int>> v3= makeConnections(v1,v2);
-//
-//        vector<pair<long long,vector<pair<int,ClassCDs>>>> v4=getBest(v3,journeyMap[j_id]->flights[0]);
-//
-//        int u_id=uIndexGenerator.getIndex(j_id);
-//
-//        for(auto [wt,ids]:v4){
-//            int c_id=cIndexGenerator.getIndex(ids);
-//
-//            graphUC[u_id].push_back(make_pair(wt,c_id));
-//            uc_edges++;
-//
-//            for(auto x:ids){
-//                int v_id=vIndexGenerator.getIndex(x);
-//                graphCV[c_id].push_back(v_id);
-//                cv_edges++;
-//            }
-//        }
-//    }
-//    return make_pair(uc_edges,cv_edges);
-//}
+pair<int,int> graphUCAndGraphCVGenerator(){
+    int uc_edges=0;
+    int cv_edges=0;
+
+    for(int j_id:AffectedJourneys){
+        vector<int> v1=findAllFlightsFromSrc(journeyMap[j_id]->flights[0]);
+        vector<int> v2=findAllFlightsToDest(journeyMap[j_id]->flights[0]);
+        vector<pair<int,int>> v3= makeConnections(v1,v2);
+
+        vector<pair<long long,vector<pair<int,ClassCDs>>>> v4=getBest(v3,journeyMap[j_id]->flights[0]);
+
+        int u_id=uIndexGenerator.getIndex(j_id);
+
+        for(auto [wt,ids]:v4){
+            int c_id=cIndexGenerator.getIndex(ids);
+
+            graphUC[u_id].push_back(make_pair(wt,c_id));
+            uc_edges++;
+
+            for(auto x:ids){
+                int v_id=vIndexGenerator.getIndex(x);
+                graphCV[c_id].push_back(v_id);
+                cv_edges++;
+            }
+        }
+    }
+    return make_pair(uc_edges,cv_edges);
+}
 
 
 // Generation of graphWD
