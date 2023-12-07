@@ -5,6 +5,7 @@
 #include<cstring>
 #include<cassert>
 #include<set>
+using namespace std;
 template <class T> constexpr T floor(const T x, const T y) { T q = x / y, r = x % y; return q - ((x ^ y) < 0 and (r != 0)); }
 
 class Date {
