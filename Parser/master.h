@@ -246,7 +246,7 @@ long long getConnectingFlightScore(pair<int, int> proposedinvIds, int originalin
     Time t3 = t1 + t2;
 
 
-    score += CITYPAIRS_SCORE;
+    score += CITYPAIR_SCORE;
     int score1 = scheduleMap[inventoryToScheduleMap[originalinvId]]->EquipmentNo ==
              scheduleMap[inventoryToScheduleMap[proposedinvId1]]->EquipmentNo ? EQUIPMENT_SCORE: 0;
     int score2 = scheduleMap[inventoryToScheduleMap[originalinvId]]->EquipmentNo ==
@@ -405,34 +405,34 @@ vector<pair<int,int>> makeConnections(vector<int> &from_src, vector<int> &to_des
 default_vector <vector<pair<int,int>>> graphUC;       //Weighted graph from affected JourneyID(s) to possible connection solutions
 default_vector <vector<int>> graphCV;       //Unweighted graph from connection solution to its solution flight Inventory ID(s)
 
-pair<int,int> graphUCAndGraphCVGenerator(){
-    int uc_edges=0;
-    int cv_edges=0;
-
-    for(int j_id:AffectedJourneys){
-        vector<int> v1=findAllFlightsFromSrc(journeyMap[j_id]->flights[0]);
-        vector<int> v2=findAllFlightsToDest(journeyMap[j_id]->flights[0]);
-        vector<pair<int,int>> v3= makeConnections(v1,v2);
-
-        vector<pair<long long,vector<pair<int,ClassCDs>>>> v4=getBest(v3,journeyMap[j_id]->flights[0]);
-
-        int u_id=uIndexGenerator.getIndex(j_id);
-
-        for(auto [wt,ids]:v4){
-            int c_id=cIndexGenerator.getIndex(ids);
-
-            graphUC[u_id].push_back(make_pair(wt,c_id));
-            uc_edges++;
-
-            for(auto x:ids){
-                int v_id=vIndexGenerator.getIndex(x);
-                graphCV[c_id].push_back(v_id);
-                cv_edges++;
-            }
-        }
-    }
-    return make_pair(uc_edges,cv_edges);
-}
+//pair<int,int> graphUCAndGraphCVGenerator(){
+//    int uc_edges=0;
+//    int cv_edges=0;
+//
+//    for(int j_id:AffectedJourneys){
+//        vector<int> v1=findAllFlightsFromSrc(journeyMap[j_id]->flights[0]);
+//        vector<int> v2=findAllFlightsToDest(journeyMap[j_id]->flights[0]);
+//        vector<pair<int,int>> v3= makeConnections(v1,v2);
+//
+//        vector<pair<long long,vector<pair<int,ClassCDs>>>> v4=getBest(v3,journeyMap[j_id]->flights[0]);
+//
+//        int u_id=uIndexGenerator.getIndex(j_id);
+//
+//        for(auto [wt,ids]:v4){
+//            int c_id=cIndexGenerator.getIndex(ids);
+//
+//            graphUC[u_id].push_back(make_pair(wt,c_id));
+//            uc_edges++;
+//
+//            for(auto x:ids){
+//                int v_id=vIndexGenerator.getIndex(x);
+//                graphCV[c_id].push_back(v_id);
+//                cv_edges++;
+//            }
+//        }
+//    }
+//    return make_pair(uc_edges,cv_edges);
+//}
 
 
 // Generation of graphWD
