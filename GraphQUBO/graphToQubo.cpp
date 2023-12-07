@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     quboInput.open(argv[2]);
     ifstream input;
     input.open(argv[3]);
-    int N = (argc > 4) ? stoi(argv[4]) : 60000;
+    int N = (argc > 4) ? stoi(argv[4]) : 100000;
     int M = (argc > 5) ? stoi(argv[5]) : 100;
 
     // input handling
