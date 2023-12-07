@@ -5,7 +5,7 @@ excel-to-csv:
 	python Parser/excelToCsv.py	--input_file_path="./Input/schedule.xlsx"	--output_file_path="./Processing/Intermediates/schedule.csv"
 
 csv-to-graph:
-	g++ ./Parser/parser.cpp -o ./Processing/Executables/parser.out
+	g++ ./Parser/parser.cpp -o ./Processing/Executables/parser.out -std=c++20
 	./Processing/Executables/parser.out \
 	./Processing/Intermediates/schedule.csv \
 	./Processing/Intermediates/inventory.csv \
