@@ -37,13 +37,15 @@ def solve_qubo(test_case, no_samples, api_key):
 def main():
     parser = argparse.ArgumentParser(description="Solve QUBO problems using D-Wave Leap Hybrid Solver.")
     parser.add_argument("--env_file", required=True, help="env file required for api key")
+    parser.add_argument("--input_file_path", required=True, help="input for qubo")
+    parser.add_argument("--output_file_path", required=True, help="input for qubo")
     args = parser.parse_args()
 
     load_dotenv(args.env_file)
 
     api_key = os.getenv('API_KEY')
-    input_file_path = os.getenv('INPUT_FILE_PATH')
-    output_file_path = os.getenv('OUTPUT_FILE_PATH')
+    input_file_path = args.input_file_path
+    output_file_path = args.output_file_path
     no_samples = int(os.getenv('NO_SAMPLES'))
 
     test_cases = read_test_cases(input_file_path)
