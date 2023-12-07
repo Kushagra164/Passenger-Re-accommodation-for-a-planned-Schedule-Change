@@ -411,7 +411,7 @@ long long getfinalConnectingFlightScore(int journeyId, pair<int, ClassCDs> propo
     return originalPnrScore * newPnrScore * connectingFlightScore;
 }
 
-vector<pair<pair<int,ClassCDs>,pair<int,ClassCDs>>> getBest(int journeyId, vector<pair<int, int>> vecproposed){
+vector<pair<long long,vector<pair<int,ClassCDs>>>> getBest(int journeyId, vector<pair<int, int>> vecproposed){
 
     vector<pair<pair<int,ClassCDs>,pair<int,ClassCDs>>> allCases;
 
@@ -442,9 +442,19 @@ vector<pair<pair<int,ClassCDs>,pair<int,ClassCDs>>> getBest(int journeyId, vecto
             }
         }
     }
-    sort(allCases.begin(), allCases.end(), [&](auto i, auto j){ return getfinalConnectingFlightScore(journeyId, i) > getfinalConnectingFlightScore(journeyId, j); });
+    sort(allCases.begin(), allCases.end(), [&](auto i, auto j){ return getfinalConnectingFlightScore(journeyId, i.first, i.second) > getfinalConnectingFlightScore(journeyId, j.first , j.second); });
     allCases.resize(min((int) MAXIMUM_ALLOWED_CONNECTIONS_PER_JOURNEY, (int) allCases.size()));
-    return allCases;
+
+
+    vector<pair<long long,vector<pair<int,ClassCDs>>>> finalCases;
+
+    for(auto cur: allCases)
+    {
+        long long totalScore = getfinalConnectingFlightScore(journeyId, cur.first , cur.second);
+        finalCases.push_back({totalScore,{cur.first,cur.second}});
+    }
+
+    return finalCases;
 }
 
 
