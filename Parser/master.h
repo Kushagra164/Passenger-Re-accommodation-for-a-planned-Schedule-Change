@@ -460,7 +460,7 @@ pair<int,int> graphUCAndGraphCVGenerator(){
         vector<int> v2=findAllFlightsToDest(journeyMap[j_id]->flights[0]);
         vector<pair<int,int>> v3= makeConnections(v1,v2);
 
-        vector<pair<long long,vector<pair<int,ClassCDs>>>> v4=getBest(v3,journeyMap[j_id]->flights[0]);
+        vector<pair<long long,vector<pair<int,ClassCDs>>>> v4=getBest(j_id,v3);
 
         int u_id=uIndexGenerator.getIndex(j_id);
 

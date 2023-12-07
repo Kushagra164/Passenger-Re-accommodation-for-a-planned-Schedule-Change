@@ -430,12 +430,13 @@ int main(int argc,char* argv[]) {
 
 
      //Graph Creation
-     int m1=0;
     int m6=graphWUGenerator();
-    pair<int,int> p=graphUVAndGraphDVGenerator();
-    int m2=p.first;
-    int m3=0;
-    int m4=p.second;
+    pair<int,int> p1=graphUVAndGraphDVGenerator();
+    pair<int,int> p2=graphUCAndGraphCVGenerator();
+    int m1=p2.first;
+    int m2=p1.first;
+    int m3=p2.second;
+    int m4=p1.second;
     int m5=graphWDGenerator();
 
 
@@ -449,7 +450,7 @@ int main(int argc,char* argv[]) {
 //    }
 
     int modU=uIndexGenerator.getSize();
-    int modC=0;
+    int modC=cIndexGenerator.getSize();
     int modV=vIndexGenerator.getSize();
     int modD=dIndexGenerator.getSize();
     int modW=wIndexGenerator.getSize();
