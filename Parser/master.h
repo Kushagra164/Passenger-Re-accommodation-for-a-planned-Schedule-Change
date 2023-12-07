@@ -257,6 +257,54 @@ long long getConnectingFlightScore(pair<int, int> proposedinvIds, int originalin
     return score;
 }
 
+long long getfinalConnectingFlightScore(int journeyId, pair<int, ClassCDs> proposed1, pair<int, ClassCDs> proposed2){
+    long long originalPnrScore = pnrScore(journeyId, journeyMap[journeyId]->ClassCD);
+    auto [invid1, classcd1] = proposed1;
+    auto [invid2, classcd2] = proposed2;
+    long long connectingFlightScore = getConnectingFlightScore(make_pair(invid1, invid2), journeyMap[journeyId]->flights[0]);
+
+    long long newPnrScore = (pnrScore(journeyId, classcd1) + pnrScore(journeyId, classcd2)) / 2;
+
+    return originalPnrScore * newPnrScore * connectingFlightScore;
+}
+
+
+vector<pair<pair<int,ClassCDs>,pair<int,ClassCDs>>> GetKbest(int journeyId, vector<pair<int, int>> vecproposed){
+    
+    vector<pair<pair<int,ClassCDs>,pair<int,ClassCDs>>> allCases;
+
+    auto originalcls = journeyMap[journeyId]->ClassCD;
+
+    int origcls = originalcls;
+
+    for(auto [proposed1,proposed2]: vecproposed){
+        for(int cls1=1;cls1<=4;cls1++){
+            for(int cls2=1;cls2<=4;cls2++){
+                if (CLASS_DOWNGRADE_ALLOWED==0 && CLASS_UPGRADE_ALLOWED==0)
+                {
+                    if(cls1!=origcls || cls2!=origcls)
+                        continue;
+                }
+                else if(CLASS_DOWNGRADE_ALLOWED==0)
+                {
+                    if(cls1>origcls || cls2>origcls)
+                        continue;
+                }
+                else if(CLASS_UPGRADE_ALLOWED==0)
+                {
+                    if(cls1<origcls || cls2<origcls)
+                        continue;
+                }
+            
+                allCases.push_back({{proposed1,static_cast<ClassCDs>(cls1)},{proposed2,static_cast<ClassCDs>(cls2)}});
+            }
+        }
+    }
+    sort(allCases.begin(), allCases.end(), [&](auto i, auto j){ return getfinalConnectingFlightScore(journeyId, i) > getfinalConnectingFlightScore(journeyId, j); });
+    allCases.resize(min((int) MAX_CONNECTING_FLIGHTS, (int) allCases.size()));
+    return allCases; 
+}
+
 // Generation of graphUV and graphDV
 
 default_vector<vector<pair<int,long long>>> graphUV;     //Weighted graph from affected JourneyID(s) to possible flight solution InventoryID(s) cum ClassCD
