@@ -2,3 +2,6 @@
 *.exe
 *.env
 *.txt
+/Processing
+/Input
+/Output
