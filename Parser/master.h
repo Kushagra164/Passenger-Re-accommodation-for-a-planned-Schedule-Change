@@ -223,9 +223,9 @@ long long getFlightScore(int originalinvId, int proposedinvId){
     return score;
 }
 
-long long getConnectingFlightScore(int originalinvId, int proposedinvId1, int proposedinvId2){
+long long getConnectingFlightScore(pair<int, int> proposedinvIds, int originalinvId){
     long long score = 0;
-
+    auto [proposedinvId1, proposedinvId2] = proposedinvIds;
     Time ArrivaltimeDiff = getArrTimeDiff(originalinvId, proposedinvId2);
     if (ArrivaltimeDiff <= Time(6, 0))       score += ARRIVAL_DELAY_LT_6_SCORE;
     else if (ArrivaltimeDiff <= Time(12, 0)) score += ARRIVAL_DELAY_LT_12_SCORE;
