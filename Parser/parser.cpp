@@ -5,7 +5,7 @@
 using namespace std;
 #include "master.h"
 
-int main(int argc,char **argv) {
+int main(int argc,char* argv[]) {
     //Parsing of Schedule File
 
     ifstream scheduleFile;
