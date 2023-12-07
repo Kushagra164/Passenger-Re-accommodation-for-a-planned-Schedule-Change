@@ -411,7 +411,7 @@ long long getfinalConnectingFlightScore(int journeyId, pair<int, ClassCDs> propo
     return originalPnrScore * newPnrScore * connectingFlightScore;
 }
 
-vector<pair<pair<int,ClassCDs>,pair<int,ClassCDs>>> getBest(int journeyId, vector<pair<int, int>> vecproposed){
+vector<pair<long long,vector<pair<int,ClassCDs>>>> getBest(int journeyId, vector<pair<int, int>> vecproposed){
 
     vector<pair<pair<int,ClassCDs>,pair<int,ClassCDs>>> allCases;
 
