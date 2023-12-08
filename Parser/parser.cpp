@@ -315,7 +315,7 @@ int main(int argc,char* argv[]) {
 
         line="";
 
-        int inv_id=getFlight(FLT_NUM,DEP_DTMZ);
+        int inv_id=getFlight(FLT_NUM,DEP_DTMZ, ARR_DTMZ);
 
         Inventory* I=inventoryMap[inv_id];
 
