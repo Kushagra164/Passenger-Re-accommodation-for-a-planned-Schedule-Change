@@ -1,4 +1,4 @@
-#define SSR_SCORE 2
+#define SSR_SCORE 1
 #define PAX_SCORE 1
 #define MAXIMUM_ALLOWED_TIME_DIFF Time(72, 0)
 #define MINIMUM_CONNECTING_TIME Time(1,0)
