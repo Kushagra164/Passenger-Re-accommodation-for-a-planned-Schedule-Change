@@ -304,13 +304,19 @@ vector<int> findAllFlightsFromSrc(int o_inv_id){
 
     auto [src, dest] = flightNumberMap[o_sch->FlightNum];
     DateTime cancelledDateTime = DateTime(inventoryMap[o_inv_id]->DepartureDate, o_sch->DepartureTime);
-
+    cerr << "In v1" << endl;
+    cerr << "source " << src << " Dest " << dest << endl;
     for(auto [p_inv_id, Inv]: inventoryMap){
+        cerr << __LINE__ << p_inv_id << endl;
         if (p_inv_id == o_inv_id) continue;
         Schedule* p_sch = scheduleMap[inventoryToScheduleMap[p_inv_id]];
-
+        cerr << __LINE__ << " " << cancelledDateTime.to_string() << flightNumberMap[p_sch->FlightNum].first << " " << flightNumberMap[p_sch->FlightNum].second << endl;
         if ((CancelledFlights.find(p_inv_id)==CancelledFlights.end()) && (flightNumberMap[p_sch->FlightNum].first == src) &&
             (flightNumberMap[p_sch->FlightNum].second != dest)){
+                cerr << "Crossed 1st if" << endl;
+                cerr << "Departured at " << DateTime(Inv->DepartureDate,p_sch->DepartureTime).to_string() << endl;
+                cerr << "Arriving " << DateTime(Inv->ArrivalDate,p_sch->ArrivalTime).to_string() << endl;
+                cerr << "Time Diff " << (DateTime(Inv->ArrivalDate,p_sch->ArrivalTime) - cancelledDateTime).to_string() << endl;
             if ((DateTime(Inv->DepartureDate,p_sch->DepartureTime) >= cancelledDateTime) &&
             ((DateTime(Inv->ArrivalDate,p_sch->ArrivalTime) - cancelledDateTime) <= MAXIMUM_ALLOWED_TIME_DIFF)){
                 ret.push_back(p_inv_id);
@@ -465,9 +471,9 @@ pair<int,int> graphUCAndGraphCVGenerator(){
         vector<int> v2=findAllFlightsToDest(journeyMap[j_id]->flights[0]);
         vector<pair<int,int>> v3= makeConnections(v1,v2);
 
-        cerr<<v1.size()<<endl;
-        cerr<<v2.size()<<endl;
-        cerr<<v3.size()<<endl;
+        cerr<<"Size of v1 ="<<v1.size()<<endl;
+        cerr<<"Size of v2 ="<<v2.size()<<endl;
+        cerr<<"Size of v3 ="<<v3.size()<<endl;
 
         vector<pair<long long,vector<pair<int,ClassCDs>>>> v4=getBest(j_id,v3);
 
