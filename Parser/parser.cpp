@@ -233,7 +233,7 @@ int main(int argc,char* argv[]) {
         char CLS_CD;
         int SEG_SEQ, PAX_CNT, FLT_NUM;
         char ORIG_CD[CITY_CODE_LENGTH],DEST_CD[CITY_CODE_LENGTH];
-        DateTime DEP_DTMZ;
+        DateTime ARR_DTMZ, DEP_DTMZ;
 
         getline(inputString, RECLOC, ',');
         int pnr_id=pnrUuidGenerator.getID(RECLOC);
@@ -284,9 +284,15 @@ int main(int argc,char* argv[]) {
         time = Time(tempString); tempString.clear();
         DEP_DTMZ = DateTime(date, time);
 
+        getline(inputString, tempString, ' ');
+        date = Date(tempString); tempString.clear();
+        getline(inputString, tempString, ',');
+        time = Time(tempString); tempString.clear();
+        ARR_DTMZ = DateTime(date, time);
+
         line="";
 
-        int inv_id=getFlight(FLT_NUM,DEP_DTMZ);
+        int inv_id=getFlight(FLT_NUM,DEP_DTMZ, ARR_DTMZ);
 
         Inventory* I=inventoryMap[inv_id];
 
