@@ -12,4 +12,5 @@ excelFilePath = args.input_file_path
 csvFilePath = args.output_file_path
 
 readFile = pandas.read_excel(excelFilePath)
+readFile.iloc[1:,:]
 readFile.to_csv(csvFilePath)
