@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
                             curInd.push_back(mappingUV[mp(u, v)] = Q.addVariable(e.S*L));
                         }
                     }
-
+                    
                     val += N;
                     eq.addByIndex(curInd,Q.addVariable(N));;
                 }
@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
                             }
                         }
                     }
-                    eq.addByIndex(curVar,-1,1);
+                    eq.addByIndex(curVar,Q.addVariable());
                 }
             }
 
