@@ -465,9 +465,9 @@ pair<int,int> graphUCAndGraphCVGenerator(){
         vector<int> v2=findAllFlightsToDest(journeyMap[j_id]->flights[0]);
         vector<pair<int,int>> v3= makeConnections(v1,v2);
 
-        cerr<<v1.size()<<endl;
-        cerr<<v2.size()<<endl;
-        cerr<<v3.size()<<endl;
+        cerr<<"Size of v1 ="<<v1.size()<<endl;
+        cerr<<"Size of v2 ="<<v2.size()<<endl;
+        cerr<<"Size of v3 ="<<v3.size()<<endl;
 
         vector<pair<long long,vector<pair<int,ClassCDs>>>> v4=getBest(j_id,v3);
 
