@@ -5,8 +5,8 @@
 #include "journey.h"
 #include "pnr.h"
 #include "passenger.h"
-#include "graphindexgenerator.h"
-#include "constraints.h"
+#include "graphIndexGenerator.h"
+#include "constants.h"
 
 using namespace std;
 

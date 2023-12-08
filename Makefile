@@ -38,7 +38,7 @@ graph-to-edges:
 	$(MAKE) binary-to-edges 
 
 edges-to-output:
-	g++ ./Parser/output.cpp -o ./Processing/Executables/output.out
+	g++ ./Parser/output.cpp -o ./Processing/Executables/output.out -std=c++20
 	./Processing/Executables/output.out \
 	./Processing/Intermediates/schedule.csv \
 	./Processing/Intermediates/inventory.csv \
