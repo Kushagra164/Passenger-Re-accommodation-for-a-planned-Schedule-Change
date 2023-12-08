@@ -1,4 +1,3 @@
-
 #define CITY_CODE_LENGTH 4
 
 enum ActionCDs{NIL4,HK,PD};
@@ -10,6 +9,14 @@ int getClassCode(string str){
     else if(str=="PC") return 3;
     else if(str=="EC") return 4;
     else return 0;
+}
+
+string getClass(int x){
+    if(x==1) return "FC";
+    else if(x==2) return "BC";
+    else if(x==3) return "PC";
+    else if(x==4) return "EC";
+    else return " ";
 }
 
 int getActionCode(string str){

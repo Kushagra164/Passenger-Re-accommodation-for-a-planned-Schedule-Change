@@ -426,7 +426,7 @@ int main(int argc,char* argv[]) {
     int m5=graphWDGenerator();
 
     //Output File Generation
-    freopen_s( argv[5], "r", stdin);
+    freopen( argv[5], "r", stdin);
     ofstream fw(argv[6],ofstream::out);
 
     int no_of_samples;
@@ -441,6 +441,14 @@ int main(int argc,char* argv[]) {
         for(int j=0;j<no_of_uc_edges;j++){
             int u,c;
             cin>>u>>c;
+
+            int j_id = uIndexGenerator.getID(u);
+            fw<<pnrUuidGenerator.getString(journeyToPnrMap[j_id])<<" ";
+
+            for(auto x:cIndexGenerator.getID(c)){
+                fw<<inventoryUuidGenerator.getString(x.first)<<" "<<getClass(x.second)<<" ";
+            }
+            fw<<endl;
         }
 
 
@@ -454,7 +462,7 @@ int main(int argc,char* argv[]) {
             int j_id = uIndexGenerator.getID(u);
 
             pair<int,ClassCDs> pr=vIndexGenerator.getID(v);
-            fw<<pnrUuidGenerator.getString(journeyToPnrMap[j_id])<<" "<<inventoryUuidGenerator.getString(pr.first)<<" "<<pr.second<<endl;
+            fw<<pnrUuidGenerator.getString(journeyToPnrMap[j_id])<<" "<<inventoryUuidGenerator.getString(pr.first)<<" "<<getClass(pr.second)<<endl;
         }
 
         int no_of_wd_edges;
