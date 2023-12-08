@@ -80,8 +80,11 @@ int getFlight(int FLT_NUM,DateTime DepartureDTMZ){
     for (auto &f: flightToInventoryMap){
         auto [a, b] = f.first;
     }
-    if (! flightToInventoryMap.count(make_pair(FLT_NUM,DepartureDTMZ)))
+    if (! flightToInventoryMap.count(make_pair(FLT_NUM,DepartureDTMZ))){
+        cerr<<"Could not find inventory for flight:"
+            <<FLT_NUM<<" "<<DepartureDTMZ.to_string()<<endl;
         return -1;
+    }
 
     return flightToInventoryMap[make_pair(FLT_NUM,DepartureDTMZ)];
 }
