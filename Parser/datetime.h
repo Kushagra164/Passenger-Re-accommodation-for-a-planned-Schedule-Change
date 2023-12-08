@@ -1,11 +1,11 @@
 #include<vector>
 #include<algorithm>
-#include<math.h>
 #include<string>
 #include<map>
 #include<cstring>
 #include<cassert>
 #include<set>
+#include<tuple>
 using namespace std;
 template <class T> constexpr T floor(const T x, const T y) { T q = x / y, r = x % y; return q - ((x ^ y) < 0 and (r != 0)); }
 
@@ -168,7 +168,7 @@ public:
         int mn = minute - rhs.minute;
         long long value = dy * 24 * 60 + hr * 60 + mn;
 
-        days = floor(value, 24 * 60LL);
+        days = floor(value, 24 * 60ll);
         value = value - days * 24 * 60;
         hour = value / 60;
         value %= 60;
@@ -181,7 +181,7 @@ public:
         int mn = minute + rhs.minute;
         long long value = dy * 24 * 60 + hr * 60 + mn;
 
-        days = floor(value, 24 * 60LL);
+        days = floor(value, 24 * 60ll);
         value = value - days * 24 * 60;
         hour = value / 60;
         value %= 60;
