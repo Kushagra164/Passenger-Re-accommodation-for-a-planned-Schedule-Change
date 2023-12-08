@@ -132,7 +132,6 @@ public:
         for (int x = 0; x < (int) s.size(); x++){
             (s[x] == ':' or s[x] == '-') ? time.push_back("") : time.back().push_back(s[x]);
         }
-        assert((int) time.size() == 2);
         hour = std::stoi(time[0]);
         minute = std::stoi(time[1]);
     }
