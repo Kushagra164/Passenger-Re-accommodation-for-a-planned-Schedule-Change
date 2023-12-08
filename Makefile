@@ -37,7 +37,7 @@ graph-to-edges:
 	$(MAKE) qubo-to-binary
 	$(MAKE) binary-to-edges 
 
-edges-to-output:
+edges-to-txt:
 	g++ ./Parser/output.cpp -o ./Processing/Executables/output.out -std=c++20
 	./Processing/Executables/output.out \
 	./Processing/Intermediates/schedule.csv \
@@ -58,3 +58,19 @@ clean-Intermediates:
 clean:
 	$(MAKE) clean-Executables
 	$(MAKE) clean-Intermediates
+
+install-dep-parser:
+	pip install -r ./Parser/requirements.txt
+
+install-dep-qubo:
+	pip install -r ./QUBO/requirements.txt
+
+install-dep:
+	$(MAKE) install-dep-parser
+	$(MAKE) install-dep-qubo
+
+run:
+	$(MAKE) excel-to-csv
+	$(MAKE) csv-to-graph
+	$(MAKE) graph-to-edges
+	$(MAKE) edges-to-txt
