@@ -10,9 +10,8 @@ int main(int argc,char* argv[]) {
 
     ifstream scheduleFile;
     scheduleFile.open(argv[1]);
-    string line="";
+    string line;
     getline(scheduleFile, line);
-    line ="";
 
     while (getline(scheduleFile, line)) {
 
@@ -24,8 +23,8 @@ int main(int argc,char* argv[]) {
 
         pair<string,string> EquipmentNo;
 
-        char Src[CITY_CODE_LENGTH];
-        char Dest[CITY_CODE_LENGTH];
+        string Src;
+        string Dest;
 
         Time DepartureTime;
         Time ArrivalTime;
@@ -36,7 +35,6 @@ int main(int argc,char* argv[]) {
 
         string FlightPattern;
         string tempString;
-         
 
         getline(inputString, ScheduleID, ',');
         int uuid=scheduleUuidGenerator.getID(ScheduleID);
@@ -44,45 +42,38 @@ int main(int argc,char* argv[]) {
 
         getline(inputString,tempString, ',');
         for(int i=0;i<CARRIER_CODE_LENGTH;i++) CarrierCD[i]= tempString[i];
-         
 
         getline(inputString,tempString, ',');
         FlightNum = atoi(tempString.c_str());
-         
 
         getline(inputString, EquipmentNo.first, ',');
         getline(inputString, EquipmentNo.second, ',');
 
         getline(inputString, tempString , ',');
-        for(int i=0;i<CITY_CODE_LENGTH;i++) Src[i]= tempString[i];
-         
+        assert(tempString.size()==CITY_CODE_LENGTH);
+        Src=tempString;
 
         getline(inputString, tempString, ',');
-        for(int i=0;i<CITY_CODE_LENGTH;i++) Dest[i]= tempString[i];
-         
+        assert(tempString.size()==CITY_CODE_LENGTH);
+        Dest=tempString;
 
         flightNumberMap[FlightNum]={Src,Dest};
         cityToFlightNumberMap[make_pair(Src,Dest)]=FlightNum;
 
         getline(inputString, tempString, ',');
         DepartureTime=Time(tempString);
-         
 
         getline(inputString, tempString, ',');
         ArrivalTime=Time(tempString);
-         
 
         getline(inputString, tempString, ',');
         StartDate=Date(tempString);
-         
 
         getline(inputString, tempString, ',');
         EndDate=Date(tempString);
-         
 
         getline(inputString, tempString, ',');
         Status = static_cast<Statuses> (getStatusCode(tempString));
-         
 
         getline(inputString, tempString, ',');
         getline(inputString, tempString, ',');
@@ -95,7 +86,6 @@ int main(int argc,char* argv[]) {
 
         getline(inputString, FlightPattern, ',');
 
-        line = "";
 
         Schedule* S = new Schedule(uuid,CarrierCD,EquipmentNo,DepartureTime,ArrivalTime,StartDate,EndDate,FlightPattern,FlightNum,Status);
 
@@ -113,9 +103,7 @@ int main(int argc,char* argv[]) {
 
     ifstream inventoryFile;
     inventoryFile.open(argv[2]);
-    line="";
     getline(inventoryFile, line);
-    line ="";
 
     bool flag=true;
 
@@ -134,84 +122,74 @@ int main(int argc,char* argv[]) {
         string tempString;
 
         getline(inputString, InventoryID, ',');
-         
         int uuid = inventoryUuidGenerator.getID(InventoryID);
 
         getline(inputString, ScheduleID, ',');
-         
 
         int s_id = scheduleUuidGenerator.getID(ScheduleID);
 
         inventoryToScheduleMap[uuid]=s_id;
-
 
         if(scheduleMap[s_id]->Status == 2) CancelledFlights.insert(uuid);
 
         scheduleMap[s_id]->DepartureDates.push_back(uuid);
 
         getline(inputString, tempString, ',');
-         
 
         getline(inputString, tempString, ',');
-         
 
         getline(inputString, tempString, ',');
         DepartureDate = Date(tempString);
-         
+
 
         getline(inputString, tempString, ',');
         ArrivalDate = Date(tempString);
-         
 
         getline(inputString, tempString, ',');
-         
 
         getline(inputString, tempString, ',');
-         
 
-        getline(inputString, tempString, ','); TotalCapacity = atoi(tempString.c_str()); 
-        getline(inputString, tempString, ','); TotalInventory = atoi(tempString.c_str()); 
-        getline(inputString, tempString, ','); 
+        getline(inputString, tempString, ','); TotalCapacity = atoi(tempString.c_str());
+        getline(inputString, tempString, ','); TotalInventory = atoi(tempString.c_str());
+        getline(inputString, tempString, ',');
 
         getline(inputString, tempString, ',');
-         
 
         getline(inputString, tempString, ',');
-         
 
-        getline(inputString, tempString, ','); FCTotalCapacity = atoi(tempString.c_str()); 
-        getline(inputString, tempString, ','); BCTotalCapacity= atoi(tempString.c_str()); 
-        getline(inputString, tempString, ','); PCTotalCapacity = atoi(tempString.c_str()); 
-        getline(inputString, tempString, ','); ECTotalCapacity = atoi(tempString.c_str()); 
+        getline(inputString, tempString, ','); FCTotalCapacity = atoi(tempString.c_str());
+        getline(inputString, tempString, ','); BCTotalCapacity= atoi(tempString.c_str());
+        getline(inputString, tempString, ','); PCTotalCapacity = atoi(tempString.c_str());
+        getline(inputString, tempString, ','); ECTotalCapacity = atoi(tempString.c_str());
 
-        getline(inputString, tempString, ','); FCTotalInventory = atoi(tempString.c_str()); 
-        getline(inputString, tempString, ','); 
-        getline(inputString, tempString, ','); 
-        getline(inputString, tempString, ','); 
+        getline(inputString, tempString, ','); FCTotalInventory = atoi(tempString.c_str());
+        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');
 
 
-        getline(inputString, tempString, ','); BCTotalInventory = atoi(tempString.c_str()); 
-        getline(inputString, tempString, ','); 
-        getline(inputString, tempString, ','); 
-        getline(inputString, tempString, ','); 
+        getline(inputString, tempString, ','); BCTotalInventory = atoi(tempString.c_str());
+        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');
 
-        getline(inputString, tempString, ','); PCTotalInventory = atoi(tempString.c_str()); 
-        getline(inputString, tempString, ','); 
-        getline(inputString, tempString, ','); 
-        getline(inputString, tempString, ','); 
+        getline(inputString, tempString, ','); PCTotalInventory = atoi(tempString.c_str());
+        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');
 
-        getline(inputString, tempString, ','); ECTotalInventory = atoi(tempString.c_str()); 
-        getline(inputString, tempString, ','); 
-        getline(inputString, tempString, ','); 
-        getline(inputString, tempString, ','); 
+        getline(inputString, tempString, ','); ECTotalInventory = atoi(tempString.c_str());
+        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');
 
         while(flag){
             for (auto &ch: {"FC", "BC", "PC", "EC"}) {
                 getline(inputString, tempString, '"');
-                 
+
                 getline(inputString, tempString, '"');
                 for (auto &c: tempString) if (c >= 'A' and c <= 'Z') cabinToClassMap[c] = ch;
-                 
+
             }
             flag=false;
         }
@@ -256,26 +234,27 @@ int main(int argc,char* argv[]) {
         ActionCDs ACTION_CD;
         char CLS_CD;
         int SEG_SEQ, PAX_CNT, FLT_NUM;
-        char ORIG_CD[CITY_CODE_LENGTH],DEST_CD[CITY_CODE_LENGTH];
-        DateTime DEP_DTMZ;
+        string ORIG_CD;
+        string DEST_CD;
+        DateTime ARR_DTMZ, DEP_DTMZ;
 
         getline(inputString, RECLOC, ',');
         int pnr_id=pnrUuidGenerator.getID(RECLOC);
 
         getline(inputString, tempString, ',');
-        CREATION_DTZ = Date(tempString);  
+        CREATION_DTZ = Date(tempString);
 
-        getline(inputString, tempString, ','); 
+        getline(inputString, tempString, ',');
         getline(inputString,tempString, ',');
         ACTION_CD = static_cast<ActionCDs> (getActionCode(tempString));
 
         getline(inputString,tempString, ',');
-        CLS_CD = (char) tempString[0];
+        CLS_CD = tempString[0];
 
         getline(inputString, tempString, ',');
-        SEG_SEQ = atoi(tempString.c_str());  
+        SEG_SEQ = atoi(tempString.c_str());
         getline(inputString, tempString, ',');
-        PAX_CNT = atoi(tempString.c_str());  
+        PAX_CNT = atoi(tempString.c_str());
 
         if(!pnrMap[pnr_id]){
             Pnr *P = new Pnr(pnr_id,CREATION_DTZ,PAX_CNT);
@@ -285,29 +264,30 @@ int main(int argc,char* argv[]) {
         }
 
 
-        getline(inputString, tempString, ','); 
+        getline(inputString, tempString, ',');
 
         getline(inputString, tempString, ',');
-        FLT_NUM = atoi(tempString.c_str());  
+        FLT_NUM = atoi(tempString.c_str());
 
         getline(inputString, tempString , ',');
-        for(int i=0;i<CITY_CODE_LENGTH;i++) ORIG_CD[i]= tempString[i];
-         
+        assert(tempString.size()==CITY_CODE_LENGTH);
+        ORIG_CD=tempString;
+
 
         getline(inputString, tempString, ',');
-        for(int i=0;i<CITY_CODE_LENGTH;i++) DEST_CD[i]= tempString[i];
-         
+        assert(tempString.size()==CITY_CODE_LENGTH);
+        DEST_CD=tempString;
 
-        getline(inputString, tempString, ','); 
-        getline(inputString, tempString, ','); 
-        getline(inputString, tempString, ','); 
+
+        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');
 
         getline(inputString, tempString, ' ');
-        date = Date(tempString);  
+        date = Date(tempString);
         getline(inputString, tempString, ',');
-        time = Time(tempString);  
-        DEP_DTMZ = DateTime(date, time);
         time = Time(tempString);
+        DEP_DTMZ = DateTime(date, time);
 
         getline(inputString, tempString, ' ');
         date = Date(tempString);
@@ -317,7 +297,7 @@ int main(int argc,char* argv[]) {
 
         line="";
 
-        int inv_id=getFlight(FLT_NUM,DEP_DTMZ,ARR_DTMZ);
+        int inv_id=getFlight(FLT_NUM,DEP_DTMZ, ARR_DTMZ);
 
         Inventory* I=inventoryMap[inv_id];
 
@@ -328,7 +308,7 @@ int main(int argc,char* argv[]) {
         if(flag && (SEG_SEQ==prev_seg_seq)){
             Journey* J=journeyMap[uuid];
             J->flights.push_back(inv_id);
-            strncpy(J->Dest,DEST_CD,CITY_CODE_LENGTH);
+            J->Dest=DEST_CD;
             J->ClassCD = static_cast <ClassCDs> (min(J->ClassCD,static_cast <ClassCDs> (x)));
         }
         else{
@@ -379,9 +359,10 @@ int main(int argc,char* argv[]) {
 
         passengerToPnrMap[uuid] = pnr_id;
 
+
         pnrMap[pnr_id]->Passengers.push_back(uuid);
 
-        getline(inputString, tempString, ','); 
+        getline(inputString, tempString, ',');
 
         getline(inputString, LastName, ',');
         getline(inputString, FirstName, ',');
@@ -392,21 +373,18 @@ int main(int argc,char* argv[]) {
         getline(inputString, DocType, ',');
 
         getline(inputString, tempString, ',');
-        SPECIAL_NAME_CD1 = static_cast<SpecialNames1>(getSN1Code(tempString));  
+        SPECIAL_NAME_CD1 = static_cast<SpecialNames1>(getSN1Code(tempString));
         getline(inputString, tempString, ',');
-        SPECIAL_NAME_CD2 = static_cast<SpecialNames2>(getSN2Code(tempString));  
+        SPECIAL_NAME_CD2 = static_cast<SpecialNames2>(getSN2Code(tempString));
         getline(inputString, tempString, ',');
 
-        SSR_CODE_CD1 = static_cast<SSRCodes>(getSSRCode(tempString));  
+        SSR_CODE_CD1 = static_cast<SSRCodes>(getSSRCode(tempString));
 
         Passenger* P = new Passenger(uuid,LastName,FirstName,Nationality,PhoneNum,Email,DocID,DocType,SPECIAL_NAME_CD1,SPECIAL_NAME_CD2,SSR_CODE_CD1);
-
         if(true){                                                            //SSR_CODE_CD1 != 1
             Pnr* pnr=pnrMap[pnr_id];
-
             for(int j_id: pnr->Journeys){
                 for(int inv_id: journeyMap[j_id]->flights){
-
                     Inventory* I=inventoryMap[inv_id];
                     I->BookedInventory++;
                     int x=journeyMap[j_id]->ClassCD;
