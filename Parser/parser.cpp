@@ -149,7 +149,7 @@ int main(int argc,char* argv[]) {
 
         getline(inputString, tempString, ','); TotalCapacity = atoi(tempString.c_str());
         getline(inputString, tempString, ','); TotalInventory = atoi(tempString.c_str());
-        getline(inputString, tempString, ',')
+        getline(inputString, tempString, ',');
 
         getline(inputString, tempString, ',');
 

@@ -87,7 +87,7 @@ int getFlight(int FLT_NUM,DateTime DepartureDTMZ, DateTime ArrivalDTMZ){
         return -1;
     }
 
-    return flightToInventoryMap[make_pair(FLT_NUM,DepartureDTMZ)];
+    return flightToInventoryMap[make_pair(FLT_NUM,make_pair(DepartureDTMZ,ArrivalDTMZ))];
 }
 
 
