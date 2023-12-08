@@ -136,7 +136,6 @@ int main(int argc,char* argv[]) {
         getline(inputString, InventoryID, ',');
         tempString="";
         int uuid = inventoryUuidGenerator.getID(InventoryID);
-        //cerr<<uuid<<endl;
 
         getline(inputString, ScheduleID, ',');
         tempString="";
@@ -144,8 +143,6 @@ int main(int argc,char* argv[]) {
         int s_id = scheduleUuidGenerator.getID(ScheduleID);
 
         inventoryToScheduleMap[uuid]=s_id;
-
-        //cerr<<__LINE__ << " " << scheduleMap[s_id]->Status<<endl;
 
         if(scheduleMap[s_id]->Status == 2) CancelledFlights.insert(uuid);
 
@@ -333,12 +330,9 @@ int main(int argc,char* argv[]) {
             journeyMap[uuid] = J;
             journeyToPnrMap[uuid]=pnr_id;
             J->flights.push_back(inv_id);
-            //cerr<<__LINE__<<" "<<inv_id<<endl;
             pnrMap[pnr_id]->Journeys.push_back(uuid);
             uuid++;
         }
-
-        //cerr<<__LINE__<<endl;
     }
 
 
@@ -377,7 +371,6 @@ int main(int argc,char* argv[]) {
 
         passengerToPnrMap[uuid] = pnr_id;
 
-        //cerr<<__LINE__<<endl;
 
         pnrMap[pnr_id]->Passengers.push_back(uuid);
 
@@ -391,24 +384,19 @@ int main(int argc,char* argv[]) {
         getline(inputString, DocID, ',');
         getline(inputString, DocType, ',');
 
-        //cerr<<__LINE__<<endl;
-
         getline(inputString, tempString, ',');
         SPECIAL_NAME_CD1 = static_cast<SpecialNames1>(getSN1Code(tempString)); tempString.clear();
         getline(inputString, tempString, ',');
         SPECIAL_NAME_CD2 = static_cast<SpecialNames2>(getSN2Code(tempString)); tempString.clear();
         getline(inputString, tempString, ',');
-        //cerr<<__LINE__<< tempString << endl;
+
         SSR_CODE_CD1 = static_cast<SSRCodes>(getSSRCode(tempString)); tempString.clear();
-        //cerr<<__LINE__<< tempString << endl;
+
         Passenger* P = new Passenger(uuid,LastName,FirstName,Nationality,PhoneNum,Email,DocID,DocType,SPECIAL_NAME_CD1,SPECIAL_NAME_CD2,SSR_CODE_CD1);
-        //cerr<<__LINE__<< tempString << endl;
         if(true){                                                            //SSR_CODE_CD1 != 1
             Pnr* pnr=pnrMap[pnr_id];
-            //cerr<<__LINE__ << endl;
             for(int j_id: pnr->Journeys){
                 for(int inv_id: journeyMap[j_id]->flights){
-                    //cerr << j_id << " " << inv_id << "\n";
                     Inventory* I=inventoryMap[inv_id];
                     I->BookedInventory++;
                     int x=journeyMap[j_id]->ClassCD;
@@ -419,12 +407,10 @@ int main(int argc,char* argv[]) {
                 }
             }
         }
-        //cerr<<__LINE__<< tempString << endl;
 
         passengerMap[uuid] = P;
 
         uuid++;
-        //cerr<<__LINE__<<endl;
     }
 
 
@@ -443,11 +429,6 @@ int main(int argc,char* argv[]) {
     //Output File Creation for QUBO
 
     ofstream fw(argv[5],ofstream::out);
-
-//    cerr<<CancelledFlights.size()<<"\n";
-//    for(int inv_id:CancelledFlights){
-//        cerr<<inventoryUuidGenerator.getString(inv_id)<<endl;
-//    }
 
     int modU=uIndexGenerator.getSize();
     int modC=cIndexGenerator.getSize();

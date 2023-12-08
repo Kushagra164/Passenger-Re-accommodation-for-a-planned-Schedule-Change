@@ -66,7 +66,6 @@ void _fn(){
         Schedule *S = scheduleMap[s_id];
 
         DateTime DepDTMZ(I.DepartureDate,S->DepartureTime);
-        //cerr << __LINE__ << " " << DepDTMZ.to_string() << "\n";
 
         flightToInventoryMap[make_pair(S->FlightNum,DepDTMZ)] = inv_id;
     }
@@ -78,10 +77,8 @@ int getFlight(int FLT_NUM,DateTime DepartureDTMZ){
         _fn();
         precalc = false;
     }
-    //cerr << __LINE__ << " " << FLT_NUM << " " << DepartureDTMZ.to_string() << "\n";
     for (auto &f: flightToInventoryMap){
         auto [a, b] = f.first;
-        //cerr << __LINE__ << " " << a << " " << b.to_string() << " " << f.second << "\n";
     }
     if (! flightToInventoryMap.count(make_pair(FLT_NUM,DepartureDTMZ)))
         return -1;
@@ -109,12 +106,10 @@ Time getArrDepTimeDiff(int c_inv_id,int n_inv_id){
 int graphWUGenerator(){
     int n_edges=0;
 
-    //cerr<<__LINE__<<" "<<journeyMap.size()<<endl;
     for(auto x:journeyMap){
         Journey* J = x.second;
         int j_id = x.first;
 
-        //cerr<<inventoryUuidGenerator.getString(J->flights[0])<<endl;
 
         if((J->flights.size()==1) && (CancelledFlights.find(J->flights[0])!=CancelledFlights.end())){
             int w_idx = wIndexGenerator.getIndex(J->flights[0]);
@@ -161,8 +156,6 @@ int pnrScore(int journeyId, ClassCDs proposed = ClassCDs::NIL5){
         pnr_score += PAX_SCORE;
     }
     pnr_score += classScoresMap[proposed];
-
-    cerr<<__LINE__<<" "<<pnr_score<<endl;
 
     return pnr_score;
 }
@@ -217,7 +210,6 @@ long long getFlightScore(int originalinvId, int proposedinvId){
     score += CITYPAIR_SCORE;
     score += scheduleMap[inventoryToScheduleMap[originalinvId]]->EquipmentNo ==
              scheduleMap[inventoryToScheduleMap[proposedinvId]]->EquipmentNo ? EQUIPMENT_SCORE: 0;
-    cerr<<__LINE__<<" "<<score<<endl;
     return score;
 }
 
@@ -396,7 +388,6 @@ long long getConnectingFlightScore(pair<int, int> proposedinvIds, int originalin
                  scheduleMap[inventoryToScheduleMap[proposedinvId2]]->EquipmentNo ? EQUIPMENT_SCORE: 0;
     score += (t1.value() * score1 + t2.value() * score2) / t3.value();
 
-    cerr<<__LINE__<<" "<<score<<endl;
     return score;
 }
 
@@ -499,11 +490,8 @@ int graphWDGenerator(){
 
     for (int c_inv_id: CancelledFlights){
         int w_idx = wIndexGenerator.getIndex(c_inv_id);
-        //cerr <<"Graph: " << w_idx << "\n";
         for (auto p_inv: inventoryMap){
-            //cerr << p_inv.first << "\n";
             if ((CancelledFlights.find(p_inv.first) == CancelledFlights.end()) && (validSolution(p_inv.first, c_inv_id))){
-                //cerr << __LINE__ << " " << i << "\n";
                 int d_idx = dIndexGenerator.getIndex(p_inv.first);
                 graphWD[w_idx].push_back(d_idx);
                 n_edges++;
