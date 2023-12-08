@@ -1,3 +1,4 @@
+#define CITY_CODE_LENGTH 3
 #define SSR_SCORE 1
 #define PAX_SCORE 1
 #define MAXIMUM_ALLOWED_TIME_DIFF Time(72, 0)

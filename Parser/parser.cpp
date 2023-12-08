@@ -23,8 +23,8 @@ int main(int argc,char* argv[]) {
 
         pair<string,string> EquipmentNo;
 
-        char Src[CITY_CODE_LENGTH];
-        char Dest[CITY_CODE_LENGTH];
+        string Src;
+        string Dest;
 
         Time DepartureTime;
         Time ArrivalTime;
@@ -50,10 +50,12 @@ int main(int argc,char* argv[]) {
         getline(inputString, EquipmentNo.second, ',');
 
         getline(inputString, tempString , ',');
-        for(int i=0;i<CITY_CODE_LENGTH;i++) Src[i]= tempString[i];
+        assert(tempString.size()==CITY_CODE_LENGTH);
+        Src=tempString;
 
         getline(inputString, tempString, ',');
-        for(int i=0;i<CITY_CODE_LENGTH;i++) Dest[i]= tempString[i];
+        assert(tempString.size()==CITY_CODE_LENGTH);
+        Dest=tempString;
 
         flightNumberMap[FlightNum]={Src,Dest};
         cityToFlightNumberMap[make_pair(Src,Dest)]=FlightNum;
@@ -232,7 +234,8 @@ int main(int argc,char* argv[]) {
         ActionCDs ACTION_CD;
         char CLS_CD;
         int SEG_SEQ, PAX_CNT, FLT_NUM;
-        char ORIG_CD[CITY_CODE_LENGTH],DEST_CD[CITY_CODE_LENGTH];
+        string ORIG_CD;
+        string DEST_CD;
         DateTime ARR_DTMZ, DEP_DTMZ;
 
         getline(inputString, RECLOC, ',');
@@ -246,7 +249,7 @@ int main(int argc,char* argv[]) {
         ACTION_CD = static_cast<ActionCDs> (getActionCode(tempString));
 
         getline(inputString,tempString, ',');
-        CLS_CD = (char) tempString[0];
+        CLS_CD = tempString[0];
 
         getline(inputString, tempString, ',');
         SEG_SEQ = atoi(tempString.c_str());  
@@ -267,11 +270,13 @@ int main(int argc,char* argv[]) {
         FLT_NUM = atoi(tempString.c_str());  
 
         getline(inputString, tempString , ',');
-        for(int i=0;i<CITY_CODE_LENGTH;i++) ORIG_CD[i]= tempString[i];
+        assert(tempString.size()==CITY_CODE_LENGTH);
+        ORIG_CD=tempString;
          
 
         getline(inputString, tempString, ',');
-        for(int i=0;i<CITY_CODE_LENGTH;i++) DEST_CD[i]= tempString[i];
+        assert(tempString.size()==CITY_CODE_LENGTH);
+        DEST_CD=tempString;
          
 
         getline(inputString, tempString, ','); 
@@ -303,7 +308,7 @@ int main(int argc,char* argv[]) {
         if(flag && (SEG_SEQ==prev_seg_seq)){
             Journey* J=journeyMap[uuid];
             J->flights.push_back(inv_id);
-            strncpy(J->Dest,DEST_CD,CITY_CODE_LENGTH);
+            J->Dest=DEST_CD;
             J->ClassCD = static_cast <ClassCDs> (min(J->ClassCD,static_cast <ClassCDs> (x)));
         }
         else{

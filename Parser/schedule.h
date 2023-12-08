@@ -1,6 +1,4 @@
 #define CARRIER_CODE_LENGTH 3            //plus 1 to accomodate null character
-#define CITY_CODE_LENGTH 4
-
 enum Statuses{SCHEDULED,PLANNED,CANCELLED,DELAYED};
 
 int getStatusCode(string str){
@@ -41,8 +39,8 @@ public:
 };
 
 map<int,Schedule*> scheduleMap;
-map<int,pair<char*,char*>> flightNumberMap;                  //map<FlightNum,pair<Src,Dest>>
-map<pair<char*,char*>,int> cityToFlightNumberMap;
+map<int,pair<string,string>> flightNumberMap;                  //map<FlightNum,pair<Src,Dest>>
+map<pair<string,string>,int> cityToFlightNumberMap;
 
 
 

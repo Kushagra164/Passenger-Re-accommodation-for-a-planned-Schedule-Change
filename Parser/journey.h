@@ -1,5 +1,3 @@
-#define CITY_CODE_LENGTH 4
-
 enum ActionCDs{NIL4,HK,PD};
 enum ClassCDs{NIL5,FC,BC,PC,EC};
 
@@ -30,16 +28,16 @@ private:
 public:
     ActionCDs ActionCD;
     ClassCDs ClassCD;
-    char Src[CITY_CODE_LENGTH];
-    char Dest[CITY_CODE_LENGTH];
+    string Src;
+    string Dest;
     vector<int> flights;              //vector<InventoryID>
 
-    Journey(int uuid, ActionCDs action_cd, ClassCDs cls_cd, char src[CITY_CODE_LENGTH], char dest[CITY_CODE_LENGTH]){
+    Journey(int uuid, ActionCDs action_cd, ClassCDs cls_cd, string src, string dest){
         JourneyID=uuid;
         ActionCD = action_cd;
         ClassCD = cls_cd;
-        strncpy(Src,src,CITY_CODE_LENGTH);
-        strncpy(Dest,dest,CITY_CODE_LENGTH);
+        Src=src;
+        Dest=dest;
     }
 };
 map<int,Journey*> journeyMap;             //map<JourneyID,Journey*>
