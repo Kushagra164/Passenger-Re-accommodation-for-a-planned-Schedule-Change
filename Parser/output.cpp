@@ -307,10 +307,17 @@ int main(int argc,char* argv[]) {
         getline(inputString, tempString, ',');
         time = Time(tempString);  
         DEP_DTMZ = DateTime(date, time);
+        time = Time(tempString);
+
+        getline(inputString, tempString, ' ');
+        date = Date(tempString);
+        getline(inputString, tempString, ',');
+        time = Time(tempString);
+        ARR_DTMZ = DateTime(date, time);
 
         line="";
 
-        int inv_id=getFlight(FLT_NUM,DEP_DTMZ);
+        int inv_id=getFlight(FLT_NUM,DEP_DTMZ,ARR_DTMZ);
 
         Inventory* I=inventoryMap[inv_id];
 
@@ -415,6 +422,8 @@ int main(int argc,char* argv[]) {
 
         uuid++;
     }
+
+
     //Graph Creation
     int m6=graphWUGenerator();
     pair<int,int> p1=graphUVAndGraphDVGenerator();
