@@ -491,8 +491,10 @@ pair<int,int> graphUCAndGraphCVGenerator(){
 
             for(auto x:ids){
                 int v_id=vIndexGenerator.getIndex(x);
-                graphCV[c_id].push_back(v_id);
-                cv_edges++;
+                if(find(graphCV[c_id].begin(),graphCV[c_id].end(),v_id) == graphCV[c_id].end()){
+                    graphCV[c_id].push_back(v_id);
+                    cv_edges++;
+                }
             }
         }
     }
