@@ -471,6 +471,10 @@ pair<int,int> graphUCAndGraphCVGenerator(){
         vector<int> v2=findAllFlightsToDest(journeyMap[j_id]->flights[0]);
         vector<pair<int,int>> v3= makeConnections(v1,v2);
 
+        for(auto x:v3){
+            cerr<<x.first<<" "<<x.second<<endl;
+        }
+
         cerr<<"Size of v1 ="<<v1.size()<<endl;
         cerr<<"Size of v2 ="<<v2.size()<<endl;
         cerr<<"Size of v3 ="<<v3.size()<<endl;
@@ -482,7 +486,7 @@ pair<int,int> graphUCAndGraphCVGenerator(){
         for(auto [wt,ids]:v4){
             int c_id=cIndexGenerator.getIndex(ids);
 
-            graphUC[u_id].push_back(make_pair(wt,c_id));
+            graphUC[u_id].push_back(make_pair(c_id,wt));
             uc_edges++;
 
             for(auto x:ids){
