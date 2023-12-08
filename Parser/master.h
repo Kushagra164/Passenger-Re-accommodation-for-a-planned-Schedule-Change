@@ -55,7 +55,7 @@ private:
 // Map to get the corresponding InventoryID for a pair of Flight Number and Departure DTMZ
 // Used while parsing passenger booking details and creating Journey
 
-map<pair<int,DateTime>,int> flightToInventoryMap;       //map< pair<FlightNum,DEP_DTMZ> , InventoryID >
+map<pair<int,pair<DateTime,DateTime>>,int> flightToInventoryMap;       //map< pair<FlightNum,pair<DEP_DTMZ,ARR_DTMZ>> , InventoryID >
 bool precalc = true;
 
 void _fn(){
@@ -66,12 +66,13 @@ void _fn(){
         Schedule *S = scheduleMap[s_id];
 
         DateTime DepDTMZ(I.DepartureDate,S->DepartureTime);
+        DateTime ArrDTMZ(I.ArrivalDate,S->ArrivalTime);
 
-        flightToInventoryMap[make_pair(S->FlightNum,DepDTMZ)] = inv_id;
+        flightToInventoryMap[make_pair(S->FlightNum,make_pair(DepDTMZ,ArrDTMZ))] = inv_id;
     }
 }
 
-int getFlight(int FLT_NUM,DateTime DepartureDTMZ){
+int getFlight(int FLT_NUM,DateTime DepartureDTMZ, DateTime ArrivalDTMZ){
 
     if (precalc){
         _fn();
@@ -80,9 +81,9 @@ int getFlight(int FLT_NUM,DateTime DepartureDTMZ){
     for (auto &f: flightToInventoryMap){
         auto [a, b] = f.first;
     }
-    if (! flightToInventoryMap.count(make_pair(FLT_NUM,DepartureDTMZ))){
+    if (! flightToInventoryMap.count(make_pair(FLT_NUM,make_pair(DepartureDTMZ,ArrivalDTMZ)))){
         cerr<<"Could not find inventory for flight:"
-            <<FLT_NUM<<" "<<DepartureDTMZ.to_string()<<endl;
+            <<FLT_NUM<<" "<<DepartureDTMZ.to_string()<<" "<<ArrivalDTMZ.to_string()<<endl;
         return -1;
     }
 

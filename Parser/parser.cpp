@@ -10,9 +10,8 @@ int main(int argc,char* argv[]) {
 
     ifstream scheduleFile;
     scheduleFile.open(argv[1]);
-    string line="";
+    string line;
     getline(scheduleFile, line);
-    line ="";
 
     while (getline(scheduleFile, line)) {
 
@@ -36,7 +35,6 @@ int main(int argc,char* argv[]) {
 
         string FlightPattern;
         string tempString;
-        tempString="";
 
         getline(inputString, ScheduleID, ',');
         int uuid=scheduleUuidGenerator.getID(ScheduleID);
@@ -44,45 +42,36 @@ int main(int argc,char* argv[]) {
 
         getline(inputString,tempString, ',');
         for(int i=0;i<CARRIER_CODE_LENGTH;i++) CarrierCD[i]= tempString[i];
-        tempString="";
 
         getline(inputString,tempString, ',');
         FlightNum = atoi(tempString.c_str());
-        tempString="";
 
         getline(inputString, EquipmentNo.first, ',');
         getline(inputString, EquipmentNo.second, ',');
 
         getline(inputString, tempString , ',');
         for(int i=0;i<CITY_CODE_LENGTH;i++) Src[i]= tempString[i];
-        tempString="";
 
         getline(inputString, tempString, ',');
         for(int i=0;i<CITY_CODE_LENGTH;i++) Dest[i]= tempString[i];
-        tempString="";
 
         flightNumberMap[FlightNum]={Src,Dest};
         cityToFlightNumberMap[make_pair(Src,Dest)]=FlightNum;
 
         getline(inputString, tempString, ',');
         DepartureTime=Time(tempString);
-        tempString="";
 
         getline(inputString, tempString, ',');
         ArrivalTime=Time(tempString);
-        tempString="";
 
         getline(inputString, tempString, ',');
         StartDate=Date(tempString);
-        tempString="";
 
         getline(inputString, tempString, ',');
         EndDate=Date(tempString);
-        tempString="";
 
         getline(inputString, tempString, ',');
         Status = static_cast<Statuses> (getStatusCode(tempString));
-        tempString.clear();
 
         getline(inputString, tempString, ',');
         getline(inputString, tempString, ',');
@@ -95,7 +84,6 @@ int main(int argc,char* argv[]) {
 
         getline(inputString, FlightPattern, ',');
 
-        line = "";
 
         Schedule* S = new Schedule(uuid,CarrierCD,EquipmentNo,DepartureTime,ArrivalTime,StartDate,EndDate,FlightPattern,FlightNum,Status);
 
@@ -113,9 +101,7 @@ int main(int argc,char* argv[]) {
 
     ifstream inventoryFile;
     inventoryFile.open(argv[2]);
-    line="";
     getline(inventoryFile, line);
-    line ="";
 
     bool flag=true;
 
@@ -134,11 +120,9 @@ int main(int argc,char* argv[]) {
         string tempString;
 
         getline(inputString, InventoryID, ',');
-        tempString="";
         int uuid = inventoryUuidGenerator.getID(InventoryID);
 
         getline(inputString, ScheduleID, ',');
-        tempString="";
 
         int s_id = scheduleUuidGenerator.getID(ScheduleID);
 
@@ -149,38 +133,31 @@ int main(int argc,char* argv[]) {
         scheduleMap[s_id]->DepartureDates.push_back(uuid);
 
         getline(inputString, tempString, ',');
-        tempString="";
 
         getline(inputString, tempString, ',');
-        tempString="";
 
         getline(inputString, tempString, ',');
         DepartureDate = Date(tempString);
-        tempString="";
+
 
         getline(inputString, tempString, ',');
         ArrivalDate = Date(tempString);
-        tempString="";
 
         getline(inputString, tempString, ',');
-        tempString="";
 
         getline(inputString, tempString, ',');
-        tempString="";
 
-        getline(inputString, tempString, ','); TotalCapacity = atoi(tempString.c_str());tempString="";
-        getline(inputString, tempString, ','); TotalInventory = atoi(tempString.c_str());tempString="";
-        getline(inputString, tempString, ',');tempString="";
-
-        getline(inputString, tempString, ',');
-        tempString="";
+        getline(inputString, tempString, ','); TotalCapacity = atoi(tempString.c_str());
+        getline(inputString, tempString, ','); TotalInventory = atoi(tempString.c_str());
+        getline(inputString, tempString, ',')
 
         getline(inputString, tempString, ',');
-        tempString="";
 
-        getline(inputString, tempString, ','); FCTotalCapacity = atoi(tempString.c_str());tempString="";
-        getline(inputString, tempString, ','); BCTotalCapacity= atoi(tempString.c_str());tempString="";
-        getline(inputString, tempString, ','); PCTotalCapacity = atoi(tempString.c_str());tempString="";
+        getline(inputString, tempString, ',');
+
+        getline(inputString, tempString, ','); FCTotalCapacity = atoi(tempString.c_str());
+        getline(inputString, tempString, ','); BCTotalCapacity= atoi(tempString.c_str());
+        getline(inputString, tempString, ','); PCTotalCapacity = atoi(tempString.c_str());
         getline(inputString, tempString, ','); ECTotalCapacity = atoi(tempString.c_str());tempString="";
 
         getline(inputString, tempString, ','); FCTotalInventory = atoi(tempString.c_str());tempString="";
