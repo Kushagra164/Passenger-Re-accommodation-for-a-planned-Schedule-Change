@@ -13,48 +13,49 @@ public:
     int totalInventory;
     int bookedInventory;
 
-    int FCTotalCapacity;
-    int FCTotalInventory;
-    int FCBookedInventory;
+    int fcTotalCapacity;
+    int fcTotalInventory;
+    int fcBookedInventory;
 
-    int BCTotalCapacity;
-    int BCTotalInventory;
-    int BCBookedInventory;
+    int bcTotalCapacity;
+    int bcTotalInventory;
+    int bcBookedInventory;
 
-    int PCTotalCapacity;
-    int PCTotalInventory;
-    int PCBookedInventory;
+    int pcTotalCapacity;
+    int pcTotalInventory;
+    int pcBookedInventory;
 
-    int ECTotalCapacity;
-    int ECTotalInventory;
-    int ECBookedInventory;
+    int ecTotalCapacity;
+    int ecTotalInventory;
+    int ecBookedInventory;
 
-    Inventory(int uuid, Date dep_date, Date arr_date, int total_cap, int total_inv, int book_inv, int fctotal_cap, int fctotal_inv, int fcbook_inv, int bctotal_cap, int bctotal_inv, int bcbook_inv, int pctotal_cap, int pctotal_inv, int pcbook_inv, int ectotal_cap, int ectotal_inv, int ecbook_inv){
-        InventoryID = uuid;
-        DepartureDate=dep_date;
-        ArrivalDate=arr_date;
+    Inventory(int _inventoryID, Date _departureDate, Date _arrivalDate,
+              int _totalCapacity, int _totalInventory, int _bookedInventory,
+              int _fcTotalCapacity, int _fcTotalInventory, int _fcBookedInventory,
+              int _bcTotalCapacity, int _bcTotalInventory, int _bcBookedInventory,
+              int _pcTotalCapacity, int _pcTotalInventory, int _pcBookedInventory,
+              int _ecTotalCapacity, int _ecTotalInventory, int _ecBookedInventory):
+            inventoryID(_inventoryID),
+            departureDate(_departureDate),
+            arrivalDate(_arrivalDate),
+            totalCapacity(_totalCapacity),
+            totalInventory(_totalInventory),
+            bookedInventory(_bookedInventory),
+            fcTotalCapacity(_fcTotalCapacity),
+            fcTotalInventory(_fcTotalInventory),
+            fcBookedInventory(_fcBookedInventory),
 
-        TotalCapacity=total_cap;
-        TotalInventory=total_inv;
-        BookedInventory=book_inv;
+            bcTotalCapacity(_bcTotalCapacity),
+            bcTotalInventory(_bcTotalInventory),
+            bcBookedInventory(_bcBookedInventory),
 
-        FCTotalCapacity=fctotal_cap;
-        FCTotalInventory=fctotal_inv;
-        FCBookedInventory=fcbook_inv;
+            pcTotalCapacity(_pcTotalCapacity),
+            pcTotalInventory(_pcTotalInventory),
+            pcBookedInventory(_pcBookedInventory),
 
-        BCTotalCapacity=bctotal_cap;
-        BCTotalInventory=bctotal_inv;
-        BCBookedInventory=bcbook_inv;
-
-        PCTotalCapacity=pctotal_cap;
-        PCTotalInventory=pctotal_inv;
-        PCBookedInventory=pcbook_inv;
-
-        ECTotalCapacity=ectotal_cap;
-        ECTotalInventory=ectotal_inv;
-        ECBookedInventory=ecbook_inv;
-
-    }
+            ecTotalCapacity(_ecTotalCapacity),
+            ecTotalInventory(_ecTotalInventory),
+            ecBookedInventory(_ecBookedInventory){}
 };
 
 map<int,Inventory*> inventoryMap;

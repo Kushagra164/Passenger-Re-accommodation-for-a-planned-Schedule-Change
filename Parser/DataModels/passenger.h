@@ -10,12 +10,14 @@ int getSN1Code(string str){
     else if(str=="ADT") return 4;
     else if(str=="UNN") return 5;
     else if(str=="S65") return 6;
+    cout<<"Special Name 1 not found: "<<str<<endl;
     else return 0;
 }
 
 int getSN2Code(string str){
     if(str=="NRPS") return 1;
     else if(str=="NRSA") return 2;
+    cout<<"Special Name 2 not found: "<<str<<endl;
     else return 0;
 }
 
@@ -31,6 +33,7 @@ int getSSRCode(string str){
     else if(str=="EXST") return 9;
     else if(str=="MEAL") return 10;
     else if(str=="NSST") return 11;
+    cout<<"SSR not found: "<<str<<endl;
     else return 0;
 }
 
@@ -49,7 +52,11 @@ public:
     SPECIAL_NAMES2 specialName2;
     SSR_CD ssrCode;
 
-    Passenger(int uuid, string lname, string fname, string nationality, string phonenum, string email, string docid, string doctype, SpecialNames1 sn1, SpecialNames2 sn2, SSRCodes ssr){
+    Passenger(int _passenger, string _lastName, string _firstName, string _nationality,
+              string _phoneNum, string _email, string _docId, string _docType,
+              SPECIAL_NAMES1 sn1, SpecialNames2 sn2, SSRCodes ssr):
+
+              {}
         PassengerID = uuid;
         LastName = lname;
         FirstName = fname;
@@ -61,7 +68,6 @@ public:
         SpecialName1 = sn1;
         SpecialName2 = sn2;
         SSRCode = ssr;
-    }
 };
 
 map<int,Passenger*> passengerMap;       //map<PassengerID,Passenger*>
