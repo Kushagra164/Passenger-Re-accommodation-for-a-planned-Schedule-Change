@@ -1,8 +1,4 @@
 #include "graph.h"
-#define mp  make_pair
-#define F   first
-#define S   second
-#define ll  long long
 using namespace std;
 
 int main(int argc,char *argv[]){
