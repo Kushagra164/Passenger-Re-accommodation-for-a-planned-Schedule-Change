@@ -1,15 +1,24 @@
 #include<iostream>
 #include <fstream>
 #include <sstream>
-
-using namespace std;
 #include "master.h"
+using namespace std;
 
 int main(int argc,char* argv[]) {
     //Parsing of Schedule File
 
+    // handling command line arguments
     ifstream scheduleFile;
     scheduleFile.open(argv[1]);
+    ifstream inventoryFile;
+    inventoryFile.open(argv[2]);
+    ifstream bookingFile;
+    bookingFile.open(argv[3]);
+    ifstream passengerFile;
+    passengerFile.open(argv[4]);
+    
+    ofstream fw(argv[5],ofstream::out);
+
     string line;
     getline(scheduleFile, line);
 
@@ -101,8 +110,6 @@ int main(int argc,char* argv[]) {
 
     //Parsing of Inventory File
 
-    ifstream inventoryFile;
-    inventoryFile.open(argv[2]);
     getline(inventoryFile, line);
 
     bool flag=true;
@@ -211,9 +218,6 @@ int main(int argc,char* argv[]) {
 
     // Parsing of Passenger Booking File
 
-    ifstream bookingFile;
-    bookingFile.open(argv[3]);
-    line = "";
     getline(bookingFile, line); line.clear();
 
     int uuid=0;
@@ -334,11 +338,7 @@ int main(int argc,char* argv[]) {
     //Parsing of Passenger Details File
 
 
-    ifstream passengerFile;
-    passengerFile.open(argv[4]);
-    line = "";
     getline(passengerFile, line);
-    line.clear();
 
     uuid=0;
 
@@ -414,9 +414,7 @@ int main(int argc,char* argv[]) {
     int m5=graphWDGenerator();
 
 
-    //Output File Creation for QUBO
-
-    ofstream fw(argv[5],ofstream::out);
+    //Output graph
 
     int modU=uIndexGenerator.getSize();
     int modC=cIndexGenerator.getSize();

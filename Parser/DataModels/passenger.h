@@ -1,6 +1,7 @@
-enum SpecialNames1 {NIL1,INS,INF,CHD,ADT,UNN,S65};
-enum SpecialNames2 {NIL2,NRPS,NRSA};
-enum SSRCodes {NIL3,WCHR,WCHS,WCHC,LANG,MAAS,UNMR,BLND,DEAF,EXST,MEAL,NSST};
+#include<string>
+#include<map>
+#include "../'Utils/constants.h"
+using namespace std;
 
 int getSN1Code(string str){
     if(str=="INS") return 1;
@@ -35,18 +36,18 @@ int getSSRCode(string str){
 
 class Passenger{
 private:
-    int PassengerID;
-    string LastName;
-    string FirstName;
-    string Nationality;
-    string PhoneNum;
-    string Email;
-    string DocID;
-    string DocType;
+    int passengerID;
+    string lastName;
+    string firstName;
+    string nationality;
+    string phoneNum;
+    string email;
+    string docID;
+    string docType;
 public:
-    SpecialNames1 SpecialName1;
-    SpecialNames2 SpecialName2;
-    SSRCodes SSRCode;
+    SPECIAL_NAMES1 specialName1;
+    SPECIAL_NAMES2 specialName2;
+    SSR_CD ssrCode;
 
     Passenger(int uuid, string lname, string fname, string nationality, string phonenum, string email, string docid, string doctype, SpecialNames1 sn1, SpecialNames2 sn2, SSRCodes ssr){
         PassengerID = uuid;

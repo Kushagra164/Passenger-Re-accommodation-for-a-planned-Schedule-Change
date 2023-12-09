@@ -1,3 +1,8 @@
+#include<vector>
+#include<map>
+#include "../Utils/dateTime.h"
+using namespace std;
+
 class Pnr{
 private:
     int PnrID;

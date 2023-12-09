@@ -1,5 +1,8 @@
-#define CARRIER_CODE_LENGTH 3            //plus 1 to accomodate null character
-enum Statuses{SCHEDULED,PLANNED,CANCELLED,DELAYED};
+#include<string>
+#include<map>
+#include "../Utils/dateTime.h"
+#include "../Utils/constants.h"
+using namespace std;
 
 int getStatusCode(string str){
     if(str=="Scheduled") return 0;

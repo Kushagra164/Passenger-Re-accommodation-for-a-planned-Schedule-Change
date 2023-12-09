@@ -1,13 +1,17 @@
+#include<map>
+#include "../Utils/DateTime/dateTime.h"
+using namespace std;
+
 class Inventory{
 private:
-    int InventoryID;
+    int inventoryID;
 public:
-    Date DepartureDate;
-    Date ArrivalDate;
+    Date departureDate;
+    Date arrivalDate;
 
-    int TotalCapacity;
-    int TotalInventory;
-    int BookedInventory;
+    int totalCapacity;
+    int totalInventory;
+    int bookedInventory;
 
     int FCTotalCapacity;
     int FCTotalInventory;
@@ -54,5 +58,4 @@ public:
 };
 
 map<int,Inventory*> inventoryMap;
-
-map<int,int> inventoryToScheduleMap;           //map<InventoryID,ScheduleID>
+map<int,int> inventoryToScheduleMap;  //map<InventoryID,ScheduleID>
