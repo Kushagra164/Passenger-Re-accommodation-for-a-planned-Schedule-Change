@@ -37,7 +37,7 @@ public:
     string dest;
     vector<int> flights;              //vector<InventoryID>
 
-    Journey(int _journeyId, ACTION_CD _actionCD, CLASS_CD _classCD, string _src, string _dest):
+    Journey(int _journeyID, ACTION_CD _actionCD, CLASS_CD _classCD, string _src, string _dest):
         journeyID(_journeyID),
         actionCD(_actionCD),
         classCD(_classCD),
