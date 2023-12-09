@@ -52,22 +52,20 @@ public:
     SPECIAL_NAME2 specialName2;
     vector<SSR_CD> ssrCodes;
 
-    Passenger(int _passenger, string _lastName, string _firstName, string _nationality,
+    Passenger(int _passengerID, string _lastName, string _firstName, string _nationality,
               string _phoneNum, string _email, string _docId, string _docType,
-              SPECIAL_NAMES1 sn1, SpecialNames2 sn2, SSRCodes ssr):
-
-              {}
-        PassengerID = uuid;
-        LastName = lname;
-        FirstName = fname;
-        Nationality = nationality;
-        PhoneNum = phonenum;
-        Email = email;
-        DocID = docid;
-        DocType = doctype;
-        SpecialName1 = sn1;
-        SpecialName2 = sn2;
-        SSRCode = ssr;
+              SPECIAL_NAME1 _specialName1, SPECIAL_NAME2 _specialName2, vector<SSR_CD> _ssrCodes):
+              passengerID(_passengerID),
+              lastName(_lastName),
+              firstName(_firstName),
+              nationality(_nationality),
+              phoneNum(_phoneNum),
+              email(_email),
+              docID(_docId),
+              docType(_docType),
+              SPECIAL_NAME1(_specialName1),
+              SPECIAL_NAME2(_specialName2),
+              vector<SSR_CD>(_ssrCodes){}
 };
 
 map<int,Passenger*> passengerMap;       //map<PassengerID,Passenger*>
