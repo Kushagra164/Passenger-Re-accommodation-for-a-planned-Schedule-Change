@@ -5,8 +5,8 @@
 using namespace std;
 
 class CityPair{
-    string srcCity, destCity;
     public:
+        string srcCity, destCity;
         CityPair(string _src, string _dest):srcCity(_src),destCity(_dest){}
         CityPair(){}
         CityPair& operator = (const CityPair& other){
