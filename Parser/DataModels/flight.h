@@ -12,7 +12,7 @@ class CityPair{
         CityPair& operator = (const CityPair& other){
             if(srcCity.empty()){
                 if((other.srcCity.length()!=CITY_CODE_LENGTH)||(other.destCity.length()!=CITY_CODE_LENGTH)){
-                    cout<<"Inconsistant city code length"<<endl;
+                    cout<<"Inconsistent city code length"<<endl;
                 }
                 srcCity = other.srcCity;
                 destCity = other.destCity;

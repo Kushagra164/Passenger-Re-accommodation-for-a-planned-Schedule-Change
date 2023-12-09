@@ -38,8 +38,7 @@ void getScheduleInput(ifstream& scheduleFile){
         int uuid=scheduleUuidGenerator.getID(ScheduleID);
 
 
-        getline(inputString,tempString, ',');
-        for(int i=0;i<CARRIER_CODE_LENGTH;i++) CarrierCD[i]= tempString[i];
+        getline(inputString,CarrierCD, ',');
 
         getline(inputString,tempString, ',');
         FlightNum = atoi(tempString.c_str());
