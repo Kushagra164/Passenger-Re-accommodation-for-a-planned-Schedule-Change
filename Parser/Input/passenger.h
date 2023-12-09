@@ -49,11 +49,13 @@ void getPassengerInput(ifstream& passengerFile){
         SPECIAL_NAME_CD1 = static_cast<SPECIAL_NAME1>(getSN1Code(tempString));  
         getline(inputString, tempString, ',');
         SPECIAL_NAME_CD2 = static_cast<SPECIAL_NAME2>(getSN2Code(tempString));  
-        getline(inputString, tempString, ',');
+        while(getline(inputString, tempString, ',')){
+            ssrCodes.push_back(static_cast<SSR_CD> (getSSRCode(tempString)));
+        }
 
-        //SSR_CODE_CD1 = static_cast<SSR_CD>(getSSRCode(tempString));  
-        Passenger* P = new Passenger(uuid,LastName,FirstName,Nationality,PhoneNum,Email,DocID,DocType,SPECIAL_NAME_CD1,SPECIAL_NAME_CD2,SSR_CODE_CD1);
-        if(true){                                                            //SSR_CODE_CD1 != 1
+
+        Passenger* P = new Passenger(uuid,LastName,FirstName,Nationality,PhoneNum,Email,DocID,DocType,SPECIAL_NAME_CD1,SPECIAL_NAME_CD2,ssrCodes);
+        if(SPECIAL_NAME_CD1 != 1){
             Pnr* pnr=pnrMap[pnr_id];
             for(int j_id: pnr->journeys){
                 for(int inv_id: journeyMap[j_id]->flights){
