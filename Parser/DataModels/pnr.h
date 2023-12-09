@@ -5,18 +5,15 @@ using namespace std;
 
 class Pnr{
 private:
-    int PnrID;
-    Date CreationDate;
+    int pnrID;
+    Date creationDate;
 public:
-    int PaxCnt;
-    vector<int> Passengers;          //vector<PassengerID>
-    vector<int> Journeys;            //vector<JourneyID>
+    int paxCnt;
+    vector<int> passengers;          //vector<PassengerID>
+    vector<int> journeys;            //vector<JourneyID>
 
-    Pnr(int uuid,Date c_date, int pax_cnt){
-        PnrID = uuid;
-        CreationDate = c_date;
-        PaxCnt = pax_cnt;
-    }
+    Pnr(int _pnrID,Date _creationDate, int _paxCnt):
+        pnrID(_pnrID), creationDate(_creationDate), paxCnt(_paxCnt){}
 };
 
 map<int,Pnr*> pnrMap;                    //map<PnrID,Pnr*>
