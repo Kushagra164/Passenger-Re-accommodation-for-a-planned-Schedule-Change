@@ -418,18 +418,14 @@ pair<int,int> graphUCAndGraphCVGenerator(){
 // Generation of graphWD
 ExtendableVector<vector<int>> graphWD;   //Unweighted graph from cancelled flight InventoryID(s) to possible flight solution InventoryID(s)
 
-int graphWDGenerator(){
-    int n_edges=0;
-
-    for (int c_inv_id: CancelledFlights){
-        int w_idx = wIndexGenerator.getIndex(c_inv_id);
-        for (auto p_inv: inventoryMap){
-            if ((CancelledFlights.find(p_inv.first) == CancelledFlights.end()) && (validSolution(p_inv.first, c_inv_id))){
-                int d_idx = dIndexGenerator.getIndex(p_inv.first);
-                graphWD[w_idx].push_back(d_idx);
-                n_edges++;
+void graphWDGenerator(){
+    for (int cancelledInventoryID: CancelledFlights){
+        int curWIdx = wIndexGenerator.getIndex(cancelledInventoryID);
+        for (auto [inventoryID, _]: inventoryMap){
+            if ((CancelledFlights.find(inventoryID) == CancelledFlights.end()) && (validSolution(inventoryID, cancelledInventoryID))){
+                int curDIdx = dIndexGenerator.getIndex(inventoryID);
+                graphWD[curWIdx].push_back(curDIdx);
             }
         }
     }
-    return n_edges;
 }
