@@ -1,6 +1,7 @@
+#include<iostream>
 #include<string>
 #include<map>
-#include "../Utils/dateTime.h"
+#include "../Utils/DateTime/dateTime.h"
 #include "../Utils/constants.h"
 using namespace std;
 
@@ -48,8 +49,7 @@ public:
 };
 
 map<int,Schedule*> scheduleMap;
-map<int,pair<string,string>> flightNumberMap;                  //map<FlightNum,pair<Src,Dest>>
-map<pair<string,string>,int> cityToFlightNumberMap;
+
 
 
 

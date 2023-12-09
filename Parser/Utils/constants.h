@@ -1,3 +1,5 @@
+#include<map>
+using namespace std;
 #define CITY_CODE_LENGTH 3
 #define SSR_SCORE 1
 #define PAX_SCORE 1
@@ -29,4 +31,4 @@ enum SSR_CD {NIL3,WCHR,WCHS,WCHC,LANG,MAAS,UNMR,BLND,DEAF,EXST,MEAL,NSST};
 
 enum STATUS{SCHEDULED,PLANNED,CANCELLED,DELAYED};
 
-map<ClassCDs,int> classScoresMap = {{FC,25},{BC,20},{PC,15},{EC,10}};
+map<CLASS_CD,int> classScoresMap = {{FC,25},{BC,20},{PC,15},{EC,10}};
