@@ -45,9 +45,9 @@ private:
     string docID;
     string docType;
 public:
-    SPECIAL_NAMES1 specialName1;
-    SPECIAL_NAMES2 specialName2;
-    SSR_CD ssrCode;
+    SPECIAL_NAME1 specialName1;
+    SPECIAL_NAME2 specialName2;
+    vector<SSR_CD> ssrCodes;
 
     Passenger(int uuid, string lname, string fname, string nationality, string phonenum, string email, string docid, string doctype, SpecialNames1 sn1, SpecialNames2 sn2, SSRCodes ssr){
         PassengerID = uuid;

@@ -33,12 +33,6 @@ enum SSRCodes {WCHR,WCHS,WCHC,LANG,MAAS,UNMR,BLND,DEAF,EXST,MEAL,NSST};
 
 classScoresMap: map<CLASSCDs: enum, score: int>    (FC:25, BC:20, PC:15, EC:10)
 
-
-First Class: F,P
-Business Class: C,J,Z
-Premium Class: Q,R,S,T,H,M
-Economy Class: Y,A,B,D,E,G,I,K,L,N,O,U,V,W,X
-
 cabinToClassMap: map<CabinID: char,CLS_ID: string>
 
 flightToInventoryMap: map<pair<FlightNum: int,DEP_DTMZ: DateTime>,InventoryID: uuid>;

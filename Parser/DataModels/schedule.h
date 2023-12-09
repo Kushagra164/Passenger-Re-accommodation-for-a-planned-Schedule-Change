@@ -9,36 +9,42 @@ int getStatusCode(string str){
     else if(str=="Planning") return 1;
     else if(str=="Cancelled") return 2;
     else if(str=="Delayed") return 3;
+    cout<<"Status node found:"<<str<<endl;
     return -1;
 }
 
 class Schedule{
 private:
-    int ScheduleID;
-    char CarrierCD[CARRIER_CODE_LENGTH];
+    int scheduleID;
+    string carrierCD;
 public:
-    pair<string,string> EquipmentNo;    //pair<AircraftType,AircraftTailNo>
-    Time DepartureTime;
-    Time ArrivalTime;
-    Date StartDate;
-    Date EndDate;
-    string FlightPattern;
-    int FlightNum;
-    Statuses Status;                        //{true: Scheduled , false: Planned}
+    pair<string,string> equipmentNo;    //pair<AircraftType,AircraftTailNo>
+    Time departureTime;
+    Time arrivalTime;
+    Date startDate;
+    Date endDate;
+    string flightPattern;
+    int flightNum;
+    STATUS status;                    //{true: Scheduled , false: Planned}
     vector<int> DepartureDates;         // vector<InventoryID>
 
-    Schedule(int uuid,char carrier_cd[CARRIER_CODE_LENGTH], pair<string,string> &equipment_no,Time dep_time, Time arr_time, Date start_date, Date end_date, string flight_pattern, int flight_num, Statuses status){
-        ScheduleID=uuid;
-        strncpy(CarrierCD,carrier_cd,CARRIER_CODE_LENGTH);
-        EquipmentNo=equipment_no;
-        DepartureTime=dep_time;
-        ArrivalTime=arr_time;
-        StartDate=start_date;
-        EndDate=end_date;
-        FlightPattern=flight_pattern;
-        FlightNum=flight_num;
-        Status=status;
-    }
+    Schedule(int _scheduleID,string _carrierCD, pair<string,string> _equipmentNo,Time _departureTime, 
+        Time _arrivalTime, Date _startDate, Date _endDate, 
+        string _flightPattern, int _flightNum, STATUS _status):
+        scheduleID(_scheduleID), carrierCD(_carrierCD), equipmentNo(_equipmentNo),
+        departureTime(_departureTime), arrivalTime(_arrivalTime), startDate(_startDate),
+        endDate(_endDate), flightPattern(_flightPattern), flightNum(_flightNum), status(_status)
+        {
+            if(endDate<startDate){
+                cout<<"Schedule Date Mismatch"<<endl;
+            }
+            if(arrivalTime<departureTime){
+                cout<<"Schedule timings mismatch"<<endl;
+            }
+            if(carrierCD.length()!=CARRIER_CODE_LENGTH){
+                cout<<"Carrier Code length differs:"<<carrierCD<<endl;
+            }
+        }
 };
 
 map<int,Schedule*> scheduleMap;
