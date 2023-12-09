@@ -1,3 +1,7 @@
+#include<vector>
+#include<map>
+#include "constants.h"
+using namespace std;
 template<typename T>
 class graphIndexGenerator{
     map<T,int> forwardMap;
@@ -22,5 +26,5 @@ class graphIndexGenerator{
 graphIndexGenerator<int> uIndexGenerator;
 graphIndexGenerator<int> dIndexGenerator;
 graphIndexGenerator<int> wIndexGenerator;
-graphIndexGenerator<vector<pair<int,ClassCD>>> cIndexGenerator;
-graphIndexGenerator<pair<int,ClassCD>> cIndexGenerator;
+graphIndexGenerator<vector<pair<int,CLASS_CD>>> cIndexGenerator;
+graphIndexGenerator<pair<int,CLASS_CD>> vIndexGenerator;

@@ -1,31 +1,32 @@
+#include<iostream>
 #include<string>
 #include<map>
-#include "../'Utils/constants.h"
+#include "../Utils/constants.h"
 using namespace std;
 
 int getClassCode(string str){
     if(str=="FC") return 1;
-    else if(str=="BC") return 2;
-    else if(str=="PC") return 3;
-    else if(str=="EC") return 4;
+    if(str=="BC") return 2;
+    if(str=="PC") return 3;
+    if(str=="EC") return 4;
     cout<<"Class Code not found: "<<str<<endl;
-    else return 0;
+    return 0;
 }
 
 string getClass(int x){
     if(x==1) return "FC";
-    else if(x==2) return "BC";
-    else if(x==3) return "PC";
-    else if(x==4) return "EC";
+    if(x==2) return "BC";
+    if(x==3) return "PC";
+    if(x==4) return "EC";
     cout<<"Class not found: "<<x<<endl;
-    else return " ";
+    return " ";
 }
 
 int getActionCode(string str){
     if(str=="HK") return 1;
-    else if(str=="PD") return 2;
+    if(str=="PD") return 2;
     cout<<"Action Code not found:"<<str<<endl;
-    else return 0;
+    return 0;
 }
 class Journey{
 private:

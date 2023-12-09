@@ -1,40 +1,41 @@
+#include<iostream>
 #include<string>
 #include<map>
-#include "../'Utils/constants.h"
+#include "../Utils/constants.h"
 using namespace std;
 
 int getSN1Code(string str){
     if(str=="INS") return 1;
-    else if(str=="INF") return 2;
-    else if(str=="CHD") return 3;
-    else if(str=="ADT") return 4;
-    else if(str=="UNN") return 5;
-    else if(str=="S65") return 6;
+    if(str=="INF") return 2;
+    if(str=="CHD") return 3;
+    if(str=="ADT") return 4;
+    if(str=="UNN") return 5;
+    if(str=="S65") return 6;
     cout<<"Special Name 1 not found: "<<str<<endl;
-    else return 0;
+    return 0;
 }
 
 int getSN2Code(string str){
     if(str=="NRPS") return 1;
-    else if(str=="NRSA") return 2;
+    if(str=="NRSA") return 2;
     cout<<"Special Name 2 not found: "<<str<<endl;
-    else return 0;
+    return 0;
 }
 
 int getSSRCode(string str){
     if(str=="WCHR") return 1;
-    else if(str=="WCHS") return 2;
-    else if(str=="WCHC") return 3;
-    else if(str=="LANG") return 4;
-    else if(str=="MAAS") return 5;
-    else if(str=="UNMR") return 6;
-    else if(str=="BLND") return 7;
-    else if(str=="DEAF") return 8;
-    else if(str=="EXST") return 9;
-    else if(str=="MEAL") return 10;
-    else if(str=="NSST") return 11;
+    if(str=="WCHS") return 2;
+    if(str=="WCHC") return 3;
+    if(str=="LANG") return 4;
+    if(str=="MAAS") return 5;
+    if(str=="UNMR") return 6;
+    if(str=="BLND") return 7;
+    if(str=="DEAF") return 8;
+    if(str=="EXST") return 9;
+    if(str=="MEAL") return 10;
+    if(str=="NSST") return 11;
     cout<<"SSR not found: "<<str<<endl;
-    else return 0;
+    return 0;
 }
 
 class Passenger{
@@ -63,9 +64,9 @@ public:
               email(_email),
               docID(_docId),
               docType(_docType),
-              SPECIAL_NAME1(_specialName1),
-              SPECIAL_NAME2(_specialName2),
-              vector<SSR_CD>(_ssrCodes){}
+              specialName1(_specialName1),
+              specialName2(_specialName2),
+              ssrCodes(_ssrCodes){}
 };
 
 map<int,Passenger*> passengerMap;       //map<PassengerID,Passenger*>
