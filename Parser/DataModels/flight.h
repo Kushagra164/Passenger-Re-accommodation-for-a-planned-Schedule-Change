@@ -1,3 +1,4 @@
+#pragma once
 #include<iostream>
 #include<string>
 #include<map>
@@ -10,9 +11,11 @@ class CityPair{
         CityPair(string _src, string _dest):srcCity(_src),destCity(_dest){}
         CityPair(){}
         CityPair& operator = (const CityPair& other){
+            if(other.srcCity.empty())return *this;
             if(srcCity.empty()){
                 if((other.srcCity.length()!=CITY_CODE_LENGTH)||(other.destCity.length()!=CITY_CODE_LENGTH)){
                     cout<<"Inconsistent city code length"<<endl;
+                    cout<<(srcCity)<<" "<<(destCity)<<" "<<(other.srcCity)<<" "<<(other.destCity)<<endl;
                 }
                 srcCity = other.srcCity;
                 destCity = other.destCity;
@@ -23,6 +26,9 @@ class CityPair{
                 }
             }
             return *this;
+        }
+        bool operator <(const CityPair& other)const{
+            return make_pair(srcCity,destCity) < make_pair(other.srcCity, other.destCity);
         }
 };
 class FlightNumberMap{

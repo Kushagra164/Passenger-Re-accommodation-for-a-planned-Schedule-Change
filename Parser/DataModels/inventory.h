@@ -1,3 +1,4 @@
+#pragma once
 #include<map>
 #include "../Utils/DateTime/dateTime.h"
 using namespace std;

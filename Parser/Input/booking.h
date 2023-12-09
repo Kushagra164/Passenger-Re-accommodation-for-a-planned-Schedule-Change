@@ -1,3 +1,4 @@
+#pragma once
 #include<fstream>
 #include<sstream>
 #include<string>
@@ -6,6 +7,7 @@
 #include "../DataModels/journey.h"
 #include "../Utils/uuidGenerator.h"
 #include "../Utils/constants.h"
+#include "../Utils/getFlight.h"
 using namespace std;
 
 void getBookingInput(ifstream& bookingFile){
@@ -26,7 +28,7 @@ void getBookingInput(ifstream& bookingFile){
         string RECLOC;
 
         Date CREATION_DTZ;
-        ACTION_CD ACTION_CD;
+        ACTION_CD actionCD;
         char CLS_CD;
         int SEG_SEQ, PAX_CNT, FLT_NUM;
         string ORIG_CD;
@@ -41,7 +43,7 @@ void getBookingInput(ifstream& bookingFile){
 
         getline(inputString, tempString, ','); 
         getline(inputString,tempString, ',');
-        ACTION_CD = static_cast<ACTION_CD> (getActionCode(tempString));
+        actionCD = static_cast<ACTION_CD> (getActionCode(tempString));
 
         getline(inputString,tempString, ',');
         CLS_CD = tempString[0];
@@ -100,17 +102,17 @@ void getBookingInput(ifstream& bookingFile){
         if(flag && (SEG_SEQ==prev_seg_seq)){
             Journey* J=journeyMap[uuid];
             J->flights.push_back(inv_id);
-            J->Dest=DEST_CD;
-            J->ClassCD = static_cast <ClassCDs> (min(J->ClassCD,static_cast <ClassCDs> (x)));
+            J->dest=DEST_CD;
+            J->classCD = static_cast <CLASS_CD> (min(J->classCD,static_cast <CLASS_CD> (x)));
         }
         else{
             if(SEG_SEQ<prev_seg_seq) prev_seg_seq=1;
             else prev_seg_seq++;
-            Journey* J = new Journey(uuid,ACTION_CD,static_cast <ClassCDs> (x),ORIG_CD,DEST_CD);
+            Journey* J = new Journey(uuid,actionCD,static_cast <CLASS_CD> (x),ORIG_CD,DEST_CD);
             journeyMap[uuid] = J;
             journeyToPnrMap[uuid]=pnr_id;
             J->flights.push_back(inv_id);
-            pnrMap[pnr_id]->Journeys.push_back(uuid);
+            pnrMap[pnr_id]->journeys.push_back(uuid);
             uuid++;
         }
     }

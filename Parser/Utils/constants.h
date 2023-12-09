@@ -1,3 +1,4 @@
+#pragma once
 #include<map>
 using namespace std;
 #define CITY_CODE_LENGTH 3

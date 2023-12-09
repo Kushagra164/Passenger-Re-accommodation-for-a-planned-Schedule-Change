@@ -5,7 +5,7 @@
 #include "../Input/inventory.h"
 #include "../Input/booking.h"
 #include "../Input/passenger.h"
-#include "../graphOutput.h"
+#include "../Utils/graphOutput.h"
 using namespace std;
 
 int main(int argc,char* argv[]) {
