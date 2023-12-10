@@ -12,10 +12,10 @@ using namespace std;
 
 void getBookingInput(ifstream& bookingFile){
     string line;
-    getline(bookingFile, line); line.clear();
+    getline(bookingFile, line);
 
     int uuid=0;
-    int prev_seg_seq = 0;
+    int prevSegSeq = 0;
 
     while (getline(bookingFile, line)) {
         string tempString = "";
@@ -25,55 +25,55 @@ void getBookingInput(ifstream& bookingFile){
 
         stringstream inputString(line);
 
-        string RECLOC;
+        string recLoc;
 
-        Date CREATION_DTZ;
+        Date creationDate;
         ACTION_CD actionCD;
-        char CLS_CD;
-        int SEG_SEQ, PAX_CNT, FLT_NUM;
-        string ORIG_CD;
-        string DEST_CD;
-        DateTime ARR_DTMZ, DEP_DTMZ;
+        char clsCD;
+        int segSeq, paxCnt, flightNum;
+        string srcCity;
+        string destCity;
+        DateTime arrDTMZ, depDTMZ;
 
-        getline(inputString, RECLOC, ',');
-        int pnr_id=pnrUuidGenerator.getID(RECLOC);
+        getline(inputString, recLoc, ',');
+        int pnr_id=pnrUuidGenerator.getID(recLoc);
 
         getline(inputString, tempString, ',');
-        CREATION_DTZ = Date(tempString);  
+        creationDate = Date(tempString);  
 
         getline(inputString, tempString, ','); 
         getline(inputString,tempString, ',');
         actionCD = static_cast<ACTION_CD> (getActionCode(tempString));
 
         getline(inputString,tempString, ',');
-        CLS_CD = tempString[0];
+        clsCD = tempString[0];
 
         getline(inputString, tempString, ',');
-        SEG_SEQ = atoi(tempString.c_str());  
+        segSeq = atoi(tempString.c_str());  
         getline(inputString, tempString, ',');
-        PAX_CNT = atoi(tempString.c_str());  
+        paxCnt = atoi(tempString.c_str());  
 
         if(!pnrMap[pnr_id]){
-            Pnr *P = new Pnr(pnr_id,CREATION_DTZ,PAX_CNT);
+            Pnr *P = new Pnr(pnr_id,creationDate,paxCnt);
             pnrMap[pnr_id] = P;
             flag=false;
-            prev_seg_seq=0;
+            prevSegSeq=0;
         }
 
 
         getline(inputString, tempString, ','); 
 
         getline(inputString, tempString, ',');
-        FLT_NUM = atoi(tempString.c_str());  
+        flightNum = atoi(tempString.c_str());  
 
         getline(inputString, tempString , ',');
         assert(tempString.size()==CITY_CODE_LENGTH);
-        ORIG_CD=tempString;
+        srcCity=tempString;
          
 
         getline(inputString, tempString, ',');
         assert(tempString.size()==CITY_CODE_LENGTH);
-        DEST_CD=tempString;
+        destCity=tempString;
          
 
         getline(inputString, tempString, ','); 
@@ -84,14 +84,14 @@ void getBookingInput(ifstream& bookingFile){
         date = Date(tempString);  
         getline(inputString, tempString, ',');
         time = Time(tempString);  
-        DEP_DTMZ = DateTime(date, time);
+        depDTMZ = DateTime(date, time);
 
         getline(inputString, tempString, ' ');
         date = Date(tempString);  
         getline(inputString, tempString, ',');
         time = Time(tempString);  
-        ARR_DTMZ = DateTime(date, time);
-        int inv_id=getFlight(FLT_NUM,DEP_DTMZ, ARR_DTMZ);
+        arrDTMZ = DateTime(date, time);
+        int inv_id=getFlight(flightNum,depDTMZ, arrDTMZ);
 
         Inventory* I=inventoryMap[inv_id];
 
@@ -99,16 +99,16 @@ void getBookingInput(ifstream& bookingFile){
 
         if(x==0) x=4;
 
-        if(flag && (SEG_SEQ==prev_seg_seq)){
+        if(flag && (segSeq==prevSegSeq)){
             Journey* J=journeyMap[uuid];
             J->flights.push_back(inv_id);
-            J->dest=DEST_CD;
+            J->dest=destCity;
             J->classCD = static_cast <CLASS_CD> (min(J->classCD,static_cast <CLASS_CD> (x)));
         }
         else{
-            if(SEG_SEQ<prev_seg_seq) prev_seg_seq=1;
-            else prev_seg_seq++;
-            Journey* J = new Journey(uuid,actionCD,static_cast <CLASS_CD> (x),ORIG_CD,DEST_CD);
+            if(segSeq<prevSegSeq) prevSegSeq=1;
+            else prevSegSeq++;
+            Journey* J = new Journey(uuid,actionCD,static_cast <CLASS_CD> (x),srcCity,destCity);
             journeyMap[uuid] = J;
             journeyToPnrMap[uuid]=pnr_id;
             J->flights.push_back(inv_id);

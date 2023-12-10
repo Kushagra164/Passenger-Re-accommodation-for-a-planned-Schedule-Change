@@ -16,62 +16,62 @@ void getScheduleInput(ifstream& scheduleFile){
 
         stringstream inputString(line);
         //ScheduleID,CarrierCD,FlightNumber, AircraftType, AircraftTailNumber,DepartureTime,ArrivalTime,StartDate,EndDate,FlightPattern,Status,DepartureDates
-        string ScheduleID;
-        string CarrierCD;
-        int FlightNum;
+        string scheduleID;
+        string carrierCD;
+        int flightNum;
 
-        pair<string,string> EquipmentNo;
+        pair<string,string> equipmentNo;
 
-        string Src;
-        string Dest;
+        string srcCity;
+        string destCity;
 
-        Time DepartureTime;
-        Time ArrivalTime;
-        Date StartDate;
-        Date EndDate;
+        Time departureTime;
+        Time arrivalTime;
+        Date startDate;
+        Date endDate;
 
-        STATUS Status;
+        STATUS status;
 
-        string FlightPattern;
+        string flightPattern;
         string tempString;
 
-        getline(inputString, ScheduleID, ',');
-        int uuid=scheduleUuidGenerator.getID(ScheduleID);
+        getline(inputString, scheduleID, ',');
+        int uuid=scheduleUuidGenerator.getID(scheduleID);
 
 
-        getline(inputString,CarrierCD, ',');
+        getline(inputString,carrierCD, ',');
 
         getline(inputString,tempString, ',');
-        FlightNum = atoi(tempString.c_str());
+        flightNum = atoi(tempString.c_str());
 
-        getline(inputString, EquipmentNo.first, ',');
-        getline(inputString, EquipmentNo.second, ',');
+        getline(inputString, equipmentNo.first, ',');
+        getline(inputString, equipmentNo.second, ',');
 
         getline(inputString, tempString , ',');
         assert(tempString.size()==CITY_CODE_LENGTH);
-        Src=tempString;
+        srcCity=tempString;
 
         getline(inputString, tempString, ',');
         assert(tempString.size()==CITY_CODE_LENGTH);
-        Dest=tempString;
+        destCity=tempString;
  
-        flightNumberMap[FlightNum]= CityPair(Src,Dest);
-        cityToFlightNumberMap[CityPair(Src,Dest)]=FlightNum;
+        flightNumberMap[flightNum]= CityPair(srcCity,destCity);
+        cityToFlightNumberMap[CityPair(srcCity,destCity)]=flightNum;
 
         getline(inputString, tempString, ',');
-        DepartureTime=Time(tempString);
+        departureTime=Time(tempString);
 
         getline(inputString, tempString, ',');
-        ArrivalTime=Time(tempString);
+        arrivalTime=Time(tempString);
 
         getline(inputString, tempString, ',');
-        StartDate=Date(tempString);
+        startDate=Date(tempString);
 
         getline(inputString, tempString, ',');
-        EndDate=Date(tempString);
+        endDate=Date(tempString);
 
         getline(inputString, tempString, ',');
-        Status = static_cast<STATUS> (getStatusCode(tempString));
+        status = static_cast<STATUS> (getStatusCode(tempString));
 
         getline(inputString, tempString, ',');
         getline(inputString, tempString, ',');
@@ -82,10 +82,11 @@ void getScheduleInput(ifstream& scheduleFile){
         getline(inputString, tempString, ',');
         getline(inputString, tempString, ',');
 
-        getline(inputString, FlightPattern, ',');
+        getline(inputString, flightPattern, ',');
 
 
-        Schedule* S = new Schedule(uuid,CarrierCD,EquipmentNo,DepartureTime,ArrivalTime,StartDate,EndDate,FlightPattern,FlightNum,Status);
+        Schedule* S = new Schedule(uuid,carrierCD,equipmentNo,departureTime,arrivalTime,
+                                   startDate,endDate,flightPattern,flightNum,status);
 
         scheduleMap[uuid]=S;
     }

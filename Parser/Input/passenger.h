@@ -18,18 +18,19 @@ void getPassengerInput(ifstream& passengerFile){
 
     while (getline(passengerFile, line)){
         stringstream inputString(line);
-        string RecLoc;
+        string recLoc;
 
-        string LastName;string FirstName;string Nationality;string PhoneNum;string Email;string DocID; string DocType;
-        SPECIAL_NAME1 SPECIAL_NAME_CD1;
-        SPECIAL_NAME2 SPECIAL_NAME_CD2;
+        string lastName;string firstName;string nationality;string phoneNum;string email;
+        string docID; string docType;
+        SPECIAL_NAME1 specialNameCD1;
+        SPECIAL_NAME2 specialNameCD2;
         vector<SSR_CD> ssrCodes;
 
         string tempString = "";
 
-        getline(inputString, RecLoc, ',');
+        getline(inputString, recLoc, ',');
 
-        int pnr_id = pnrUuidGenerator.getID(RecLoc);
+        int pnr_id = pnrUuidGenerator.getID(recLoc);
 
         passengerToPnrMap[uuid] = pnr_id;
 
@@ -38,25 +39,25 @@ void getPassengerInput(ifstream& passengerFile){
 
         getline(inputString, tempString, ','); 
 
-        getline(inputString, LastName, ',');
-        getline(inputString, FirstName, ',');
-        getline(inputString, Nationality, ',');
-        getline(inputString, PhoneNum, ',');
-        getline(inputString, Email, ',');
-        getline(inputString, DocID, ',');
-        getline(inputString, DocType, ',');
+        getline(inputString, lastName, ',');
+        getline(inputString, firstName, ',');
+        getline(inputString, nationality, ',');
+        getline(inputString, phoneNum, ',');
+        getline(inputString, email, ',');
+        getline(inputString, docID, ',');
+        getline(inputString, docType, ',');
 
         getline(inputString, tempString, ',');
-        SPECIAL_NAME_CD1 = static_cast<SPECIAL_NAME1>(getSN1Code(tempString));  
+        specialNameCD1 = static_cast<SPECIAL_NAME1>(getSN1Code(tempString));
         getline(inputString, tempString, ',');
-        SPECIAL_NAME_CD2 = static_cast<SPECIAL_NAME2>(getSN2Code(tempString));  
+        specialNameCD2 = static_cast<SPECIAL_NAME2>(getSN2Code(tempString));
         while(getline(inputString, tempString, ',')){
             ssrCodes.push_back(static_cast<SSR_CD> (getSSRCode(tempString)));
         }
 
 
-        Passenger* P = new Passenger(uuid,LastName,FirstName,Nationality,PhoneNum,Email,DocID,DocType,SPECIAL_NAME_CD1,SPECIAL_NAME_CD2,ssrCodes);
-        if(SPECIAL_NAME_CD1 != 1){
+        Passenger* P = new Passenger(uuid,lastName,firstName,nationality,phoneNum,email,docID,docType,specialNameCD1,specialNameCD2,ssrCodes);
+        if(specialNameCD1 != 1){
             Pnr* pnr=pnrMap[pnr_id];
             for(int j_id: pnr->journeys){
                 for(int inv_id: journeyMap[j_id]->flights){

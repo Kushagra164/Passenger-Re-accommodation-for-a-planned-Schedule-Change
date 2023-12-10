@@ -2,6 +2,8 @@
 #include<map>
 using namespace std;
 #define CITY_CODE_LENGTH 3
+#define SCHEDULE_LEVEL_CANCELLATION false
+#define INVENTORY_LEVEL_CANCELLATION true
 #define SSR_SCORE 1
 #define PAX_SCORE 1
 #define MAXIMUM_ALLOWED_TIME_DIFF Time(72, 0)

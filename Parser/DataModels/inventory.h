@@ -1,6 +1,7 @@
 #pragma once
 #include<map>
 #include "../Utils/DateTime/dateTime.h"
+#include "../Utils/constants.h"
 using namespace std;
 
 class Inventory{
@@ -29,6 +30,9 @@ public:
     int ecTotalCapacity;
     int ecTotalInventory;
     int ecBookedInventory;
+
+    Status status;
+    Time timeDelay;
 
     Inventory(int _inventoryID, Date _departureDate, Date _arrivalDate,
               int _totalCapacity, int _totalInventory, int _bookedInventory,
