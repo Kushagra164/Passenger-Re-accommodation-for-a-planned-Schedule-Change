@@ -224,7 +224,7 @@ pair<int,int> graphUVAndGraphDVGenerator(){
 
 // Generation of graphUC and graphCV
 
-vector<int> findAllFlightsFromSrc(int o_inv_id){
+vector<int> findAllRelevantFlightsFromSrc(int o_inv_id){
     int sch_id = inventoryToScheduleMap[o_inv_id];
     Schedule* o_sch = scheduleMap[sch_id];
 
@@ -246,7 +246,7 @@ vector<int> findAllFlightsFromSrc(int o_inv_id){
     return ret;
 }
 
-vector<int> findAllFlightsToDest(int o_inv_id){
+vector<int> findAllRelevantFlightsToDest(int o_inv_id){
     int sch_id = inventoryToScheduleMap[o_inv_id];
     Schedule* o_sch = scheduleMap[sch_id];
 
@@ -270,12 +270,12 @@ vector<int> findAllFlightsToDest(int o_inv_id){
     return ret;
 }
 
-vector<pair<int,int>> makeConnections(vector<int> &from_src, vector<int> &to_dest){
+vector<pair<int,int>> getRelevantConnectingFlights(vector<int> &flightsFromSrc, vector<int> &flightsToDest){
     vector<pair<int,int>> v;
 
-    for(int inv_id_1:from_src){
+    for(int inv_id_1:flightsFromSrc){
         Schedule* sch1=scheduleMap[inventoryToScheduleMap[inv_id_1]];
-        for(int inv_id_2:to_dest){
+        for(int inv_id_2:flightsToDest){
             Schedule* sch2=scheduleMap[inventoryToScheduleMap[inv_id_2]];
             if((flightNumberMap[sch1->flightNum].destCity==flightNumberMap[sch2->flightNum].srcCity) &&
                     (getArrDepTimeDiff(inv_id_1,inv_id_2))>=MINIMUM_CONNECTING_TIME){
@@ -383,35 +383,30 @@ ExtendableVector <vector<pair<int,long long>>> graphUC;       //Weighted graph f
 ExtendableVector <vector<int>> graphCV;       //Unweighted graph from connection solution to its solution flight Inventory ID(s)
 
 pair<int,int> graphUCAndGraphCVGenerator(){
-    int uc_edges=0;
-    int cv_edges=0;
 
-    for(int j_id:AffectedJourneys){
-        vector<int> v1=findAllFlightsFromSrc(journeyMap[j_id]->flights[0]);
-        vector<int> v2=findAllFlightsToDest(journeyMap[j_id]->flights[0]);
-        vector<pair<int,int>> v3= makeConnections(v1,v2);
+    for(int curJourneyID:AffectedJourneys){
+        vector<int> flightsFromSrc= findAllRelevantFlightsFromSrc(journeyMap[curJourneyID]->flights[0]);
+        vector<int> flightsToDest = findAllRelevantFlightsToDest(journeyMap[curJourneyID]->flights[0]);
+        vector<pair<int,int>> allConnectingFlights= getRelevantConnectingFlights(flightsFromSrc,flightsToDest);
 
 
-        vector<pair<long long,vector<pair<int,CLASS_CD>>>> v4=getBest(j_id,v3);
+        vector<pair<long long,vector<pair<int,CLASS_CD>>>>bestConnectingFlights =getBest(curJourneyID,allConnectingFlights);
 
-        int u_id=uIndexGenerator.getIndex(j_id);
+        int curUIdx=uIndexGenerator.getIndex(curJourneyID);
 
-        for(auto [wt,ids]:v4){
-            int c_id=cIndexGenerator.getIndex(ids);
+        for(auto [flightScore,flightIdx]:bestConnectingFlights){
+            int curCIdx=cIndexGenerator.getIndex(flightIdx);
 
-            graphUC[u_id].push_back(make_pair(c_id,wt));
-            uc_edges++;
+            graphUC[curUIdx].push_back(make_pair(curCIdx,flightScore));
 
-            for(auto x:ids){
-                int v_id=vIndexGenerator.getIndex(x);
-                if(find(graphCV[c_id].begin(),graphCV[c_id].end(),v_id) == graphCV[c_id].end()){
-                    graphCV[c_id].push_back(v_id);
-                    cv_edges++;
+            for(auto curIdx:flightIdx){
+                int curVIdx=vIndexGenerator.getIndex(curIdx);
+                if(find(graphCV[curCIdx].begin(),graphCV[curCIdx].end(),curVIdx) == graphCV[curCIdx].end()){
+                    graphCV[curCIdx].push_back(curVIdx);
                 }
             }
         }
     }
-    return make_pair(uc_edges,cv_edges);
 }
 
 
