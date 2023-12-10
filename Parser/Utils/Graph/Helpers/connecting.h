@@ -73,8 +73,8 @@ vector<pair<long long,vector<pair<int,CLASS_CD>>>> getBest(int journeyId, vector
     int origcls = originalcls;
 
     for(auto [proposed1,proposed2]: vecproposed){
-        for(int cls1=1;cls1<=4;cls1++){
-            for(int cls2=1;cls2<=4;cls2++){
+        for(int cls1=0;cls1<4;cls1++){
+            for(int cls2=0;cls2<4;cls2++){
                 if (CLASS_DOWNGRADE_ALLOWED==0 && CLASS_UPGRADE_ALLOWED==0)
                 {
                     if(cls1!=origcls || cls2!=origcls)
