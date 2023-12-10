@@ -1,6 +1,6 @@
 #pragma once
-#include "../DateTime/dateTime.h"
-#include "helper.h"
+#include "data.h"
+#include "timeDiff.h"
 using namespace std;
 
 int pnrScore(int journeyId, CLASS_CD proposed){

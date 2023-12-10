@@ -1,10 +1,6 @@
 #pragma once
-#include "calculation.h"
-#include "data.h"
-#include "../getFlight.h"
+#include "../Helpers/helper.h"
 using namespace std;
-
-
 
 void graphUVAndGraphDVGenerator(){
     int uv_edges=0;

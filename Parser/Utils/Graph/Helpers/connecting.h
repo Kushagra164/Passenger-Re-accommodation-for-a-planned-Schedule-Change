@@ -1,6 +1,5 @@
 #pragma once
-#include "data.h"
-#include "calculation.h"
+#include "scoring.h"
 using namespace std;
 
 vector<int> findAllFlightsFromSrc(int o_inv_id){

@@ -1,6 +1,5 @@
 #pragma once
-#include "calculation.h"
-#include "data.h"
+#include "../Helpers/helper.h"
 using namespace std;
 
 void graphWUGenerator(){

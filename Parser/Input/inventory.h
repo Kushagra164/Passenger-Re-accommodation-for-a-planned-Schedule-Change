@@ -6,7 +6,7 @@
 #include "../DataModels/inventory.h"
 #include "../Utils/uuidGenerator.h"
 #include "../DataModels/schedule.h"
-#include "../Utils/Graph/data.h"
+#include "../Utils/Graph/Helpers/data.h"
 using namespace std;
 
 void getInventoryInput(ifstream& inventoryFile){

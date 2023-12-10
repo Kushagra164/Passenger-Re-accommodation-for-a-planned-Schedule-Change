@@ -1,9 +1,14 @@
 #pragma once
 #include<map>
 #include<set>
-#include "../extendableVector.h"
-#include "../DateTime/dateTime.h"
-#include "graphIndexGenerator.h"
+#include "../../extendableVector.h"
+#include "../../DateTime/dateTime.h"
+#include "../../../DataModels/inventory.h"
+#include "../../../DataModels/schedule.h"
+#include "../../../DataModels/journey.h"
+#include "../../../DataModels/passenger.h"
+#include "../../../DataModels/pnr.h"
+#include "../../../DataModels/flight.h"
 using namespace std;
 
 set<int> CancelledFlights;                                  //set<InventoryID>

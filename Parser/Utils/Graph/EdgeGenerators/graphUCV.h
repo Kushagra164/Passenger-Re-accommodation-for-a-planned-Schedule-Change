@@ -1,4 +1,5 @@
-#include "connecting.h"
+#pragma once
+#include "../Helpers/helper.h"
 using namespace std;
 
 void graphUCAndGraphCVGenerator(){
