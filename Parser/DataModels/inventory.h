@@ -31,8 +31,39 @@ public:
     int ecTotalInventory;
     int ecBookedInventory;
 
-    Status status;
+    INVENTORY_STATUS status;
     Time timeDelay;
+
+    Inventory(int _inventoryID, Date _departureDate, Date _arrivalDate,
+              int _totalCapacity, int _totalInventory, int _bookedInventory,
+              int _fcTotalCapacity, int _fcTotalInventory, int _fcBookedInventory,
+              int _bcTotalCapacity, int _bcTotalInventory, int _bcBookedInventory,
+              int _pcTotalCapacity, int _pcTotalInventory, int _pcBookedInventory,
+              int _ecTotalCapacity, int _ecTotalInventory, int _ecBookedInventory,string _status,
+              Time _timeDelay):
+            inventoryID(_inventoryID),
+            departureDate(_departureDate),
+            arrivalDate(_arrivalDate),
+            totalCapacity(_totalCapacity),
+            totalInventory(_totalInventory),
+            bookedInventory(_bookedInventory),
+            fcTotalCapacity(_fcTotalCapacity),
+            fcTotalInventory(_fcTotalInventory),
+            fcBookedInventory(_fcBookedInventory),
+
+            bcTotalCapacity(_bcTotalCapacity),
+            bcTotalInventory(_bcTotalInventory),
+            bcBookedInventory(_bcBookedInventory),
+
+            pcTotalCapacity(_pcTotalCapacity),
+            pcTotalInventory(_pcTotalInventory),
+            pcBookedInventory(_pcBookedInventory),
+
+            ecTotalCapacity(_ecTotalCapacity),
+            ecTotalInventory(_ecTotalInventory),
+            ecBookedInventory(_ecBookedInventory),
+            status(getInventoryStatus(_status)),
+            timeDelay(_timeDelay){}
 
     Inventory(int _inventoryID, Date _departureDate, Date _arrivalDate,
               int _totalCapacity, int _totalInventory, int _bookedInventory,
@@ -43,9 +74,11 @@ public:
             inventoryID(_inventoryID),
             departureDate(_departureDate),
             arrivalDate(_arrivalDate),
+
             totalCapacity(_totalCapacity),
             totalInventory(_totalInventory),
             bookedInventory(_bookedInventory),
+
             fcTotalCapacity(_fcTotalCapacity),
             fcTotalInventory(_fcTotalInventory),
             fcBookedInventory(_fcBookedInventory),

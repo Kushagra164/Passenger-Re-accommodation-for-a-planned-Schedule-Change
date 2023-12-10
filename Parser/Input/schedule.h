@@ -30,7 +30,7 @@ void getScheduleInput(ifstream& scheduleFile){
         Date startDate;
         Date endDate;
 
-        STATUS status;
+        string status;
 
         string flightPattern;
         string tempString;
@@ -70,8 +70,7 @@ void getScheduleInput(ifstream& scheduleFile){
         getline(inputString, tempString, ',');
         endDate=Date(tempString);
 
-        getline(inputString, tempString, ',');
-        status = static_cast<STATUS> (getStatusCode(tempString));
+        getline(inputString, status, ',');
 
         getline(inputString, tempString, ',');
         getline(inputString, tempString, ',');

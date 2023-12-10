@@ -5,40 +5,6 @@
 #include "../Utils/constants.h"
 using namespace std;
 
-int getSN1Code(string str){
-    if(str=="INS") return 1;
-    if(str=="INF") return 2;
-    if(str=="CHD") return 3;
-    if(str=="ADT") return 4;
-    if(str=="UNN") return 5;
-    if(str=="S65") return 6;
-    cout<<"Special Name 1 not found: "<<str<<endl;
-    return 0;
-}
-
-int getSN2Code(string str){
-    if(str=="NRPS") return 1;
-    if(str=="NRSA") return 2;
-    cout<<"Special Name 2 not found: "<<str<<endl;
-    return 0;
-}
-
-int getSSRCode(string str){
-    if(str=="WCHR") return 1;
-    if(str=="WCHS") return 2;
-    if(str=="WCHC") return 3;
-    if(str=="LANG") return 4;
-    if(str=="MAAS") return 5;
-    if(str=="UNMR") return 6;
-    if(str=="BLND") return 7;
-    if(str=="DEAF") return 8;
-    if(str=="EXST") return 9;
-    if(str=="MEAL") return 10;
-    if(str=="NSST") return 11;
-    cout<<"SSR not found: "<<str<<endl;
-    return 0;
-}
-
 class Passenger{
 private:
     int passengerID;
