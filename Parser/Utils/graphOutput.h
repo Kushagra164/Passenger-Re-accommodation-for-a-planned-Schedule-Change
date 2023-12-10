@@ -1,12 +1,7 @@
 #pragma once
 #include<vector>
 #include<fstream>
-#include "../DataModels/pnr.h"
-#include "../DataModels/journey.h"
-#include "../DataModels/inventory.h"
-#include "extendableVector.h"
-#include "graphIndexGenerator.h"
-#include "processing.h"
+#include "Graph/graph.h"
 using namespace std;
 template<typename T>int calEdges(ExtendableVector<vector<T>> &adj){
     int edges = 0;

@@ -3,8 +3,8 @@
 #include<algorithm>
 using namespace std;
 #define CITY_CODE_LENGTH 3
-#define SCHEDULE_LEVEL_CANCELLATION false
-#define INVENTORY_LEVEL_CANCELLATION true
+#define SCHEDULE_LEVEL_CANCELLATION true
+#define INVENTORY_LEVEL_CANCELLATION false
 #define SSR_SCORE 1
 #define PAX_SCORE 1
 #define MAXIMUM_ALLOWED_TIME_DIFF Time(72, 0)
@@ -32,6 +32,7 @@ static ACTION_CD getActionCode(string str){
     if(str=="HK") return HK;
     if(str=="PD") return PD;
     cout<<"Action Code not found:"<<str<<endl;
+    exit(-1);
 }
 
 enum CLASS_CD{FC,BC,PC,EC};
@@ -42,6 +43,7 @@ static CLASS_CD getClassCode(string str){
     if(str=="PC") return PC;
     if(str=="EC") return EC;
     cout<<"Class Code not found: "<<str<<endl;
+    exit(-1);
 }
 
 enum SPECIAL_NAME1 {SPECIAL_NAME1_NULL,INS,INF,CHD,ADT,UNN,S65};
@@ -88,6 +90,7 @@ static SCHEDULE_STATUS getScheduleStatus(string status){
     if(status=="PLANNING") return SCHEDULE_PLANNED;
     if(status=="CANCELLED") return SCHEDULE_CANCELLED;
     cout<<"Schedule status not found:"<<status<<endl;
+    exit(-1);
 }
 
 enum INVENTORY_STATUS{INVENTORY_SCHEDULED,INVENTORY_PLANNED,INVENTORY_CANCELLED,INVENTORY_DELAYED};
@@ -98,6 +101,7 @@ static INVENTORY_STATUS getInventoryStatus(string status){
     if(status=="CANCELLED") return INVENTORY_CANCELLED;
     if(status=="DELAYED") return INVENTORY_DELAYED;
     cout<<"Inventory status not found:"<<status<<endl;
+    exit(-1);
 }
 
 map<CLASS_CD,int> classScoresMap{{(CLASS_CD)FC,25},{(CLASS_CD)BC,20},{(CLASS_CD)PC,15},{(CLASS_CD)EC,10}};

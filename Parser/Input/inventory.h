@@ -6,7 +6,7 @@
 #include "../DataModels/inventory.h"
 #include "../Utils/uuidGenerator.h"
 #include "../DataModels/schedule.h"
-#include "../Utils/processing.h"
+#include "../Utils/Graph/data.h"
 using namespace std;
 
 void getInventoryInput(ifstream& inventoryFile){
@@ -108,6 +108,8 @@ void getInventoryInput(ifstream& inventoryFile){
             }
         }
 
+        Inventory* I;
+
         if(INVENTORY_LEVEL_CANCELLATION){
             string status;
             getline(inputString, tempString, ',');
@@ -116,7 +118,7 @@ void getInventoryInput(ifstream& inventoryFile){
 
             getline(inputString, tempString, ',');
 
-            Inventory* I= new Inventory(uuid, departureDate, arrivalDate, totalCapacity, totalInventory,0,
+            I= new Inventory(uuid, departureDate, arrivalDate, totalCapacity, totalInventory,0,
                                         fcTotalCapacity, fcTotalInventory,0,
                                         bcTotalCapacity,bcTotalInventory,0,
                                         pcTotalCapacity, pcTotalInventory,0,
@@ -128,7 +130,7 @@ void getInventoryInput(ifstream& inventoryFile){
 
         }
         else{
-            Inventory* I= new Inventory(uuid, departureDate, arrivalDate, totalCapacity, totalInventory,0,
+            I= new Inventory(uuid, departureDate, arrivalDate, totalCapacity, totalInventory,0,
                                         fcTotalCapacity, fcTotalInventory,0,
                                         bcTotalCapacity,bcTotalInventory,0,
                                         pcTotalCapacity, pcTotalInventory,0,
