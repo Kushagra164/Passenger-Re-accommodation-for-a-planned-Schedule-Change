@@ -1,8 +1,8 @@
 #pragma once
 #include<vector>
 #include<map>
-#include "constants.h"
 using namespace std;
+
 template<typename T>
 class graphIndexGenerator{
     map<T,int> forwardMap;

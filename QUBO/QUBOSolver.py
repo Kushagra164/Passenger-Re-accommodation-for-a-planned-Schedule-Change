@@ -25,14 +25,20 @@ def read_test_cases(file_path):
 def solve_qubo(test_case, no_samples, api_key):
     test_case_number, matrix_size, qubo_matrix = test_case
     QUBO = {(i, j): qubo_matrix[i][j] for i in range(matrix_size) for j in range(matrix_size)}
-    sampler = LeapHybridSampler(token=api_key)
-    Assignments = {}
+    sampler = LeapHybridSampler(token=api_key,anneal_time = 20)
+    Assignments = []
+    SortedAssignments = {}
+
+    for _ in range(no_samples):
+        response = sampler.sample_qubo(QUBO)
+        Assignments.append(response)
+
+    Assignments.sort(key = lambda x: x.first.energy)
 
     for i in range(no_samples):
-        response = sampler.sample_qubo(QUBO)
-        Assignments[i] = response
+        SortedAssignments[i] = Assignments[i]
 
-    return test_case_number, Assignments
+    return test_case_number, SortedAssignments
 
 def main():
     parser = argparse.ArgumentParser(description="Solve QUBO problems using D-Wave Leap Hybrid Solver.")
