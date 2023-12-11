@@ -3,10 +3,8 @@
 using namespace std;
 
 Time getArrDepTimeDiff(int curInventoryID, int nextInventoryID){
-    DateTime curTime = DateTime(inventoryMap[curInventoryID]->arrivalDate,
-                            scheduleMap[inventoryToScheduleMap[curInventoryID]]->arrivalTime);
-    DateTime nextTime = DateTime(inventoryMap[nextInventoryID]->departureDate,
-                            scheduleMap[inventoryToScheduleMap[nextInventoryID]]->departureTime);
+    DateTime curTime = getInventoryTime(curInventoryID).second;
+    DateTime nextTime = getInventoryTime(nextInventoryID).first;
     return nextTime-curTime;
 }
 
@@ -14,18 +12,14 @@ Time getFlightDuration(int curInventoryID){
     return getArrDepTimeDiff(curInventoryID, curInventoryID);
 }
 
-Time getDepTimeDiff(int o_inv_id,int p_inv_id){
-    DateTime original = DateTime(inventoryMap[o_inv_id]->departureDate,
-                            scheduleMap[inventoryToScheduleMap[o_inv_id]]->departureTime);
-    DateTime proposed = DateTime(inventoryMap[p_inv_id]->departureDate,
-                            scheduleMap[inventoryToScheduleMap[p_inv_id]]->departureTime);
-    return abs(original - proposed);
+Time getDepTimeDiff(int curInventoryID,int nextInventoryID){
+    DateTime curTime = getInventoryTime(curInventoryID).first;
+    DateTime nextTime = getInventoryTime(nextInventoryID).first;
+    return abs(nextTime-curTime);
 }
 
-Time getArrTimeDiff(int o_inv_id,int p_inv_id){
-    DateTime original = DateTime(inventoryMap[o_inv_id]->arrivalDate,
-                            scheduleMap[inventoryToScheduleMap[o_inv_id]]->arrivalTime);
-    DateTime proposed = DateTime(inventoryMap[p_inv_id]->arrivalDate,
-                            scheduleMap[inventoryToScheduleMap[p_inv_id]]->arrivalTime);
-    return abs(original - proposed);
+Time getArrTimeDiff(int curInventoryID,int nextInventoryID){
+    DateTime curTime = getInventoryTime(curInventoryID).second;
+    DateTime nextTime = getInventoryTime(nextInventoryID).second;
+    return abs(nextTime-curTime);
 }
