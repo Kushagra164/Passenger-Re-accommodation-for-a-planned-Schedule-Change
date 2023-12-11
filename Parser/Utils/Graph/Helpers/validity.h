@@ -1,3 +1,4 @@
+#pragma once
 #include "data.h"
 #include "timeDiff.h"
 using namespace std;

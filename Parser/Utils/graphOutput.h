@@ -51,14 +51,20 @@ void graphOutput(ofstream& fw){
     fw<<"\n";
 
     for(int v=0;v<modV;v++){
-        pair<int,CLASS_CD>  p= vIndexGenerator.getVal(v);
+        pair<int,CLASS_CD>  p = vIndexGenerator.getVal(v);
         int avl_inv;
 
         int inv_id=p.first;
 
-        if(p.second==1) avl_inv = inventoryMap[inv_id]->fcTotalInventory - inventoryMap[inv_id]->fcBookedInventory;
-        else if(p.second==2) avl_inv = inventoryMap[inv_id]->bcTotalInventory - inventoryMap[inv_id]->bcBookedInventory;
-        else if(p.second==3) avl_inv = inventoryMap[inv_id]->pcTotalInventory - inventoryMap[inv_id]->pcBookedInventory;
+        cout<<p.second<<"\n";
+        cout<<inventoryMap[inv_id]->fcTotalInventory<<" "<<inventoryMap[inv_id]->fcBookedInventory<<endl;
+        cout<<inventoryMap[inv_id]->bcTotalInventory<<" "<<inventoryMap[inv_id]->bcBookedInventory<<endl;
+        cout<<inventoryMap[inv_id]->pcTotalInventory<<" "<<inventoryMap[inv_id]->pcBookedInventory<<endl;
+        cout<<inventoryMap[inv_id]->ecTotalInventory<<" "<<inventoryMap[inv_id]->ecBookedInventory<<endl;
+
+        if(p.second==FC) avl_inv = inventoryMap[inv_id]->fcTotalInventory - inventoryMap[inv_id]->fcBookedInventory;
+        else if(p.second==BC) avl_inv = inventoryMap[inv_id]->bcTotalInventory - inventoryMap[inv_id]->bcBookedInventory;
+        else if(p.second==PC) avl_inv = inventoryMap[inv_id]->pcTotalInventory - inventoryMap[inv_id]->pcBookedInventory;
         else avl_inv = inventoryMap[inv_id]->ecTotalInventory - inventoryMap[inv_id]->ecBookedInventory;
 
         fw<<avl_inv<<" ";

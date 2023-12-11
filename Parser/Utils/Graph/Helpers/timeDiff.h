@@ -2,14 +2,16 @@
 #include "data.h"
 using namespace std;
 
-Time getArrDepTimeDiff(int curInvID, int nextInvID){
-    DateTime curTime = DateTime(inventoryMap[curInvID]->arrivalDate,
-                            scheduleMap[inventoryToScheduleMap[curInvID]]->arrivalTime);
-
-    DateTime nextTime = DateTime(inventoryMap[nextInvID]->departureDate,
-                            scheduleMap[inventoryToScheduleMap[nextInvID]]->departureTime);
-
+Time getArrDepTimeDiff(int curInventoryID, int nextInventoryID){
+    DateTime curTime = DateTime(inventoryMap[curInventoryID]->arrivalDate,
+                            scheduleMap[inventoryToScheduleMap[curInventoryID]]->arrivalTime);
+    DateTime nextTime = DateTime(inventoryMap[nextInventoryID]->departureDate,
+                            scheduleMap[inventoryToScheduleMap[nextInventoryID]]->departureTime);
     return nextTime-curTime;
+}
+
+Time getFlightDuration(int curInventoryID){
+    return getArrDepTimeDiff(curInventoryID, curInventoryID);
 }
 
 Time getDepTimeDiff(int o_inv_id,int p_inv_id){
