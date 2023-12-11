@@ -8,7 +8,6 @@
 using namespace std;
 
 int main(int argc,char* argv[]) {
-    //Parsing of Schedule File
 
     // handling command line arguments
     ifstream scheduleFile;

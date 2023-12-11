@@ -5,8 +5,12 @@ using namespace std;
 Time getArrDepTimeDiff(int curInvID, int nextInvID){
     DateTime curTime = DateTime(inventoryMap[curInvID]->departureDate,
                             scheduleMap[inventoryToScheduleMap[curInvID]]->arrivalTime);
+    if(DelayedFlights.find(curInvID)!=DelayedFlights.end()) curTime+=DelayedFlights[curInvID];
+
     DateTime nextTime = DateTime(inventoryMap[nextInvID]->departureDate,
                             scheduleMap[inventoryToScheduleMap[nextInvID]]->departureTime);
+    if(DelayedFlights.find(nextInvID)!=DelayedFlights.end()) nextTime+=DelayedFlights[nextInvID];
+
     return nextTime-curTime;
 }
 

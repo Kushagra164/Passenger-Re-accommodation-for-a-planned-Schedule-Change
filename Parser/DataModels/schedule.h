@@ -9,8 +9,8 @@ using namespace std;
 class Schedule{
 private:
     int scheduleID;
-    string carrierCD;
 public:
+    string carrierCD;
     pair<string,string> equipmentNo;    //pair<AircraftType,AircraftTailNo>
     Time departureTime;
     Time arrivalTime;

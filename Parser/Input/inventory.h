@@ -13,8 +13,6 @@ void getInventoryInput(ifstream& inventoryFile){
     string line;
     getline(inventoryFile, line);
 
-    bool flag = true;
-
     while (getline(inventoryFile, line)) {
         stringstream inputString(line);
 
@@ -91,22 +89,14 @@ void getInventoryInput(ifstream& inventoryFile){
         getline(inputString, tempString, ','); 
         getline(inputString, tempString, ','); 
 
-        if(flag){
-            for (auto &ch: {"FC", "BC", "PC", "EC"}) {
-                getline(inputString, tempString, '"');
+
+        for (auto &ch: {"FC", "BC", "PC", "EC"}) {
+            getline(inputString, tempString, '"');
                  
-                getline(inputString, tempString, '"');
-                for (auto &c: tempString) if (c >= 'A' and c <= 'Z') cabinToClassMap[c] = ch;
-                 
-            }
-            flag=false;
+            getline(inputString, tempString, '"');
+            for (auto &c: tempString) if (c >= 'A' and c <= 'Z') cabinToClassMap[c] = ch;
         }
-        else{
-            for(int i=0;i<4;i++){
-                getline(inputString, tempString, '"');
-                getline(inputString, tempString, '"');
-            }
-        }
+
 
         Inventory* I;
 

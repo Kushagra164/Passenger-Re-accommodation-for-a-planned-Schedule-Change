@@ -17,22 +17,25 @@ void graphWUGenerator(){
             graphWU[curWIdx].push_back(curUIdx);
         }
         else{
-            // [TODO: shreyansh remove hardcode 72 hrs, add a little descriptive comment for this section]
+            //Single journey has multiple flights
             for(int i=0;i<curJourney->flights.size();i++){
-                if(DelayedFlights.find(curJourney->flights[i])!=DelayedFlights.end()){
-                    bool cond1 = (DelayedFlights[curJourney->flights[i]] > Time(72,0));
+                bool cond1 = false;
+                if(DelayedFlights.find(curJourney->flights[i])!=DelayedFlights.end()) cond1 = (DelayedFlights[curJourney->flights[i]] > MAXIMUM_ALLOWED_TIME_DIFF);
+                // if flight delay is more than 72 hours
 
-                    bool cond2 = false;
 
-                    if((i+1)<curJourney->flights.size()) 
-                        cond2= (getArrDepTimeDiff(curJourney->flights[i],curJourney->flights[i+1]) < MINIMUM_CONNECTING_TIME);
+                bool cond2 = false;
 
-                    if(cond1 || cond2){
-                        uIndexGenerator.getIndex(curJourneyID);
-                        AffectedJourneys.push_back(curJourneyID);
-                        break;
-                    }
+                if((i+1)<curJourney->flights.size())
+                    cond2 = (getArrDepTimeDiff(curJourney->flights[i],curJourney->flights[i+1]) < MINIMUM_CONNECTING_TIME);
+                //if time difference between 2 consecutive flights after delay taken into consideration is less than 1hr
+
+                if(cond1 || cond2){
+                    uIndexGenerator.getIndex(curJourneyID);
+                    AffectedJourneys.push_back(curJourneyID);
+                    break;
                 }
+
             }
         }
     }

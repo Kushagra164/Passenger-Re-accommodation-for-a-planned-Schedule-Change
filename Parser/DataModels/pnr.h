@@ -7,8 +7,8 @@ using namespace std;
 class Pnr{
 private:
     int pnrID;
-    Date creationDate;
 public:
+    Date creationDate;
     int paxCnt;
     vector<int> passengers;          //vector<PassengerID>
     vector<int> journeys;            //vector<JourneyID>
