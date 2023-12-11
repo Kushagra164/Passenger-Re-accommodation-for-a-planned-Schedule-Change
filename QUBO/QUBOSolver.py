@@ -36,9 +36,10 @@ def solve_qubo(test_case, no_samples, api_key):
     Assignments.sort(key = lambda x: x.first.energy)
 
     for i in range(no_samples):
-        SortedAssignments[i] = Assignments[i]
+        response = sampler.sample_qubo(QUBO)
+        Assignments[i] = response
 
-    return test_case_number, SortedAssignments
+    return test_case_number, Assignments
 
 def main():
     parser = argparse.ArgumentParser(description="Solve QUBO problems using D-Wave Leap Hybrid Solver.")

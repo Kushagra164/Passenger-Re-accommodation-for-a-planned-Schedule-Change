@@ -6,7 +6,7 @@
 #include "../DataModels/inventory.h"
 #include "../Utils/uuidGenerator.h"
 #include "../DataModels/schedule.h"
-#include "../Utils/Graph/Helpers/data.h"
+#include "../Utils/processing.h"
 using namespace std;
 
 void getInventoryInput(ifstream& inventoryFile){
@@ -38,7 +38,7 @@ void getInventoryInput(ifstream& inventoryFile){
 
         inventoryToScheduleMap[uuid]=s_id;
 
-        if(SCHEDULE_LEVEL_CANCELLATION && scheduleMap[s_id]->status == SCHEDULE_STATUS::SCHEDULE_CANCELLED) CancelledFlights.insert(uuid);
+        if(SCHEDULE_LEVEL_CANCELLATION && scheduleMap[s_id]->status == 2) CancelledFlights.insert(uuid);
 
         scheduleMap[s_id]->DepartureDates.push_back(uuid);
 
@@ -108,34 +108,20 @@ void getInventoryInput(ifstream& inventoryFile){
             }
         }
 
-        Inventory* I;
-
         if(INVENTORY_LEVEL_CANCELLATION){
-            string status;
             getline(inputString, tempString, ',');
-
-            getline(inputString, status, ',');
-
-            getline(inputString, tempString, ',');
-
-            I= new Inventory(uuid, departureDate, arrivalDate, totalCapacity, totalInventory,0,
-                                        fcTotalCapacity, fcTotalInventory,0,
-                                        bcTotalCapacity,bcTotalInventory,0,
-                                        pcTotalCapacity, pcTotalInventory,0,
-                                        ecTotalCapacity, ecTotalInventory, 0,
-                                        status,Time(tempString));
-
-            if(I->status == INVENTORY_STATUS::INVENTORY_CANCELLED) CancelledFlights.insert(uuid);
 
 
         }
-        else{
-            I= new Inventory(uuid, departureDate, arrivalDate, totalCapacity, totalInventory,0,
-                                        fcTotalCapacity, fcTotalInventory,0,
-                                        bcTotalCapacity,bcTotalInventory,0,
-                                        pcTotalCapacity, pcTotalInventory,0,
-                                        ecTotalCapacity, ecTotalInventory, 0);
-        }
+
+
+
+
+        Inventory* I= new Inventory(uuid, departureDate, arrivalDate, totalCapacity, totalInventory,0,
+                                    fcTotalCapacity, fcTotalInventory,0,
+                                    bcTotalCapacity,bcTotalInventory,0,
+                                    pcTotalCapacity, pcTotalInventory,0,
+                                    ecTotalCapacity, ecTotalInventory, 0);
 
         inventoryMap[uuid]=I;
     }

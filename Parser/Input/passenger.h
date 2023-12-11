@@ -48,11 +48,11 @@ void getPassengerInput(ifstream& passengerFile){
         getline(inputString, docType, ',');
 
         getline(inputString, tempString, ',');
-        specialNameCD1 =getSpecialName1(tempString);
+        specialNameCD1 = static_cast<SPECIAL_NAME1>(getSN1Code(tempString));
         getline(inputString, tempString, ',');
-        specialNameCD2 = getSpecialName2(tempString);
+        specialNameCD2 = static_cast<SPECIAL_NAME2>(getSN2Code(tempString));
         while(getline(inputString, tempString, ',')){
-            ssrCodes.push_back(getSSR(tempString));
+            ssrCodes.push_back(static_cast<SSR_CD> (getSSRCode(tempString)));
         }
 
 
