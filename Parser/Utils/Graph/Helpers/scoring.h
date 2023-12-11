@@ -16,69 +16,65 @@ int pnrScore(int journeyId, CLASS_CD proposed){
     return pnr_score;
 }
 
+long long getFlightScoreWithTimeDiff(Time ArrivalTimeDiff, Time DepartureTimeDiff){
+    long long score = 0;
+
+    if (ArrivalTimeDiff <= Time(6, 0))       score += ARRIVAL_DELAY_LT_6_SCORE;
+    else if (ArrivalTimeDiff <= Time(12, 0)) score += ARRIVAL_DELAY_LT_12_SCORE;
+    else if (ArrivalTimeDiff <= Time(24, 0)) score += ARRIVAL_DELAY_LT_24_SCORE;
+    else if (ArrivalTimeDiff <= Time(48, 0)) score += ARRIVAL_DELAY_LT_48_SCORE;
+
+    if (DepartureTimeDiff <= Time(6, 0))       score += DEPARTURE_DELAY_LT_6_SCORE;
+    else if (DepartureTimeDiff <= Time(12, 0)) score += DEPARTURE_DELAY_LT_12_SCORE;
+    else if (DepartureTimeDiff <= Time(24, 0)) score += DEPARTURE_DELAY_LT_24_SCORE;
+    else if (DepartureTimeDiff <= Time(48, 0)) score += DEPARTURE_DELAY_LT_48_SCORE;
+
+    return score;
+}
+
 long long getFlightScore(int originalinvId, int proposedinvId){
     long long score = 0;
 
-    Time ArrivaltimeDiff = getArrTimeDiff(originalinvId, proposedinvId);
-    if (ArrivaltimeDiff <= Time(6, 0))       score += ARRIVAL_DELAY_LT_6_SCORE;
-    else if (ArrivaltimeDiff <= Time(12, 0)) score += ARRIVAL_DELAY_LT_12_SCORE;
-    else if (ArrivaltimeDiff <= Time(24, 0)) score += ARRIVAL_DELAY_LT_24_SCORE;
-    else if (ArrivaltimeDiff <= Time(48, 0)) score += ARRIVAL_DELAY_LT_48_SCORE;
-
-    Time DeparturetimeDiff = getDepTimeDiff(originalinvId, proposedinvId);
-    if (DeparturetimeDiff <= Time(6, 0))       score += DEPARTURE_DELAY_LT_6_SCORE;
-    else if (DeparturetimeDiff <= Time(12, 0)) score += DEPARTURE_DELAY_LT_12_SCORE;
-    else if (DeparturetimeDiff <= Time(24, 0)) score += DEPARTURE_DELAY_LT_24_SCORE;
-    else if (DeparturetimeDiff <= Time(48, 0)) score += DEPARTURE_DELAY_LT_48_SCORE;
+    Time ArrivalTimeDiff = getArrTimeDiff(originalinvId, proposedinvId);
+    Time DepartureTimeDiff = getDepTimeDiff(originalinvId, proposedinvId);
+    
+    score += getFlightScoreWithTimeDiff(ArrivalTimeDiff, DepartureTimeDiff);
 
     score += CITYPAIR_SCORE;
     score += scheduleMap[inventoryToScheduleMap[originalinvId]]->equipmentNo ==
              scheduleMap[inventoryToScheduleMap[proposedinvId]]->equipmentNo ? EQUIPMENT_SCORE: 0;
+
     return score;
 }
 
-long long getConnectingFlightScore(pair<int, int> proposedinvIds, int originalinvId){
+long long getConnectingFlightScore(int originalInventoryID, vector<pair<int, CLASS_CD>> connectingFlight){
     long long score = 0;
-    auto [proposedinvId1, proposedinvId2] = proposedinvIds;
-    Time ArrivaltimeDiff = getArrTimeDiff(originalinvId, proposedinvId2);
-    if (ArrivaltimeDiff <= Time(6, 0))       score += ARRIVAL_DELAY_LT_6_SCORE;
-    else if (ArrivaltimeDiff <= Time(12, 0)) score += ARRIVAL_DELAY_LT_12_SCORE;
-    else if (ArrivaltimeDiff <= Time(24, 0)) score += ARRIVAL_DELAY_LT_24_SCORE;
-    else if (ArrivaltimeDiff <= Time(48, 0)) score += ARRIVAL_DELAY_LT_48_SCORE;
 
-    Time DeparturetimeDiff = getDepTimeDiff(originalinvId, proposedinvId1);
-    if (DeparturetimeDiff <= Time(6, 0))       score += DEPARTURE_DELAY_LT_6_SCORE;
-    else if (DeparturetimeDiff <= Time(12, 0)) score += DEPARTURE_DELAY_LT_12_SCORE;
-    else if (DeparturetimeDiff <= Time(24, 0)) score += DEPARTURE_DELAY_LT_24_SCORE;
-    else if (DeparturetimeDiff <= Time(48, 0)) score += DEPARTURE_DELAY_LT_48_SCORE;
-
-
-    DateTime proposed1departure = DateTime(inventoryMap[proposedinvId1]->departureDate,scheduleMap[inventoryToScheduleMap[proposedinvId1]]->departureTime);
-    DateTime proposed2departure = DateTime(inventoryMap[proposedinvId2]->departureDate,scheduleMap[inventoryToScheduleMap[proposedinvId2]]->departureTime);
-    DateTime proposed1arrival = DateTime(inventoryMap[proposedinvId1]->arrivalDate,scheduleMap[inventoryToScheduleMap[proposedinvId1]]->arrivalTime);
-    DateTime proposed2arrival = DateTime(inventoryMap[proposedinvId2]->arrivalDate,scheduleMap[inventoryToScheduleMap[proposedinvId2]]->arrivalTime);
-    Time t1 = proposed1arrival - proposed1departure;
-    Time t2 = proposed2arrival - proposed2departure;
-    Time t3 = t1 + t2;
-
+    Time ArrivalTimeDiff = getArrTimeDiff(connectingFlight[0].first, originalInventoryID);
+    Time DepartureTimeDiff = getDepTimeDiff(connectingFlight.back().first, originalInventoryID);
+    
+    score += getFlightScoreWithTimeDiff(ArrivalTimeDiff, DepartureTimeDiff);
 
     score += CITYPAIR_SCORE;
-    int score1 = scheduleMap[inventoryToScheduleMap[originalinvId]]->equipmentNo ==
-                 scheduleMap[inventoryToScheduleMap[proposedinvId1]]->equipmentNo ? EQUIPMENT_SCORE: 0;
-    int score2 = scheduleMap[inventoryToScheduleMap[originalinvId]]->equipmentNo ==
-                 scheduleMap[inventoryToScheduleMap[proposedinvId2]]->equipmentNo ? EQUIPMENT_SCORE: 0;
-    score += (t1.value() * score1 + t2.value() * score2) / t3.value();
 
     return score;
 }
 
-long long getFinalConnectingFlightScore(int journeyId, pair<int, CLASS_CD> proposed1, pair<int, CLASS_CD> proposed2){
-    long long originalPnrScore = pnrScore(journeyId, journeyMap[journeyId]->classCD);
-    auto [invid1, classcd1] = proposed1;
-    auto [invid2, classcd2] = proposed2;
-    long long connectingFlightScore = getConnectingFlightScore(make_pair(invid1, invid2), journeyMap[journeyId]->flights[0]);
+long long getFinalConnectingFlightScore(int journeyID, vector<pair<int, CLASS_CD>> proposedFlight){
+    long long originalPnrScore = pnrScore(journeyID, journeyMap[journeyID]->classCD);
 
-    long long newPnrScore = (pnrScore(journeyId, classcd1) + pnrScore(journeyId, classcd2)) / 2;
+    long double avgPnrScore = 0;
+    long double totalTime = 0;
 
-    return originalPnrScore * newPnrScore * connectingFlightScore;
+    CLASS_CD originalClassCD = journeyMap[journeyID]->classCD;
+
+    for(auto [curFlightID, curClassCD]: proposedFlight){
+        long double curTime = getFlightDuration(curFlightID).value();
+        totalTime += curTime;
+        avgPnrScore += (curTime*pnrScore(journeyID, curClassCD));
+    }
+
+    avgPnrScore /= totalTime;
+
+    return originalPnrScore*getConnectingFlightScore(journeyID, proposedFlight)*avgPnrScore;
 }

@@ -1,111 +1,115 @@
 #pragma once
 #include "scoring.h"
+#include "validity.h"
 using namespace std;
 
-vector<int> findAllFlightsFromSrc(int o_inv_id){
-    int sch_id = inventoryToScheduleMap[o_inv_id];
-    Schedule* o_sch = scheduleMap[sch_id];
+vector<int> findAllRelevantFlightsFromSrc(int originalInventoryID){
+    int originalScheduleID = inventoryToScheduleMap[originalInventoryID];
+    Schedule* originalSchedule = scheduleMap[originalScheduleID];
 
-    vector<int> ret;
+    vector<int> result;
 
-    auto [src, dest] = flightNumberMap[o_sch->flightNum];
-    DateTime cancelledDateTime = DateTime(inventoryMap[o_inv_id]->departureDate, o_sch->departureTime);
-    for(auto [p_inv_id, Inv]: inventoryMap){
-        if (p_inv_id == o_inv_id) continue;
-        Schedule* p_sch = scheduleMap[inventoryToScheduleMap[p_inv_id]];
-        if ((CancelledFlights.find(p_inv_id)==CancelledFlights.end()) && (flightNumberMap[p_sch->flightNum].srcCity == src) &&
-            (flightNumberMap[p_sch->flightNum].destCity != dest)){
-            if ((DateTime(Inv->departureDate,p_sch->departureTime) >= cancelledDateTime) &&
-            ((DateTime(Inv->arrivalDate,p_sch->arrivalTime) - cancelledDateTime) <= MAXIMUM_ALLOWED_TIME_DIFF)){
-                ret.push_back(p_inv_id);
+    auto [srcCity, destCity] = flightNumberMap[originalSchedule->flightNum];
+
+    for(auto [curInventoryID, curInventory]: inventoryMap){
+        if (curInventoryID == originalInventoryID) continue;
+        Schedule* curSchedule = scheduleMap[inventoryToScheduleMap[curInventoryID]];
+        if ((CancelledFlights.find(curInventoryID)==CancelledFlights.end()) 
+                && (flightNumberMap[curSchedule->flightNum].srcCity == srcCity) 
+                && (flightNumberMap[curSchedule->flightNum].destCity != destCity)){
+            
+            Time ArrivalTimeDiff = getArrTimeDiff(curInventoryID, originalInventoryID);
+            if (ArrivalTimeDiff <= MAXIMUM_ALLOWED_TIME_DIFF){
+                result.push_back(curInventoryID);
             }
         }
     }
-    return ret;
+
+    return result;
 }
 
-vector<int> findAllFlightsToDest(int o_inv_id){
-    int sch_id = inventoryToScheduleMap[o_inv_id];
-    Schedule* o_sch = scheduleMap[sch_id];
+vector<int> findAllRelevantFlightsToDest(int originalInventoryID){
+    int originalScheduleID = inventoryToScheduleMap[originalInventoryID];
+    Schedule* originalSchedule = scheduleMap[originalScheduleID];
 
-    vector<int> ret;
+    vector<int> result;
 
-    auto [src, dest] = flightNumberMap[o_sch->flightNum];
-    DateTime cancelledDateTime = DateTime(inventoryMap[o_inv_id]->departureDate, o_sch->departureTime);
+    auto [srcCity, destCity] = flightNumberMap[originalSchedule->flightNum]; 
+    DateTime cancelledDateTime = DateTime(inventoryMap[originalInventoryID]->departureDate, originalSchedule->departureTime);
+    for(auto [curInventoryID, curInventory]: inventoryMap){
+        if (curInventoryID == originalInventoryID) continue;
+        Schedule* curSchedule = scheduleMap[inventoryToScheduleMap[curInventoryID]];
+        if ((CancelledFlights.find(curInventoryID)==CancelledFlights.end()) 
+                && (flightNumberMap[curSchedule->flightNum].srcCity != srcCity) 
+                && (flightNumberMap[curSchedule->flightNum].destCity == destCity)){
 
-    for(auto [p_inv_id, Inv]: inventoryMap){
-        if (p_inv_id == o_inv_id) continue;
-        Schedule* p_sch = scheduleMap[inventoryToScheduleMap[p_inv_id]];
-
-        if ((CancelledFlights.find(p_inv_id)==CancelledFlights.end()) && (flightNumberMap[p_sch->flightNum].srcCity != src) &&
-            (flightNumberMap[p_sch->flightNum].destCity == dest)){
-            if ((DateTime(Inv->arrivalDate,p_sch->arrivalTime) >= cancelledDateTime) &&
-            ((DateTime(Inv->arrivalDate,p_sch->arrivalTime) - cancelledDateTime) <= MAXIMUM_ALLOWED_TIME_DIFF)){
-                ret.push_back(p_inv_id);
+            Time DepartureTimeDiff = getDepTimeDiff(curInventoryID, originalInventoryID);
+            if (DepartureTimeDiff <= MAXIMUM_ALLOWED_TIME_DIFF){
+                result.push_back(curInventoryID);
             }
         }
     }
-    return ret;
+
+    return result;
 }
 
-vector<pair<int,int>> makeConnections(vector<int> &from_src, vector<int> &to_dest){
-    vector<pair<int,int>> v;
+// return relevant journey
+vector<vector<int>> getConnectingFlights(vector<int> &fromSrc, vector<int> &toDest){
+    vector<vector<int>> connectingFlights;
 
-    for(int inv_id_1:from_src){
-        Schedule* sch1=scheduleMap[inventoryToScheduleMap[inv_id_1]];
-        for(int inv_id_2:to_dest){
-            Schedule* sch2=scheduleMap[inventoryToScheduleMap[inv_id_2]];
-            if((flightNumberMap[sch1->flightNum].destCity==flightNumberMap[sch2->flightNum].srcCity) &&
-                    (getArrDepTimeDiff(inv_id_1,inv_id_2))>=MINIMUM_CONNECTING_TIME){
-                v.push_back(make_pair(inv_id_1,inv_id_2));
+    for(int srcFlight: fromSrc){
+        Schedule* srcSchedule = scheduleMap[inventoryToScheduleMap[srcFlight]];
+        for(int destFlight: toDest){
+            Schedule* destSchedule = scheduleMap[inventoryToScheduleMap[destFlight]];
+            if((flightNumberMap[srcSchedule->flightNum].destCity == flightNumberMap[destSchedule->flightNum].srcCity) &&
+                    (getArrDepTimeDiff(srcFlight, destFlight)) >= MINIMUM_CONNECTING_TIME){
+                connectingFlights.push_back({srcFlight,destFlight});
             }
         }
     }
-    return v;
+    return connectingFlights;
 }
 
-vector<pair<long long,vector<pair<int,CLASS_CD>>>> getBest(int journeyId, vector<pair<int, int>> vecproposed){
+vector<pair<long long,vector<pair<int,CLASS_CD>>>> getBestConnectingFlights(int journeyID, vector<vector<int>> proposedFlights){
 
-    vector<pair<pair<int,CLASS_CD>,pair<int,CLASS_CD>>> allCases;
+    vector<pair<long long, vector<pair<int, CLASS_CD>>>> allConnectingFlightsWithScore;
 
-    auto originalcls = journeyMap[journeyId]->classCD;
+    CLASS_CD originalClassCD = journeyMap[journeyID]->classCD;
 
-    int origcls = originalcls;
-
-    for(auto [proposed1,proposed2]: vecproposed){
-        for(int cls1=0;cls1<4;cls1++){
-            for(int cls2=0;cls2<4;cls2++){
-                if (CLASS_DOWNGRADE_ALLOWED==0 && CLASS_UPGRADE_ALLOWED==0)
-                {
-                    if(cls1!=origcls || cls2!=origcls)
-                        continue;
-                }
-                else if(CLASS_DOWNGRADE_ALLOWED==0)
-                {
-                    if(cls1>origcls || cls2>origcls)
-                        continue;
-                }
-                else if(CLASS_UPGRADE_ALLOWED==0)
-                {
-                    if(cls1<origcls || cls2<origcls)
-                        continue;
-                }
-
-                allCases.push_back({{proposed1,static_cast<CLASS_CD>(cls1)},{proposed2,static_cast<CLASS_CD>(cls2)}});
+    for(auto curFlight: proposedFlights){
+        vector<pair<int,CLASS_CD>> curProposedFlight; 
+        function<void(int)> generateConnectingFlightWithClass = [&](int index){
+            if(index == curFlight.size()){
+                allConnectingFlightsWithScore.push_back(
+                    make_pair(
+                        getFinalConnectingFlightScore(journeyID, curProposedFlight),
+                        curProposedFlight
+                    )
+                );
             }
-        }
+            else{
+                for(int toClassCD = 0; toClassCD < 4; toClassCD++){
+                    if((toClassCD<originalClassCD)&&(!CLASS_UPGRADE_ALLOWED))continue;
+                    if((toClassCD>originalClassCD)&&(!CLASS_DOWNGRADE_ALLOWED))continue;
+                    if((isSufficientInventoryAvailable()))
+                    curProposedFlight.push_back(make_pair(curFlight[index], 
+                        static_cast <CLASS_CD> (toClassCD)));
+                    generateConnectingFlightWithClass(index+1);
+                    curProposedFlight.pop_back();
+                }
+            }
+        };
+        generateConnectingFlightWithClass(0);
     }
-    sort(allCases.begin(), allCases.end(), [&](auto i, auto j){ return getFinalConnectingFlightScore(journeyId, i.first, i.second) > getFinalConnectingFlightScore(journeyId, j.first , j.second); });
-    allCases.resize(min((int) MAXIMUM_ALLOWED_CONNECTIONS_PER_JOURNEY, (int) allCases.size()));
 
+    auto bestConnectingFlightsWithScore = allConnectingFlightsWithScore;
+    sort(bestConnectingFlightsWithScore.begin(), bestConnectingFlightsWithScore.end()); 
+    bestConnectingFlightsWithScore.resize(
+        min(
+            (int) MAXIMUM_ALLOWED_CONNECTING_FLIGHTS_PER_JOURNEY,
+            (int) bestConnectingFlightsWithScore.size()
+        )
+    );
 
-    vector<pair<long long,vector<pair<int,CLASS_CD>>>> finalCases;
-
-    for(auto cur: allCases)
-    {
-        long long totalScore = getFinalConnectingFlightScore(journeyId, cur.first , cur.second);
-        finalCases.push_back({totalScore,{cur.first,cur.second}});
-    }
-
-    return finalCases;
+    return bestConnectingFlightsWithScore;
 }
