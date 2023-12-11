@@ -25,7 +25,7 @@ def read_test_cases(file_path):
 def solve_qubo(test_case, no_samples, api_key):
     test_case_number, matrix_size, qubo_matrix = test_case
     QUBO = {(i, j): qubo_matrix[i][j] for i in range(matrix_size) for j in range(matrix_size)}
-    sampler = LeapHybridSampler(token=api_key)
+    sampler = LeapHybridSampler(token=api_key,anneal_time = 20)
     Assignments = []
     SortedAssignments = {}
 
