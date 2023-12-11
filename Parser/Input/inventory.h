@@ -98,35 +98,39 @@ void getInventoryInput(ifstream& inventoryFile){
         }
 
 
-        Inventory* I;
+        Inventory* newInventory;
 
         if(INVENTORY_LEVEL_CANCELLATION){
             string status;
+            Time delayTime;
             getline(inputString, tempString, ',');
 
             getline(inputString, status, ',');
 
             getline(inputString, tempString, ',');
+            delayTime = Time(tempString);
 
-            I= new Inventory(uuid, departureDate, arrivalDate, totalCapacity, totalInventory,0,
+            newInventory= new Inventory(uuid, departureDate, arrivalDate, totalCapacity, totalInventory,0,
                                         fcTotalCapacity, fcTotalInventory,0,
                                         bcTotalCapacity,bcTotalInventory,0,
                                         pcTotalCapacity, pcTotalInventory,0,
                                         ecTotalCapacity, ecTotalInventory, 0,
-                                        status,Time(tempString));
+                                        status,delayTime);
 
-            if(I->status == INVENTORY_STATUS::INVENTORY_CANCELLED) CancelledFlights.insert(uuid);
+            if(newInventory->status == INVENTORY_STATUS::INVENTORY_CANCELLED) CancelledFlights.insert(uuid);
+
+            if(newInventory->status == INVENTORY_STATUS::INVENTORY_DELAYED) DelayedFlights[uuid]=delayTime;
 
 
         }
         else{
-            I= new Inventory(uuid, departureDate, arrivalDate, totalCapacity, totalInventory,0,
+            newInventory = new Inventory(uuid, departureDate, arrivalDate, totalCapacity, totalInventory,0,
                                         fcTotalCapacity, fcTotalInventory,0,
                                         bcTotalCapacity,bcTotalInventory,0,
                                         pcTotalCapacity, pcTotalInventory,0,
                                         ecTotalCapacity, ecTotalInventory, 0);
         }
 
-        inventoryMap[uuid]=I;
+        inventoryMap[uuid]=newInventory;
     }
 }

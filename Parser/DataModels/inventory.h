@@ -2,6 +2,8 @@
 #include<map>
 #include "../Utils/DateTime/dateTime.h"
 #include "../Utils/constants.h"
+#include "../Utils/Graph/Helpers/data.h"
+#include "schedule.h"
 using namespace std;
 
 class Inventory{
@@ -98,3 +100,16 @@ public:
 
 map<int,Inventory*> inventoryMap;
 map<int,int> inventoryToScheduleMap;  //map<InventoryID,ScheduleID>
+
+
+pair<DateTime,DateTime> getInventoryTime(int inventoryID){
+    DateTime depDateTime = DateTime(inventoryMap[inventoryID]->departureDate,scheduleMap[inventoryToScheduleMap[inventoryID]]->departureTime);
+    DateTime arrDateTime = DateTime(inventoryMap[inventoryID]->arrivalDate,scheduleMap[inventoryToScheduleMap[inventoryID]]->arrivalTime);
+
+    if(DelayedFlights.find(inventoryID)!=DelayedFlights.end()){
+        arrDateTime += DelayedFlights[inventoryID];
+        depDateTime += DelayedFlights[inventoryID];
+    }
+
+    return make_pair(depDateTime,arrDateTime);
+}
