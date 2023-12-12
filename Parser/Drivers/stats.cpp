@@ -34,7 +34,7 @@ int main(int argc,char* argv[]) {
 
     int totalAffectedJourneys = AffectedJourneys.size();  // |I|
 
-    inputtream input(argv[5], inputtream::in);
+    ifstream input(argv[5], ifstream::in);
     ofstream output(argv[6], ofstream::out);
 
     int noOfSamples;
