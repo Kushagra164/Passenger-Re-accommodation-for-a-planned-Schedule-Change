@@ -83,17 +83,13 @@ Check out each repository's `README.md` to know about the specific usages.
 
 <h2 id="usage"> ✨ Contributors </h2>
 
-- **[Harsh Singh Jadon](https://www.linkedin.com/in/harsh-singh-55ab4519a/) - Team Lead**
-- **[Sushant Kumar](https://www.linkedin.com/in/sushantiit/) - Team Vice Lead**
-- **[Shrirang Deshmukh](https://www.linkedin.com/in/shrirang-deshmukh/)**
-- **[Arpit Kesharwani](https://www.linkedin.com/in/arpit82/)**
-- **[Jagdish Deshmukh](https://www.linkedin.com/in/jagdish-deshmukh-iit/)**
-- **[P Kartikeya](https://www.linkedin.com/in/kartikeya-pochampalli-29a0a319b/)**
-- **[Sai Krishna Jupally](https://www.linkedin.com/in/sai-krishna-jupally-b7050177/)**
-- **[Rishvic Pushpakaran]()**
-- **[Akshat Gupta](https://www.linkedin.com/in/akshat-gupta-62b13b198/)**
-- **[Sarthak Gupta](https://www.linkedin.com/in/sg1729/)**
-- **[Pranay Borghoin](https://www.linkedin.com/in/pranay-borgohain-45a290211/)**
+- **[Sarthak Gupta](https://www.linkedin.com/in/sg1729/) - Team Lead****
+- **[Kushgra Khare](https://www.linkedin.com/in/kushagra-khare-5b76b8215/) - Team Vice Lead**
+- **[Akshat Rampuria](https://www.linkedin.com/in/akshat-rampuria/)**
+- **[Arihant Garg](https://www.linkedin.com/in/arihant-garg-22a535247/)**
+- **[Thatparthi Ajay Reddy](https://www.linkedin.com/in/ajay-reddy-5671b2247/)**
+- **[Shreyan Bagchi](https://www.linkedin.com/in/shreyan-bagchi/)**
+
 
 
 
