@@ -123,7 +123,7 @@ int main(int argc,char* argv[]) {
             }
         }
 
-        output << "Percentage of Affected PNRs with Alternate Flight Solution: " << solvedJourneys * 100. / totalaffectedjourneys << "%" << endl;
+        output << "Percentage of Affected PNRs with Alternate Flight Solution: " << solvedJourneys * 100. / totalAffectedJourneys << "%" << endl;
         output << "Percentage of Solutions coming under default flight solution : " << solvedDefault * 100. / solvedJourneys << "%" << endl;
         output << "Average Delay in Solutions : " << totalDelay.value() * 50. / solvedJourneys << "%" << endl;
 
