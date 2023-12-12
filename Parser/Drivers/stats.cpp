@@ -14,13 +14,13 @@ int main(int argc,char* argv[]) {
     //Parsing of Schedule File
 
     // handling command line arguments
-    inputtream scheduleFile;
+    ifstream scheduleFile;
     scheduleFile.open(argv[1]);
-    inputtream inventoryFile;
+    ifstream inventoryFile;
     inventoryFile.open(argv[2]);
-    inputtream bookingFile;
+    ifstream bookingFile;
     bookingFile.open(argv[3]);
-    inputtream passengerFile;
+    ifstream passengerFile;
     passengerFile.open(argv[4]);
 
 
