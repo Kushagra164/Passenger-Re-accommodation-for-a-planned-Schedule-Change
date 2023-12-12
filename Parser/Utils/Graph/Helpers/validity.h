@@ -4,7 +4,7 @@
 using namespace std;
 
 bool isSufficientInventoryAvailable(int paxCnt ,int inventoryID, CLASS_CD toClassCD){
-    int availableInventory= getPassengers(inventoryID,toClassCD);
+    int availableInventory= getPassengers(inventoryID, toClassCD);
     return paxCnt <= availableInventory;
 }
 
