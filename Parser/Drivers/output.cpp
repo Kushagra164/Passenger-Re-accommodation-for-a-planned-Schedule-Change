@@ -5,6 +5,13 @@
 #include "../Input/booking.h"
 #include "../Input/passenger.h"
 #include "../Utils/graphOutput.h"
+#include "../Output/schedule.h"
+#include "../Output/inventory.h"
+#include "../Output/booking.h"
+#include "../Utils/uuidGenerator.h"
+#include "../Utils/Graph/Helpers/graphIndexGenerator.h"
+
+
 using namespace std;
 
 int main(int argc,char* argv[]) {
@@ -34,10 +41,10 @@ int main(int argc,char* argv[]) {
     //Output File Generation
     freopen( argv[5], "r", stdin);
 
-    int noOfSolutions;
+    int noOfSolutions=1;
     cin>>noOfSolutions;
 
-    for(int i=0;i<noOfSolutions;i++){
+    for(int i=0;i<1;i++){
         map<int,vector<pair<int,CLASS_CD>>> journeyToConnectingMap;
         map<int,pair<int,CLASS_CD>> journeyToFlightMap;
         map<int,int> cancelledFlightToSolutionFlightMap;
@@ -48,7 +55,7 @@ int main(int argc,char* argv[]) {
             int u,c;
             cin>>u>>c;
 
-            int journeyID = uIndexGenerator.getID(u);
+            int journeyID = uIndexGenerator.getVal(u);
             journeyToConnectingMap[journeyID]=cIndexGenerator.getVal(c);
         }
 
@@ -58,7 +65,7 @@ int main(int argc,char* argv[]) {
             int u,v;
             cin>>u>>v;
 
-            int journeyID = uIndexGenerator.getID(u);
+            int journeyID = uIndexGenerator.getVal(u);
 
             journeyToFlightMap[journeyID]=vIndexGenerator.getVal(v);
 
@@ -69,16 +76,16 @@ int main(int argc,char* argv[]) {
         for (int i=0;i<noOfWDEdges;i++){
             int w,d;
             cin>>w>>d;
-            int cancelledFlightInventoryID = wIndexGenerator.getID(w);
-            int solutionFlightInventoryID = dIndexGenerator.getID(d);
+            int cancelledFlightInventoryID = wIndexGenerator.getVal(w);
+            int solutionFlightInventoryID = dIndexGenerator.getVal(d);
 
             cancelledFlightToSolutionFlightMap[cancelledFlightInventoryID]=solutionFlightInventoryID;
         }
 
-        ofstream schedule(argv[5+3*i+1],ofstream::out);
+        ofstream schedule("txt1.txt",ofstream::out);
         getScheduleOutput(schedule);
 
-        ofstream inventory(argv[5+3*i+2],ofstream::out);
+        ofstream inventory("txt2",ofstream::out);
         getInventoryOutput(inventory,cancelledFlightToSolutionFlightMap);
 
         ofstream booking(argv[5+3*i+3],ofstream::out);

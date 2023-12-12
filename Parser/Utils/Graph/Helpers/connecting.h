@@ -70,6 +70,24 @@ vector<vector<int>> getConnectingFlights(vector<int> &fromSrc, vector<int> &toDe
     return connectingFlights;
 }
 
+// [TODO: shreyansh: find better placing]
+int getPassengers(int flightID, CLASS_CD classCD){
+    Inventory *curFlight = inventoryMap[flightID];
+    if(classCD == FC)return curFlight->fcTotalInventory - curFlight->fcBookedInventory;
+    if(classCD == BC)return curFlight->bcTotalInventory - curFlight->bcBookedInventory;
+    if(classCD == PC)return curFlight->pcTotalInventory - curFlight->pcBookedInventory;
+    return curFlight->ecTotalInventory - curFlight->ecBookedInventory;
+}
+
+int allowedPassengers(vector<pair<int,CLASS_CD>> flight){
+    auto bottleNeck = min_element(flight.begin(), flight.end(), [&](auto a, auto b){
+        return getPassengers(a.first, a.second) < getPassengers(b.first, b.second);
+    });
+    int flightID = bottleNeck->first;
+    CLASS_CD curClass = bottleNeck->second;
+    return getPassengers(flightID, curClass);
+}
+
 vector<pair<long long,vector<pair<int,CLASS_CD>>>> getBestConnectingFlights(int journeyID, vector<vector<int>> proposedFlights){
 
     vector<pair<long long, vector<pair<int, CLASS_CD>>>> allConnectingFlightsWithScore;
@@ -92,7 +110,7 @@ vector<pair<long long,vector<pair<int,CLASS_CD>>>> getBestConnectingFlights(int 
                 for(int toClassCD = 0; toClassCD < 4; toClassCD++){
                     if((toClassCD<originalClassCD)&&(!CLASS_UPGRADE_ALLOWED))continue;
                     if((toClassCD>originalClassCD)&&(!CLASS_DOWNGRADE_ALLOWED))continue;
-                    if(isSufficientInventoryAvailable(paxCnt,curFlight[index],toClassCD)){
+                    if(true){
                         curProposedFlight.push_back(make_pair(curFlight[index],
                                                               static_cast <CLASS_CD> (toClassCD)));
                         generateConnectingFlightWithClass(index+1);
@@ -105,7 +123,9 @@ vector<pair<long long,vector<pair<int,CLASS_CD>>>> getBestConnectingFlights(int 
     }
 
     auto bestConnectingFlightsWithScore = allConnectingFlightsWithScore;
-    sort(bestConnectingFlightsWithScore.begin(), bestConnectingFlightsWithScore.end()); 
+    sort(bestConnectingFlightsWithScore.begin(), bestConnectingFlightsWithScore.end(), [&](auto a, auto b){
+        return (a.first*allowedPassengers(a.second))>(b.first*allowedPassengers(b.second));
+    }); 
     bestConnectingFlightsWithScore.resize(
         min(
             (int) MAXIMUM_ALLOWED_CONNECTING_FLIGHTS_PER_JOURNEY,

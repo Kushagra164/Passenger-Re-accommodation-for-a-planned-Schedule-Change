@@ -18,7 +18,6 @@ void graphUCAndGraphCVGenerator(){
             graphUC[curUIdx].push_back(make_pair(curCIdx, curScore));
 
             for(auto curFlight: curFlights){
-                cout<<curFlight.second<<"check"<<endl;
                 int curVIdx = vIndexGenerator.getIndex(curFlight);
                 if(find(graphCV[curCIdx].begin(),graphCV[curCIdx].end(), curVIdx) 
                     == graphCV[curCIdx].end()){

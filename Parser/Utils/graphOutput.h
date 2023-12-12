@@ -55,13 +55,6 @@ void graphOutput(ofstream& fw){
         int avl_inv;
 
         int inv_id=p.first;
-
-        cout<<p.second<<"\n";
-        cout<<inventoryMap[inv_id]->fcTotalInventory<<" "<<inventoryMap[inv_id]->fcBookedInventory<<endl;
-        cout<<inventoryMap[inv_id]->bcTotalInventory<<" "<<inventoryMap[inv_id]->bcBookedInventory<<endl;
-        cout<<inventoryMap[inv_id]->pcTotalInventory<<" "<<inventoryMap[inv_id]->pcBookedInventory<<endl;
-        cout<<inventoryMap[inv_id]->ecTotalInventory<<" "<<inventoryMap[inv_id]->ecBookedInventory<<endl;
-
         if(p.second==FC) avl_inv = inventoryMap[inv_id]->fcTotalInventory - inventoryMap[inv_id]->fcBookedInventory;
         else if(p.second==BC) avl_inv = inventoryMap[inv_id]->bcTotalInventory - inventoryMap[inv_id]->bcBookedInventory;
         else if(p.second==PC) avl_inv = inventoryMap[inv_id]->pcTotalInventory - inventoryMap[inv_id]->pcBookedInventory;
