@@ -27,4 +27,5 @@ void getScheduleOutput(ofstream& fw){
 
         fw<<curSchedule->flightPattern<<endl;
     }
+    fw.close();
 }

@@ -69,4 +69,5 @@ map<int,pair<int,CLASS_CD>> &journeyToFlightMap){
             }
         }
     }
+    fw.close();
 }

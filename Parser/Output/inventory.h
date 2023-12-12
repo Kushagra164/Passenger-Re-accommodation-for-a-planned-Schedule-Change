@@ -43,4 +43,5 @@ void getInventoryOutput(ofstream& fw,map<int,int> &cancelledFlightToSolutionFlig
         }
         fw<<endl;
     }
+    fw.close();
 }
