@@ -83,14 +83,19 @@ int main(int argc,char* argv[]) {
         }
 
         string outputFolder = argv[6];
-        cout<<outputFolder<<endl;
-        string outputFilePath = outputFolder + "/Solution" + to_string(i+1) + ".txt";
-        cout<<outputFilePath<<endl;
 
-        ofstream output(outputFilePath,ofstream::out);
-        getScheduleOutput(output);
-        getInventoryOutput(output,cancelledFlightToSolutionFlightMap);
-        getBookingOutput(output,journeyToConnectingMap,journeyToFlightMap);
+        string scheduleFilePath = outputFolder + "/Solution" + to_string(i+1) + "/schedule.txt";
+        string inventoryFilePath = outputFolder + "/Solution" + to_string(i+1) + "/inventory.txt";
+        string bookingFilePath = outputFolder + "/Solution" + to_string(i+1) + "/booking.txt";
+
+        ofstream scheduleOutput(scheduleFilePath,ofstream::out);
+        getScheduleOutput(scheduleOutput);
+
+        ofstream inventoryOutput(inventoryFilePath,ofstream::out);
+        getInventoryOutput(inventoryOutput,cancelledFlightToSolutionFlightMap);
+
+        ofstream bookingOutput(bookingFilePath,ofstream::out);
+        getBookingOutput(bookingOutput,journeyToConnectingMap,journeyToFlightMap);
     }
 
 }
