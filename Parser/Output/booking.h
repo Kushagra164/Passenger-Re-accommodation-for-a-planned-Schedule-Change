@@ -60,6 +60,7 @@ map<int,pair<int,CLASS_CD>> &journeyToFlightMap){
                 printDetails(fw,recLoc,curPnr,curJourneyID,segSeq,itr->second.first,itr->second.second);
                 segSeq++;
             }
+            else if(find(AffectedJourneys.begin(),AffectedJourneys.end(),curJourneyID) != AffectedJourneys.end()) segSeq++;
             else{
                 for(auto curInventoryID: journeyMap[curJourneyID]->flights){
                     printDetails(fw,recLoc,curPnr,curJourneyID,segSeq,curInventoryID,journeyMap[curJourneyID]->classCD);
