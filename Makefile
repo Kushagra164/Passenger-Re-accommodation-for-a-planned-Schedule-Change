@@ -45,7 +45,7 @@ edges-to-txt:
 	./Processing/Intermediates/booking.csv \
 	./Processing/Intermediates/passenger.csv \
 	./Processing/Intermediates/edges.txt \
-	./Output/output.txt
+	./Output/Experiment1
 
 clean-Executables:
 	rm -rf ./Processing/Executables

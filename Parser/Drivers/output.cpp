@@ -82,7 +82,10 @@ int main(int argc,char* argv[]) {
             cancelledFlightToSolutionFlightMap[cancelledFlightInventoryID]=solutionFlightInventoryID;
         }
 
-        string outputFilePath = "../Output/Solutions/Solution" + to_string(i+1) + ".txt";
+        string outputFolder = argv[6];
+        cout<<outputFolder<<endl;
+        string outputFilePath = outputFolder + "/Solution" + to_string(i+1) + ".txt";
+        cout<<outputFilePath<<endl;
 
         ofstream output(outputFilePath,ofstream::out);
         getScheduleOutput(output);

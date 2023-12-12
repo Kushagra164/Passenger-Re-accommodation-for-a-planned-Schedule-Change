@@ -19,8 +19,8 @@ void getInventoryOutput(ofstream& fw,map<int,int> &cancelledFlightToSolutionFlig
         fw<<scheduleUuidGenerator.getString(inventoryToScheduleMap[curInventoryID])<<" ";
         fw<<scheduleMap[inventoryToScheduleMap[curInventoryID]]->flightNum<<" ";
         fw<<scheduleMap[inventoryToScheduleMap[curInventoryID]]->equipmentNo.first<<" ";
-        fw<<curInventory->departureDate<<" ";
-        fw<<curInventory->arrivalDate<<" ";
+        fw<<curInventory->departureDate.to_string()<<" ";
+        fw<<curInventory->arrivalDate.to_string()<<" ";
         fw<<flightNumberMap[scheduleMap[inventoryToScheduleMap[curInventoryID]]->flightNum].srcCity<<" ";
         fw<<flightNumberMap[scheduleMap[inventoryToScheduleMap[curInventoryID]]->flightNum].destCity<<" ";
         
