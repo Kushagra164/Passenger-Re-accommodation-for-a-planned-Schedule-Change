@@ -50,18 +50,18 @@ map<int,pair<int,CLASS_CD>> &journeyToFlightMap){
         for(int curJourneyID:curPnr->journeys){
             if(journeyToConnectingMap.find(curJourneyID)!=journeyToConnectingMap.end()){
                 auto itr = journeyToConnectingMap.find(curJourneyID);
-                for(auto e:*itr){
+                for(auto e:itr->second){
                     printDetails(fw,recLoc,curPnr,curJourneyID,segSeq,e.first,e.second);
                 }
                 segSeq++;
             }
             else if(journeyToFlightMap.find(curJourneyID)!=journeyToFlightMap.end()){
                 auto itr = journeyToFlightMap.find(curJourneyID);
-                printDetails(fw,recLoc,curPnr,curJourneyID,segSeq,itr->first,itr->second);
+                printDetails(fw,recLoc,curPnr,curJourneyID,segSeq,itr->second.first,itr->second.second);
                 segSeq++;
             }
             else{
-                for(auto curInventoryID: curPnr->flights){
+                for(auto curInventoryID: journeyMap[curJourneyID]->flights){
                     printDetails(fw,recLoc,curPnr,curJourneyID,segSeq,curInventoryID,journeyMap[curJourneyID]->classCD);
                 }
                 segSeq++;

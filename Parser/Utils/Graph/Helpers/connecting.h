@@ -34,8 +34,7 @@ vector<int> findAllRelevantFlightsToDest(int originalInventoryID){
 
     vector<int> result;
 
-    auto [srcCity, destCity] = flightNumberMap[originalSchedule->flightNum]; 
-    DateTime cancelledDateTime = DateTime(inventoryMap[originalInventoryID]->departureDate, originalSchedule->departureTime);
+    auto [srcCity, destCity] = flightNumberMap[originalSchedule->flightNum];
     for(auto [curInventoryID, curInventory]: inventoryMap){
         if (curInventoryID == originalInventoryID) continue;
         Schedule* curSchedule = scheduleMap[inventoryToScheduleMap[curInventoryID]];
