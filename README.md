@@ -83,7 +83,7 @@ Check out each repository's `README.md` to know about the specific usages.
 
 <h2 id="usage"> ✨ Contributors </h2>
 
-- **[Sarthak Gupta](https://www.linkedin.com/in/sg1729/) - Team Lead****
+- **[Sarthak Gupta](https://www.linkedin.com/in/sg1729/) - Team Lead**
 - **[Kushgra Khare](https://www.linkedin.com/in/kushagra-khare-5b76b8215/) - Team Vice Lead**
 - **[Akshat Rampuria](https://www.linkedin.com/in/akshat-rampuria/)**
 - **[Arihant Garg](https://www.linkedin.com/in/arihant-garg-22a535247/)**
