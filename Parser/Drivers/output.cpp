@@ -39,10 +39,10 @@ int main(int argc,char* argv[]) {
     graphWDGenerator();
 
     //Output File Generation
-    freopen( argv[5], "r", stdin);
+    ifstream input(argv[5]);
 
     int noOfSolutions;
-    cin>>noOfSolutions;
+    input>>noOfSolutions;
 
     for(int i=0;i<noOfSolutions;i++){
         map<int,vector<pair<int,CLASS_CD>>> journeyToConnectingMap;
@@ -50,20 +50,20 @@ int main(int argc,char* argv[]) {
         map<int,int> cancelledFlightToSolutionFlightMap;
 
         int noOfUCEdges;
-        cin>>noOfUCEdges;
+        input>>noOfUCEdges;
         for(int j=0;j<noOfUCEdges;j++){
             int u,c;
-            cin>>u>>c;
+            input>>u>>c;
 
             int journeyID = uIndexGenerator.getVal(u);
             journeyToConnectingMap[journeyID]=cIndexGenerator.getVal(c);
         }
 
         int noOfUVEdges;
-        cin>>noOfUVEdges;
+        input>>noOfUVEdges;
         for(int j=0;j<noOfUVEdges;j++){
             int u,v;
-            cin>>u>>v;
+            input>>u>>v;
 
             int journeyID = uIndexGenerator.getVal(u);
 
@@ -72,10 +72,10 @@ int main(int argc,char* argv[]) {
         }
 
         int noOfWDEdges;
-        cin>>noOfWDEdges;
+        input>>noOfWDEdges;
         for (int i=0;i<noOfWDEdges;i++){
             int w,d;
-            cin>>w>>d;
+            input>>w>>d;
             int cancelledFlightInventoryID = wIndexGenerator.getVal(w);
             int solutionFlightInventoryID = dIndexGenerator.getVal(d);
 
