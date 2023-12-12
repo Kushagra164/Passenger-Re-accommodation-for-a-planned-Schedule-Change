@@ -23,13 +23,21 @@ void getInventoryOutput(ofstream& fw,map<int,int> &cancelledFlightToSolutionFlig
         fw<<curInventory->arrivalDate<<" ";
         fw<<flightNumberMap[scheduleMap[inventoryToScheduleMap[curInventoryID]]->flightNum].srcCity<<" ";
         fw<<flightNumberMap[scheduleMap[inventoryToScheduleMap[curInventoryID]]->flightNum].destCity<<" ";
-        
-        if(curInventory->status == INVENTORY_STATUS::INVENTORY_SCHEDULED) fw<<"Scheduled"<<" ";
-        else if(curInventory->status == INVENTORY_STATUS::INVENTORY_CANCELLED) fw<<"Cancelled"<<" ";
-        else if(curInventory->status == INVENTORY_STATUS::INVENTORY_PLANNED) fw<<"Planned"<<" ";
-        else if(curInventory->status == INVENTORY_STATUS::INVENTORY_DELAYED) fw<<"Delayed"<<" ";
 
-        if(curInventory->status == INVENTORY_STATUS::INVENTORY_CANCELLED){
+        if(INVENTORY_LEVEL_CANCELLATION){
+            if(curInventory->status == INVENTORY_STATUS::INVENTORY_SCHEDULED) fw<<"Scheduled"<<" ";
+            else if(curInventory->status == INVENTORY_STATUS::INVENTORY_CANCELLED) fw<<"Cancelled"<<" ";
+            else if(curInventory->status == INVENTORY_STATUS::INVENTORY_PLANNED) fw<<"Planned"<<" ";
+            else if(curInventory->status == INVENTORY_STATUS::INVENTORY_DELAYED) fw<<"Delayed"<<" ";
+        }
+        else{
+            if(scheduleMap[inventoryToScheduleMap[curInventoryID]]->status == SCHEDULE_SCHEDULED) fw<<"Scheduled"<<" ";
+            else if(scheduleMap[inventoryToScheduleMap[curInventoryID]]->status == SCHEDULE_PLANNED) fw<<"Planned"<<" ";
+            else if(scheduleMap[inventoryToScheduleMap[curInventoryID]]->status == SCHEDULE_CANCELLED) fw<<"Cancelled"<<" ";
+        }
+
+        if((INVENTORY_LEVEL_CANCELLATION && curInventory->status == INVENTORY_CANCELLED) ||
+            scheduleMap[inventoryToScheduleMap[curInventoryID]]->status == SCHEDULE_CANCELLED){
             fw<<cancelledFlightToSolutionFlightMap[curInventoryID]<<endl;
         }
         else fw<<"null"<<endl;
