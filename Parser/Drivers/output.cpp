@@ -41,10 +41,10 @@ int main(int argc,char* argv[]) {
     //Output File Generation
     freopen( argv[5], "r", stdin);
 
-    int noOfSolutions=1;
+    int noOfSolutions;
     cin>>noOfSolutions;
 
-    for(int i=0;i<1;i++){
+    for(int i=0;i<noOfSolutions;i++){
         map<int,vector<pair<int,CLASS_CD>>> journeyToConnectingMap;
         map<int,pair<int,CLASS_CD>> journeyToFlightMap;
         map<int,int> cancelledFlightToSolutionFlightMap;
@@ -82,14 +82,12 @@ int main(int argc,char* argv[]) {
             cancelledFlightToSolutionFlightMap[cancelledFlightInventoryID]=solutionFlightInventoryID;
         }
 
-        ofstream schedule("txt1.txt",ofstream::out);
-        getScheduleOutput(schedule);
+        string outputFilePath = "../Output/Solutions/Solution" + to_string(i+1) + ".txt";
 
-        ofstream inventory("txt2",ofstream::out);
-        getInventoryOutput(inventory,cancelledFlightToSolutionFlightMap);
-
-        ofstream booking(argv[5+3*i+3],ofstream::out);
-        getBookingOutput(booking,journeyToConnectingMap,journeyToFlightMap);
+        ofstream output(outputFilePath,ofstream::out);
+        getScheduleOutput(output);
+        getInventoryOutput(output,cancelledFlightToSolutionFlightMap);
+        getBookingOutput(output,journeyToConnectingMap,journeyToFlightMap);
     }
 
 }
