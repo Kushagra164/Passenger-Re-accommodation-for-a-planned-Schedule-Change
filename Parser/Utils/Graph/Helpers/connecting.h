@@ -100,7 +100,8 @@ vector<pair<long long,vector<pair<int,CLASS_CD>>>> getBestConnectingFlights(int 
                 for(int toClassCD = 0; toClassCD < 4; toClassCD++){
                     if((toClassCD<originalClassCD)&&(!CLASS_UPGRADE_ALLOWED))continue;
                     if((toClassCD>originalClassCD)&&(!CLASS_DOWNGRADE_ALLOWED))continue;
-                    if(true){
+                    if(isSufficientInventoryAvailable(paxCnt, curFlight[index],
+                        static_cast <CLASS_CD> (toClassCD))){
                         curProposedFlight.push_back(make_pair(curFlight[index],
                                                               static_cast <CLASS_CD> (toClassCD)));
                         generateConnectingFlightWithClass(index+1);

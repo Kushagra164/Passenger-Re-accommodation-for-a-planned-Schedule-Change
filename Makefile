@@ -45,7 +45,12 @@ edges-to-txt:
 	./Processing/Intermediates/booking.csv \
 	./Processing/Intermediates/passenger.csv \
 	./Processing/Intermediates/edges.txt \
-	./Output/Experiment1
+	./Processing/Intermediates/solution.txt
+
+txt-to-excel:
+	python ./Parser/Drivers/txtToExcel.py \
+	--input_file_path ./Processing/Intermediates/solution.txt \
+	--output_folder ./Output/Experiment
 
 clean-Executables:
 	rm -rf ./Processing/Executables
@@ -74,3 +79,4 @@ run:
 	$(MAKE) csv-to-graph
 	$(MAKE) graph-to-edges
 	$(MAKE) edges-to-txt
+	$(MAKE) txt-to-excel
