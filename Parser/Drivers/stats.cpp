@@ -9,11 +9,31 @@
 #include "../Utils/graphOutput.h"
 using namespace std;
 
-// sch.csv, inv.csv, booking.csv, pass.csv, edg.txt, stats.txt
-int main(int argc,char* argv[]) {
-    //Parsing of Schedule File
+class Delay{
+    private:
+        int lt6,lt12,lt18,lt24,mt24;
+    public:
+        Delay():
+            lt6(0),lt12(0),lt18(0),lt24(0),mt24(0){}
+            
+        void checkAndIncrement(double timeDelay){
+            if(timeDelay <= 6) lt6++;
+            else if(timeDelay <= 12) lt12++;
+            else if(timeDelay <= 12) lt18++;
+            else if(timeDelay <= 12) lt24++;
+            else mt24++;
+        }    
+        void display(ofstream& output){
+            output<<lt6<<" ";
+            output<<lt12<<" ";
+            output<<lt18<<" ";
+            output<<lt24<<" ";
+            output<<mt24<<endl;;
+        }    
+};
 
-    // handling command line arguments
+int main(int argc,char* argv[]) {
+
     ifstream scheduleFile;
     scheduleFile.open(argv[1]);
     ifstream inventoryFile;
@@ -29,18 +49,10 @@ int main(int argc,char* argv[]) {
     getBookingInput(bookingFile);
     getPassengerInput(passengerFile);
 
-    // edges.txt
     graphWUGenerator();
 
-    int totalAffectedJourneys = AffectedJourneys.size();  // |I|
+    int totalAffectedJourneys = AffectedJourneys.size();
 
-    ifstream input(argv[5], ifstream::in);
-    ofstream output(argv[6], ofstream::out);
-
-    int noOfSamples;
-    input>>noOfSamples;
-
-    graphWUGenerator();
     graphUVAndGraphDVGenerator();
     set<pair<int,int>> edgesDV, edgesWU;
     for (int d = 0; d < graphDV.size(); d++){
@@ -50,14 +62,19 @@ int main(int argc,char* argv[]) {
         for (auto &u: graphWU[w]) edgesWU.insert(make_pair(w, u));
     }
 
+    ifstream input(argv[5], ifstream::in);
+    ofstream output(argv[6], ofstream::out);
+
+    int noOfSamples;
+    input>>noOfSamples;
+
     for (int iter = 0; iter < noOfSamples; iter++){
 
-        int solvedJourneys = 0;  // |S|
+        int solvedJourneys = 0;
 
         set<pair<int, int>> edgesUC, edgesUV, edgesWD;
-        Time totalDelay = Time(0, 0);
 
-        output << "Solution " << iter + 1 << endl;
+        Delay delay;
 
         int oneOne = 0;
         int oneMul = 0;
@@ -70,6 +87,7 @@ int main(int argc,char* argv[]) {
         solvedJourneys += noOfUCEdges;
         for(int dup = 0; dup < noOfUCEdges; dup++){
             int u,c;
+            Time totalDelay = Time(0, 0);
             input >> u >> c;
             edgesUC.insert(make_pair(u, c));
             int journeyID = uIndexGenerator.getVal(u);
@@ -77,7 +95,10 @@ int main(int argc,char* argv[]) {
             vector<int> flights;
             for(auto x:cIndexGenerator.getVal(c)) flights.push_back(x.first);
             totalDelay += getDepTimeDiff((journeyMap[journeyID]->flights).front(),flights.front()) + getArrTimeDiff((journeyMap[journeyID]->flights).back(),flights.back());
+            delay.checkAndIncrement(totalDelay.value()/2);
         }
+        
+        
 
         int noOfUVEdges; 
         input >> noOfUVEdges;
@@ -85,17 +106,18 @@ int main(int argc,char* argv[]) {
         solvedJourneys += noOfUVEdges;
         for(int dup = 0; dup < noOfUVEdges; dup++){
             int u, v;
+            Time totalDelay = Time(0, 0);
             input >> u >> v;
             edgesUV.insert(make_pair(u, v));
             int journeyID = uIndexGenerator.getVal(u);
             journeyMap[journeyID]->flights.size() == 1 ? oneOne += 1: mulOne += 1;
             pair<int, CLASS_CD> pr = vIndexGenerator.getVal(v);
             totalDelay += getDepTimeDiff((journeyMap[journeyID]->flights).front(),pr.first) + getArrTimeDiff((journeyMap[journeyID]->flights).back(),pr.first);
+            delay.checkAndIncrement(totalDelay.value()/2);
         }
 
         int noOfWDEdges;
         input >> noOfWDEdges;
-        solvedJourneys += noOfWDEdges;
         for (int dup = 0; dup < noOfWDEdges; dup++){
             int w,d;
             input >> w >> d;
@@ -123,14 +145,16 @@ int main(int argc,char* argv[]) {
             }
         }
 
-        output << "Percentage of Affected PNRs with Alternate Flight Solution: " << solvedJourneys * 100. / totalAffectedJourneys << "%" << endl;
-        output << "Percentage of Solutions coming under default flight solution : " << solvedDefault * 100. / solvedJourneys << "%" << endl;
-        output << "Average Delay in Solutions : " << totalDelay.value() * 50. / solvedJourneys << "%" << endl;
+        output << oneOne << " ";
+        output << oneMul << " ";
+        output << mulOne << " ";
+        output << mulMul << endl;
 
-        output << "Percentage of One-One Solutions: " << oneOne * 100. / solvedJourneys << "%" << endl;
-        output << "Percentage of One-Multi Solutions: " << oneMul * 100. / solvedJourneys << "%" << endl;
-        output << "Percentage of Multi-One Solutions: " << mulOne * 100. / solvedJourneys << "%" << endl;
-        output << "Percentage of Multi-Multi Solutions: " << mulMul * 100. / solvedJourneys << "%" << endl;
+        output << solvedDefault  << " ";
+        output << solvedJourneys - solvedDefault << " ";
+        output << totalAffectedJourneys - solvedJourneys << endl;
+        
+        delay.display();
     }
 
 }
