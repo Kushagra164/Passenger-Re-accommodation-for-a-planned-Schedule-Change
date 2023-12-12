@@ -31,7 +31,8 @@ void getInventoryOutput(ofstream& fw,map<int,int> &cancelledFlightToSolutionFlig
             else if(curInventory->status == INVENTORY_STATUS::INVENTORY_DELAYED) fw<<"Delayed"<<" ";
         }
         else{
-            if(scheduleMap[inventoryToScheduleMap[curInventoryID]]->status == SCHEDULE_SCHEDULED) fw<<"Scheduled"<<" ";
+            if(DelayedFlights.find(curInventoryID)!=DelayedFlights.end()) fw<<"Delayed"<<" ";
+            else if(scheduleMap[inventoryToScheduleMap[curInventoryID]]->status == SCHEDULE_SCHEDULED) fw<<"Scheduled"<<" ";
             else if(scheduleMap[inventoryToScheduleMap[curInventoryID]]->status == SCHEDULE_PLANNED) fw<<"Planned"<<" ";
             else if(scheduleMap[inventoryToScheduleMap[curInventoryID]]->status == SCHEDULE_CANCELLED) fw<<"Cancelled"<<" ";
         }
