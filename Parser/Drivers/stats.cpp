@@ -75,8 +75,8 @@ int main(int argc,char* argv[]) {
             int journeyID = uIndexGenerator.getVal(u);
             journeyMap[journeyID]->flights.size() == 1 ? oneMul += 1: mulMul += 1;
             vector<int> flights;
-            for(auto x:cIndexGenerator.getVal(c)) inventorys.push_back(x.first);
-            totalDelay += getDepTimeDiff((journeyMap[j_id]->flights).front(),flights.front()) + getArrTimeDiff(journeyMap[j_id]->flights).back(),flights.back());
+            for(auto x:cIndexGenerator.getVal(c)) flights.push_back(x.first);
+            totalDelay += getDepTimeDiff((journeyMap[journeyID]->flights).front(),flights.front()) + getArrTimeDiff((journeyMap[journeyID]->flights).back(),flights.back());
         }
 
         int noOfUVEdges; 
@@ -90,7 +90,7 @@ int main(int argc,char* argv[]) {
             int journeyID = uIndexGenerator.getVal(u);
             journeyMap[journeyID]->flights.size() == 1 ? oneOne += 1: mulOne += 1;
             pair<int, CLASS_CD> pr = vIndexGenerator.getVal(v);
-            totalDelay += getDepTimeDiff((journeyMap[j_id]->flights).front(),pr.first) + getArrTimeDiff((journeyMap[j_id]->flights).back(),pr.first);
+            totalDelay += getDepTimeDiff((journeyMap[journeyID]->flights).front(),pr.first) + getArrTimeDiff((journeyMap[journeyID]->flights).back(),pr.first);
         }
 
         int noOfWDEdges;
