@@ -113,3 +113,14 @@ pair<DateTime,DateTime> getInventoryTime(int inventoryID){
 
     return make_pair(depDateTime,arrDateTime);
 }
+
+int getPassengers(int flightID, CLASS_CD classCD){
+    Inventory *curFlight = inventoryMap[flightID];
+    if(classCD == FC)return curFlight->fcTotalInventory - curFlight->fcBookedInventory;
+    if(classCD == BC)return curFlight->bcTotalInventory - curFlight->bcBookedInventory;
+    if(classCD == PC)return curFlight->pcTotalInventory - curFlight->pcBookedInventory;
+    if(classCD == EC) return curFlight->ecTotalInventory - curFlight->ecBookedInventory;
+
+    cout<<"Invalid Class"<<endl;
+    exit(-1);
+}

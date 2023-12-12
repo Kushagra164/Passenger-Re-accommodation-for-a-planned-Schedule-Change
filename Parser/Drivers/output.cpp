@@ -5,6 +5,13 @@
 #include "../Input/booking.h"
 #include "../Input/passenger.h"
 #include "../Utils/graphOutput.h"
+#include "../Output/schedule.h"
+#include "../Output/inventory.h"
+#include "../Output/booking.h"
+#include "../Utils/uuidGenerator.h"
+#include "../Utils/Graph/Helpers/graphIndexGenerator.h"
+
+
 using namespace std;
 
 int main(int argc,char* argv[]) {
@@ -48,7 +55,7 @@ int main(int argc,char* argv[]) {
             int u,c;
             cin>>u>>c;
 
-            int journeyID = uIndexGenerator.getID(u);
+            int journeyID = uIndexGenerator.getVal(u);
             journeyToConnectingMap[journeyID]=cIndexGenerator.getVal(c);
         }
 
@@ -58,7 +65,7 @@ int main(int argc,char* argv[]) {
             int u,v;
             cin>>u>>v;
 
-            int journeyID = uIndexGenerator.getID(u);
+            int journeyID = uIndexGenerator.getVal(u);
 
             journeyToFlightMap[journeyID]=vIndexGenerator.getVal(v);
 
@@ -69,20 +76,18 @@ int main(int argc,char* argv[]) {
         for (int i=0;i<noOfWDEdges;i++){
             int w,d;
             cin>>w>>d;
-            int cancelledFlightInventoryID = wIndexGenerator.getID(w);
-            int solutionFlightInventoryID = dIndexGenerator.getID(d);
+            int cancelledFlightInventoryID = wIndexGenerator.getVal(w);
+            int solutionFlightInventoryID = dIndexGenerator.getVal(d);
 
             cancelledFlightToSolutionFlightMap[cancelledFlightInventoryID]=solutionFlightInventoryID;
         }
 
-        ofstream schedule(argv[5+3*i+1],ofstream::out);
-        getScheduleOutput(schedule);
+        string outputFilePath = "../Output/Solutions/Solution" + to_string(i+1) + ".txt";
 
-        ofstream inventory(argv[5+3*i+2],ofstream::out);
-        getInventoryOutput(inventory,cancelledFlightToSolutionFlightMap);
-
-        ofstream booking(argv[5+3*i+3],ofstream::out);
-        getBookingOutput(booking,journeyToConnectingMap,journeyToFlightMap);
+        ofstream output(outputFilePath,ofstream::out);
+        getScheduleOutput(output);
+        getInventoryOutput(output,cancelledFlightToSolutionFlightMap);
+        getBookingOutput(output,journeyToConnectingMap,journeyToFlightMap);
     }
 
 }

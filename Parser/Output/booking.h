@@ -15,7 +15,7 @@ using namespace std;
 
 void printDetails(ofstream& fw,string recLoc, Pnr* curPnr,int curJourneyID,int segSeq, int curInventoryID, CLASS_CD clsCD){
     fw<<recLoc<<" ";
-    fw<<curPnr->creationDate<<" ";
+    fw<<curPnr->creationDate.to_string()<<" ";
 
     if(journeyMap[curJourneyID]->actionCD == ACTION_CD::HK) fw<<"HK"<<" ";
     else if(journeyMap[curJourneyID]->actionCD == ACTION_CD::PD) fw<<"PD"<<" ";
@@ -25,7 +25,7 @@ void printDetails(ofstream& fw,string recLoc, Pnr* curPnr,int curJourneyID,int s
     else if(clsCD == CLASS_CD::PC) fw<<"PC"<<" ";
     else if(clsCD == CLASS_CD::EC) fw<<"EC"<<" ";
 
-    fw<<seqSeq<<" ";
+    fw<<segSeq<<" ";
     fw<<curPnr->paxCnt<<" ";
     fw<<scheduleMap[inventoryToScheduleMap[curInventoryID]]->flightNum<<" ";
     fw<<flightNumberMap[scheduleMap[inventoryToScheduleMap[curInventoryID]]->flightNum].srcCity<<" ";
@@ -50,7 +50,7 @@ map<int,pair<int,CLASS_CD>> &journeyToFlightMap){
         for(int curJourneyID:curPnr->journeys){
             if(journeyToConnectingMap.find(curJourneyID)!=journeyToConnectingMap.end()){
                 auto itr = journeyToConnectingMap.find(curJourneyID);
-                for(auto e:itr->second){
+                for(auto e: itr->second){
                     printDetails(fw,recLoc,curPnr,curJourneyID,segSeq,e.first,e.second);
                 }
                 segSeq++;
