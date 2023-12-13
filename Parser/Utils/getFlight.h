@@ -5,10 +5,10 @@
 #include "../DataModels/inventory.h"
 #include "../DataModels/schedule.h"
 using namespace std;
-// Map to get the corresponding InventoryID for a pair of Flight Number and Departure DTMZ
+// Map to get the corresponding InventoryID for a pair of Flight Number and Departure DTML
 // Used while parsing passenger booking details and creating Journey
 
-multimap<pair<int,pair<DateTime,DateTime>>,int> flightNumberWithDateTimeToInventoryMap;       //map< pair<FlightNum,pair<DEP_DTMZ,ARR_DTMZ>> , InventoryID >
+multimap<pair<int,pair<DateTime,DateTime>>,int> flightNumberWithDateTimeToInventoryMap;       //map< pair<FlightNum,pair<DEP_DTML,ARR_DTML>> , InventoryID >
 bool flightInventoryMapCal = false;
 
 void calculateFlightInventoryMap(){

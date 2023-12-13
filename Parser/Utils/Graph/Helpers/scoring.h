@@ -4,12 +4,11 @@
 using namespace std;
 
 int pnrScore(int journeyId, CLASS_CD proposed){
-    Journey* journey = journeyMap[journeyId];
     Pnr* pnr = pnrMap[journeyToPnrMap[journeyId]];
     int pnr_score = 0;
     for (auto &passenger_id: pnr->passengers){
         Passenger* passenger = passengerMap[passenger_id];
-        pnr_score += (passenger->ssrCodes.size()*SSR_SCORE);
+        if(passenger->ssrCode != SSR_CD_NULL) pnr_score += SSR_SCORE;
         pnr_score += PAX_SCORE;
     }
     pnr_score += classScoresMap[proposed];
@@ -32,17 +31,17 @@ long long getFlightScoreWithTimeDiff(Time ArrivalTimeDiff, Time DepartureTimeDif
     return score;
 }
 
-long long getFlightScore(int originalinvId, int proposedinvId){
+long long getFlightScore(int curInventoryID, int nextInventoryID){
     long long score = 0;
 
-    Time ArrivalTimeDiff = getArrTimeDiff(originalinvId, proposedinvId);
-    Time DepartureTimeDiff = getDepTimeDiff(originalinvId, proposedinvId);
+    Time ArrivalTimeDiff = getArrTimeDiff(curInventoryID, nextInventoryID);
+    Time DepartureTimeDiff = getDepTimeDiff(curInventoryID, nextInventoryID);
     
     score += getFlightScoreWithTimeDiff(ArrivalTimeDiff, DepartureTimeDiff);
 
     score += CITYPAIR_SCORE;
-    score += scheduleMap[inventoryToScheduleMap[originalinvId]]->equipmentNo ==
-             scheduleMap[inventoryToScheduleMap[proposedinvId]]->equipmentNo ? EQUIPMENT_SCORE: 0;
+    score += scheduleMap[inventoryToScheduleMap[curInventoryID]]->equipmentNo ==
+             scheduleMap[inventoryToScheduleMap[nextInventoryID]]->equipmentNo ? EQUIPMENT_SCORE: 0;
 
     return score;
 }
@@ -65,8 +64,6 @@ long long getFinalConnectingFlightScore(int journeyID, vector<pair<int, CLASS_CD
 
     long double avgPnrScore = 0;
     long double totalTime = 0;
-
-    CLASS_CD originalClassCD = journeyMap[journeyID]->classCD;
 
     for(auto [curFlightID, curClassCD]: proposedFlight){
         long double curTime = getFlightDuration(curFlightID).value();

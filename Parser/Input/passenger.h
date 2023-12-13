@@ -24,55 +24,56 @@ void getPassengerInput(ifstream& passengerFile){
         string docID; string docType;
         SPECIAL_NAME1 specialNameCD1;
         SPECIAL_NAME2 specialNameCD2;
-        vector<SSR_CD> ssrCodes;
+        SSR_CD ssrCode;
 
         string tempString = "";
 
         getline(inputString, recLoc, ',');
 
-        int pnr_id = pnrUuidGenerator.getID(recLoc);
+        int pnrID = pnrUuidGenerator.getID(recLoc);
 
-        passengerToPnrMap[uuid] = pnr_id;
+        passengerToPnrMap[uuid] = pnrID;
 
 
-        pnrMap[pnr_id]->passengers.push_back(uuid);
+        pnrMap[pnrID]->passengers.push_back(uuid);
 
-        getline(inputString, tempString, ','); 
+        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');
 
         getline(inputString, lastName, ',');
         getline(inputString, firstName, ',');
-        getline(inputString, nationality, ',');
+        getline(inputString, nationality, ',')
+        getline(inputString, tempString, ',');;
         getline(inputString, phoneNum, ',');
         getline(inputString, email, ',');
-        getline(inputString, docID, ',');
         getline(inputString, docType, ',');
+        getline(inputString, docID, ',');
 
-        getline(inputString, tempString, ',');
-        specialNameCD1 =getSpecialName1(tempString);
         getline(inputString, tempString, ',');
         specialNameCD2 = getSpecialName2(tempString);
-        while(getline(inputString, tempString, ',')){
-            ssrCodes.push_back(getSSR(tempString));
-        }
+        getline(inputString, tempString, ',');
+        ssrCode=getSSR(tempString);
+        getline(inputString, tempString, ',');
+        specialNameCD1 =getSpecialName1(tempString);
 
 
-        Passenger* P = new Passenger(uuid,lastName,firstName,nationality,phoneNum,email,docID,docType,specialNameCD1,specialNameCD2,ssrCodes);
-        if(specialNameCD1 != 1){
-            Pnr* pnr=pnrMap[pnr_id];
-            for(int j_id: pnr->journeys){
-                for(int inv_id: journeyMap[j_id]->flights){
-                    Inventory* I=inventoryMap[inv_id];
+        Passenger* curPassenger = new Passenger(uuid,lastName,firstName,nationality,phoneNum,email,docID,docType,specialNameCD1,specialNameCD2,ssrCode);
+        passengerMap[uuid] = curPassenger;
+
+        Pnr* pnr=pnrMap[pnrID];
+        if(specialNameCD1 != INS){
+            for(int journeyID: pnr->journeys){
+                for(int inventoryID: journeyMap[journeyID]->flights){
+                    Inventory* curInventory=inventoryMap[inventoryID];
                     I->bookedInventory++;
-                    int x=journeyMap[j_id]->classCD;
-                    if(x==1) I->fcBookedInventory++;
-                    else if(x==2) I->bcBookedInventory++;
-                    else if(x==3) I->pcBookedInventory++;
-                    else if(x==4) I->ecBookedInventory++;
+                    if(journeyMap[journeyID]->classCD == FC) curInventory->fcBookedInventory++;
+                    else if(journeyMap[journeyID]->classCD == BC) curInventory->bcBookedInventory++;
+                    else if(journeyMap[journeyID]->classCD == PC) curInventory->pcBookedInventory++;
+                    else if(journeyMap[journeyID]->classCD == EC) curInventory->ecBookedInventory++;
                 }
             }
         }
-
-        passengerMap[uuid] = P;
+        else pnr->paxCnt--;
 
         uuid++;
     }

@@ -18,11 +18,11 @@ private:
 public:
     SPECIAL_NAME1 specialName1;
     SPECIAL_NAME2 specialName2;
-    vector<SSR_CD> ssrCodes;
+    SSR_CD ssrCode;
 
     Passenger(int _passengerID, string _lastName, string _firstName, string _nationality,
               string _phoneNum, string _email, string _docId, string _docType,
-              SPECIAL_NAME1 _specialName1, SPECIAL_NAME2 _specialName2, vector<SSR_CD> _ssrCodes):
+              SPECIAL_NAME1 _specialName1, SPECIAL_NAME2 _specialName2, SSR_CD _ssrCode):
               passengerID(_passengerID),
               lastName(_lastName),
               firstName(_firstName),
@@ -33,7 +33,7 @@ public:
               docType(_docType),
               specialName1(_specialName1),
               specialName2(_specialName2),
-              ssrCodes(_ssrCodes){}
+              ssrCode(_ssrCode){}
 };
 
 map<int,Passenger*> passengerMap;       //map<PassengerID,Passenger*>

@@ -18,7 +18,9 @@ void printDetails(ofstream& fw,string recLoc, Pnr* curPnr,int curJourneyID,int s
     fw<<curPnr->creationDate.to_string()<<" ";
 
     if(journeyMap[curJourneyID]->actionCD == ACTION_CD::HK) fw<<"HK"<<" ";
-    else if(journeyMap[curJourneyID]->actionCD == ACTION_CD::PD) fw<<"PD"<<" ";
+    else if(journeyMap[curJourneyID]->actionCD == ACTION_CD::GN) fw<<"GN"<<" ";
+    else if(journeyMap[curJourneyID]->actionCD == ACTION_CD::HL) fw<<"HL"<<" ";
+    else if(journeyMap[curJourneyID]->actionCD == ACTION_CD::XX) fw<<"XX"<<" ";
 
     if(clsCD == CLASS_CD::FC) fw<<"FC"<<" ";
     else if(clsCD == CLASS_CD::BC) fw<<"BC"<<" ";

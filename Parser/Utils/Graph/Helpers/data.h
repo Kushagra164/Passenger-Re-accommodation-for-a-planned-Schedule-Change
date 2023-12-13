@@ -22,7 +22,5 @@ ExtendableVector<vector<int>> graphWD;                      //Unweighted graph f
 ExtendableVector<vector<pair<int,long long>>> graphUV;      //Weighted graph from affected JourneyID(s) to possible flight solution InventoryID(s) cum classCD
 ExtendableVector<vector<int>> graphDV;                      //Unweighted graph from flight Inventory ID(s) to their possible classes
 
-map<char,string> cabinToClassMap;
-
 ExtendableVector <vector<pair<int,long long>>> graphUC;     //Weighted graph from affected JourneyID(s) to possible connection solutions
 ExtendableVector <vector<int>> graphCV;                     //Unweighted graph from connection solution to its solution flight Inventory ID(s)

@@ -26,27 +26,28 @@ using namespace std;
 #define MAXIMUM_ALLOWED_CONNECTING_FLIGHTS_PER_JOURNEY 2
 #define CARRIER_CODE_LENGTH 2
 
-enum ACTION_CD{HK,PD};
+enum ACTION_CD{GN,HK,HL,XX};
 static ACTION_CD getActionCode(string str){
     transform(str.begin(), str.end(), str.begin(), ::toupper);
+    if(str=="GN") return GN;
     if(str=="HK") return HK;
-    if(str=="PD") return PD;
+    if(str=="HL") return HL;
+    if(str=="XX") return XX;
     cout<<"Action Code not found:"<<str<<endl;
     exit(-1);
 }
 
 enum CLASS_CD{FC,BC,PC,EC};
 static CLASS_CD getClassCode(string str){
-    transform(str.begin(), str.end(), str.begin(), ::toupper);
-    if(str=="FC") return FC;
-    if(str=="BC") return BC;
-    if(str=="PC") return PC;
-    if(str=="EC") return EC;
+    if(str=="FirstClass") return FC;
+    if(str=="BusinessClass") return BC;
+    if(str=="PremiumEconomyClass") return PC;
+    if(str=="EconomyClass") return EC;
     cout<<"Class Code not found: "<<str<<endl;
     exit(-1);
 }
 
-enum SPECIAL_NAME1 {SPECIAL_NAME1_NULL,INS,INF,CHD,ADT,UNN,S65};
+enum SPECIAL_NAME1 {SPECIAL_NAME1_NULL,INS,INF,CHD,ADT,S65};
 static SPECIAL_NAME1 getSpecialName1(string str){
     transform(str.begin(), str.end(), str.begin(), ::toupper);
     if(str=="INS") return INS;

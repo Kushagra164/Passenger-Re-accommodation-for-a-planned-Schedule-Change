@@ -15,7 +15,6 @@ void getBookingInput(ifstream& bookingFile){
     getline(bookingFile, line);
 
     int uuid=0;
-    int prevSegSeq = 0;
 
     while (getline(bookingFile, line)) {
         string tempString = "";
@@ -29,14 +28,14 @@ void getBookingInput(ifstream& bookingFile){
 
         Date creationDate;
         ACTION_CD actionCD;
-        char cabinCD;
+        CLASS_CD clsCD;
         int segSeq, paxCnt, flightNum;
         string srcCity;
         string destCity;
-        DateTime arrDTMZ, depDTMZ;
+        DateTime arrDTML, depDTML;
 
         getline(inputString, recLoc, ',');
-        int pnr_id=pnrUuidGenerator.getID(recLoc);
+        int pnrID=pnrUuidGenerator.getID(recLoc);
 
         getline(inputString, tempString, ',');
         creationDate = Date(tempString);  
@@ -46,16 +45,16 @@ void getBookingInput(ifstream& bookingFile){
         actionCD = getActionCode(tempString);
 
         getline(inputString,tempString, ',');
-        cabinCD = tempString[0];
+        clsCD = getClassCode(tempString);
 
         getline(inputString, tempString, ',');
-        segSeq = atoi(tempString.c_str());  
+        getline(inputString, tempString, ',');
         getline(inputString, tempString, ',');
         paxCnt = atoi(tempString.c_str());  
 
-        if(!pnrMap[pnr_id]){
-            Pnr *P = new Pnr(pnr_id,creationDate,paxCnt);
-            pnrMap[pnr_id] = P;
+        if(pnrMap.count(pnrID)==0){
+            Pnr *P = new Pnr(pnrID,creationDate,paxCnt);
+            pnrMap[pnrID] = P;
             flag=false;
             prevSegSeq=0;
         }
@@ -76,41 +75,26 @@ void getBookingInput(ifstream& bookingFile){
         destCity=tempString;
          
 
-        getline(inputString, tempString, ','); 
-        getline(inputString, tempString, ','); 
-        getline(inputString, tempString, ','); 
+        getline(inputString, tempString, ',');
 
         getline(inputString, tempString, ' ');
         date = Date(tempString);  
         getline(inputString, tempString, ',');
         time = Time(tempString);  
-        depDTMZ = DateTime(date, time);
+        depDTML = DateTime(date, time);
 
         getline(inputString, tempString, ' ');
         date = Date(tempString);  
         getline(inputString, tempString, ',');
         time = Time(tempString);  
-        arrDTMZ = DateTime(date, time);
-        int inv_id=getFlight(flightNum,depDTMZ, arrDTMZ);
+        arrDTML = DateTime(date, time);
+        int inventoryID=getFlight(flightNum,depDTML, arrDTML);
 
-        Inventory* I=inventoryMap[inv_id];
-
-        CLASS_CD clsCD = getClassCode(cabinToClassMap[cabinCD]);
-
-        if(flag && (segSeq==prevSegSeq)){
-            Journey* curJourney = journeyMap[uuid];
-            curJourney->flights.push_back(inv_id);
-            curJourney->dest=destCity;
-        }
-        else{
-            if(segSeq<prevSegSeq) prevSegSeq=1;
-            else prevSegSeq++;
-            Journey* curJourney = new Journey(uuid,actionCD,clsCD,srcCity,destCity);
-            journeyMap[uuid] = curJourney;
-            journeyToPnrMap[uuid]=pnr_id;
-            curJourney->flights.push_back(inv_id);
-            pnrMap[pnr_id]->journeys.push_back(uuid);
-            uuid++;
-        }
+        Journey* curJourney = new Journey(uuid,actionCD,clsCD,srcCity,destCity);
+        journeyMap[uuid] = curJourney;
+        journeyToPnrMap[uuid]=pnrID;
+        curJourney->flights.push_back(inventoryID);
+        pnrMap[pnrID]->journeys.push_back(uuid);
+        uuid++;
     }
 }

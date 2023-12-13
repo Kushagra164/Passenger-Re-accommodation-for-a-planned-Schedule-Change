@@ -16,8 +16,6 @@ void getInventoryInput(ifstream& inventoryFile){
     while (getline(inventoryFile, line)) {
         stringstream inputString(line);
 
-        string inventoryID;
-        string scheduleID;
         Date departureDate, arrivalDate;
         int totalCapacity, totalInventory;
         int fcTotalCapacity, fcTotalInventory;
@@ -27,33 +25,38 @@ void getInventoryInput(ifstream& inventoryFile){
 
         string tempString;
 
-        getline(inputString, inventoryID, ',');
-        int uuid = inventoryUuidGenerator.getID(inventoryID);
+        getline(inputString, tempString, ',');       //InventoryID
+        int uuid = inventoryUuidGenerator.getID(tempString);
 
-        getline(inputString, scheduleID, ',');
+        getline(inputString, tempString, ',');       //ScheduleID
+        int scheduleID = scheduleUuidGenerator.getID(tempString);
 
-        int s_id = scheduleUuidGenerator.getID(scheduleID);
+        inventoryToScheduleMap[uuid]=scheduleID;
 
-        inventoryToScheduleMap[uuid]=s_id;
+        getline(inputString, tempString, ',');        //CarrierCode
 
-        if(SCHEDULE_LEVEL_CANCELLATION && scheduleMap[s_id]->status == SCHEDULE_STATUS::SCHEDULE_CANCELLED) CancelledFlights.insert(uuid);
+        if(SCHEDULE_LEVEL_CANCELLATION && scheduleMap[scheduleID]->status == SCHEDULE_STATUS::SCHEDULE_CANCELLED) CancelledFlights.insert(uuid);
 
-        scheduleMap[s_id]->DepartureDates.push_back(uuid);
+        scheduleMap[scheduleID]->DepartureDates.push_back(uuid);
 
-        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');         //DepKey
 
-        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');         //FlightNum
 
-        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');         //AircraftType
+
+        getline(inputString, tempString, ',');        //DepartureDate
         departureDate = Date(tempString);
 
+        getline(inputString, tempString, ',');         //DepartureDateTime
 
-        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ' ');         //Arrival Date
         arrivalDate = Date(tempString);
 
-        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');         //Arrival Time
 
-        getline(inputString, tempString, ',');
+        getline(inputString, tempString, ',');         //Src
+        getline(inputString, tempString, ',');         //Dest
 
         getline(inputString, tempString, ','); totalCapacity = atoi(tempString.c_str());
         getline(inputString, tempString, ','); totalInventory = atoi(tempString.c_str());
@@ -87,15 +90,7 @@ void getInventoryInput(ifstream& inventoryFile){
         getline(inputString, tempString, ','); ecTotalInventory = atoi(tempString.c_str());
         getline(inputString, tempString, ','); 
         getline(inputString, tempString, ','); 
-        getline(inputString, tempString, ','); 
-
-
-        for (auto &ch: {"FC", "BC", "PC", "EC"}) {
-            getline(inputString, tempString, '"');
-                 
-            getline(inputString, tempString, '"');
-            for (auto &c: tempString) if (c >= 'A' and c <= 'Z') cabinToClassMap[c] = ch;
-        }
+        getline(inputString, tempString, ',');
 
 
         Inventory* newInventory;
