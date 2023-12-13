@@ -4,11 +4,11 @@
 #include "DateTime/dateTime.h"
 #include "../DataModels/inventory.h"
 #include "../DataModels/schedule.h"
-using namespace std;
+using namespace std
 // Map to get the corresponding InventoryID for a pair of Flight Number and Departure DTML
 // Used while parsing passenger booking details and creating Journey
 
-multimap<pair<int,pair<DateTime,DateTime>>,int> flightNumberWithDateTimeToInventoryMap;       //map< pair<FlightNum,pair<DEP_DTML,ARR_DTML>> , InventoryID >
+map<pair<pair<int,CityPair>,pair<DateTime,DateTime>>,int> flightNumberWithDateTimeToInventoryMap;       //map< pair<FlightNum,pair<DEP_DTML,ARR_DTML>> , InventoryID >
 bool flightInventoryMapCal = false;
 
 void calculateFlightInventoryMap(){
@@ -21,44 +21,48 @@ void calculateFlightInventoryMap(){
         DateTime departureTime(curInventory.departureDate, curSchedule->departureTime);
         DateTime arrivalTime(curInventory.arrivalDate, curSchedule->arrivalTime);
 
-        flightNumberWithDateTimeToInventoryMap.insert(
+        auto cur = make_pair(
+                    make_pair(
+                            curSchedule->flightNum,
+                            CityPair(curSchedule->srcCity, curSchedule->destCity)
+                            ),
+                    make_pair(
+                                departureTime,
+                                arrivalTime
+                            )
+                );
+        assert(flightNumberWithDateTimeToInventoryMap.find(cur) == flightNumberWithDateTimeToInventoryMap.end());
+        flightNumberWithDateTimeToInventoryMap[cur].insert(
             make_pair(
-                make_pair(
-                    curSchedule->flightNum,
-                    make_pair(departureTime, arrivalTime)
-                ),
+                cur,
                 curInvID
             )
         );
     }
 }
 
-int getFlight(int flightNumber,DateTime departureTime, DateTime arrivalTime){
-
+int getFlight(int flightNumber,string srcCity, string destCity,DateTime departureTime, DateTime arrivalTime){
     if(!flightInventoryMapCal){
         calculateFlightInventoryMap();
         flightInventoryMapCal = true;
     }
 
-    pair<int,pair<DateTime,DateTime>> cur = make_pair(
-        flightNumber,
-        make_pair(
-            departureTime,
-            arrivalTime
-        )      
-    );
+    auto cur = make_pair(
+                make_pair(
+                        flightNumber,
+                        CityPair(srcCity, destCity),
+                ),
+                make_pair(
+                        departureTime,
+                        arrivalTime
+                        )
 
-    int cnt = flightNumberWithDateTimeToInventoryMap.count(cur);
+            );
 
-    if(cnt==0){
+    if(flightNumberWithDateTimeToInventoryMap.find(cur)==flightNumberWithDateTimeToInventoryMap.end()){
         cout<<"No flight found"<<endl;
         return -1;
     }
-    else{
-        auto it = flightNumberWithDateTimeToInventoryMap.find(cur);
-        if(cnt>1){
-            cout<<"Too many matching flight found"<<endl;
-        }
-        return it->second;
-    }
+
+    return flightNumberWithDateTimeToInventoryMap[cur];
 }

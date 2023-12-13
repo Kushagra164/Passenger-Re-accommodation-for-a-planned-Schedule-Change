@@ -31,16 +31,4 @@ class CityPair{
             return make_pair(srcCity,destCity) < make_pair(other.srcCity, other.destCity);
         }
 };
-class FlightNumberMap{
-    map<int,CityPair> flightNumberMap;
-    public:
-        CityPair& operator [](int ind){
-            if(flightNumberMap.find(ind)==flightNumberMap.end()){
-                flightNumberMap[ind] = CityPair();
-            }
-            return flightNumberMap[ind];
-        }
-};
-
-FlightNumberMap flightNumberMap;
-map<CityPair,int> cityToFlightNumberMap;
+map<int,vector<CityPair>> flightNumberMap;

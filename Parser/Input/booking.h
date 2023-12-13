@@ -88,7 +88,7 @@ void getBookingInput(ifstream& bookingFile){
         getline(inputString, tempString, ',');
         time = Time(tempString);  
         arrDTML = DateTime(date, time);
-        int inventoryID=getFlight(flightNum,depDTML, arrDTML);
+        int inventoryID=getFlight(flightNum,srcCity,destCity,depDTML, arrDTML);
 
         Journey* curJourney = new Journey(uuid,actionCD,clsCD,srcCity,destCity);
         journeyMap[uuid] = curJourney;

@@ -55,8 +55,8 @@ void getScheduleInput(ifstream& scheduleFile){
         assert(tempString.size()==CITY_CODE_LENGTH);
         destCity=tempString;
  
-        flightNumberMap[flightNum]= CityPair(srcCity,destCity);
-        cityToFlightNumberMap[CityPair(srcCity,destCity)]=flightNum;
+        flightNumberMap[flightNum].push_back(CityPair(srcCity,destCity));
+
 
         getline(inputString, tempString, ',');
         departureTime=Time(tempString);
@@ -85,7 +85,7 @@ void getScheduleInput(ifstream& scheduleFile){
 
 
         Schedule* S = new Schedule(uuid,carrierCD,equipmentNo,departureTime,arrivalTime,
-                                   startDate,endDate,flightPattern,flightNum,status);
+                                   startDate,endDate,flightPattern,flightNum,srcCity,destCity,status);
 
         scheduleMap[uuid]=S;
     }
