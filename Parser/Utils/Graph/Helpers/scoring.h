@@ -9,6 +9,7 @@ int pnrScore(int journeyId, CLASS_CD proposed){
     for (auto &passenger_id: pnr->passengers){
         Passenger* passenger = passengerMap[passenger_id];
         if(passenger->ssrCode != SSR_CD_NULL) pnr_score += SSR_SCORE;
+        pnr_score += loyaltyScoresMap[passenger->loyaltyCode];
         pnr_score += PAX_SCORE;
     }
     pnr_score += classScoresMap[proposed];

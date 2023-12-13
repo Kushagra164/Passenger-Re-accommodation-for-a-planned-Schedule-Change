@@ -1,6 +1,5 @@
 #pragma once
 #include<fstream>
-#include<string>
 #include<functional>
 #include "../Input/schedule.h"
 #include "../Input/inventory.h"
@@ -126,19 +125,21 @@ int main(int argc,char* argv[]) {
 
         int solvedDefault = 0;
 
-        function<bool(int, int)> doit = [&](int d, int u)->bool{
+        function<bool(int, int)> checkDefaultSolution = [&](int d, int u)->bool{
             for(auto &wd: edgesWD){
                 if (d == wd.second){
                     for(auto &wu: edgesWU){
                         if (wd.first == wu.first and wu.second == u) return true;
                     }
                 }
+
             }
+            return false;
         };
 
         for (auto &uv: edgesUV){
             for (auto &dv: edgesDV){
-                if (uv.second == dv.second and doit(dv.first,uv.first)){
+                if (uv.second == dv.second and checkDefaultSolution(dv.first,uv.first)){
                     solvedDefault += 1;
                     break;
                 }
@@ -154,7 +155,7 @@ int main(int argc,char* argv[]) {
         output << solvedJourneys - solvedDefault << " ";
         output << totalAffectedJourneys - solvedJourneys << endl;
         
-        delay.display();
+        delay.display(output);
     }
 
 }

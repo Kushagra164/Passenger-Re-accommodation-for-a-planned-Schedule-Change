@@ -25,6 +25,7 @@ void getPassengerInput(ifstream& passengerFile){
         SPECIAL_NAME1 specialNameCD1;
         SPECIAL_NAME2 specialNameCD2;
         SSR_CD ssrCode;
+        LOYALTY_CD loyaltyCode;
 
         string tempString = "";
 
@@ -56,8 +57,13 @@ void getPassengerInput(ifstream& passengerFile){
         getline(inputString, tempString, ',');
         specialNameCD1 =getSpecialName1(tempString);
 
+        getline(inputString, tempString, ',');
 
-        Passenger* curPassenger = new Passenger(uuid,lastName,firstName,nationality,phoneNum,email,docID,docType,specialNameCD1,specialNameCD2,ssrCode);
+        getline(inputString, tempString, ',');
+        loyaltyCode = getLoyalty(tempString);
+
+
+        Passenger* curPassenger = new Passenger(uuid,lastName,firstName,nationality,phoneNum,email,docID,docType,specialNameCD1,specialNameCD2,ssrCode,loyaltyCode);
         passengerMap[uuid] = curPassenger;
 
         Pnr* pnr=pnrMap[pnrID];

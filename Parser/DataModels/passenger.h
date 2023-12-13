@@ -19,10 +19,11 @@ public:
     SPECIAL_NAME1 specialName1;
     SPECIAL_NAME2 specialName2;
     SSR_CD ssrCode;
+    LOYALTY_CD loyaltyCode;
 
     Passenger(int _passengerID, string _lastName, string _firstName, string _nationality,
               string _phoneNum, string _email, string _docId, string _docType,
-              SPECIAL_NAME1 _specialName1, SPECIAL_NAME2 _specialName2, SSR_CD _ssrCode):
+              SPECIAL_NAME1 _specialName1, SPECIAL_NAME2 _specialName2, SSR_CD _ssrCode,Loyalty_CD _loyaltyCode):
               passengerID(_passengerID),
               lastName(_lastName),
               firstName(_firstName),
@@ -33,7 +34,8 @@ public:
               docType(_docType),
               specialName1(_specialName1),
               specialName2(_specialName2),
-              ssrCode(_ssrCode){}
+              ssrCode(_ssrCode),
+              loyaltyCode(_loyaltyCode){}
 };
 
 map<int,Passenger*> passengerMap;       //map<PassengerID,Passenger*>

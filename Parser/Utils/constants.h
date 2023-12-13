@@ -84,6 +84,14 @@ static SSR_CD getSSR(string str){
     return SSR_CD_NULL;
 }
 
+enum LOYALTY_CD {LOYALTY_NULL,PLATINUM,GOLD,SILVER};
+static LOYALTY_CD getLoyalty(string str){
+    if(str=="Platinum") return PLATINUM;
+    if(str=="Gold") return GOLD;
+    if(str=="Silver") return SILVER;
+    return LOYALTY_NULL;
+}
+
 enum SCHEDULE_STATUS{SCHEDULE_SCHEDULED,SCHEDULE_PLANNED,SCHEDULE_CANCELLED};
 static SCHEDULE_STATUS getScheduleStatus(string status){
     transform(status.begin(), status.end(), status.begin(), ::toupper);
@@ -106,3 +114,4 @@ static INVENTORY_STATUS getInventoryStatus(string status){
 }
 
 map<CLASS_CD,int> classScoresMap{{(CLASS_CD)FC,25},{(CLASS_CD)BC,20},{(CLASS_CD)PC,15},{(CLASS_CD)EC,10}};
+map<LOYALTY_CD,int> loyaltyScoresMap{{(LOYALTY_CD)PLATINUM,9},{(LOYALTY_CD)GOLD,8},{(LOYALTY_CD)SILVER,7},{(LOYALTY_CD)LOYALTY_NULL,0}};
