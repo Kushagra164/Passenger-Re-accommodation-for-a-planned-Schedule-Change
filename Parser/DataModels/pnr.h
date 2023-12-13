@@ -8,7 +8,7 @@ class Pnr{
 private:
     int pnrID;
 public:
-    Date creationDate;
+    DateTime creationDate;
     int paxCnt;
     vector<int> passengers;          //vector<PassengerID>
     vector<int> journeys;            //vector<JourneyID>

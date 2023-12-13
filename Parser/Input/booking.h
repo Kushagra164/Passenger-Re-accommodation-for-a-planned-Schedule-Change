@@ -26,7 +26,7 @@ void getBookingInput(ifstream& bookingFile){
 
         string recLoc;
 
-        Date creationDate;
+        DateTime creationDate;
         ACTION_CD actionCD;
         CLASS_CD clsCD;
         int segSeq, paxCnt, flightNum;
@@ -37,8 +37,11 @@ void getBookingInput(ifstream& bookingFile){
         getline(inputString, recLoc, ',');
         int pnrID=pnrUuidGenerator.getID(recLoc);
 
+        getline(inputString, tempString, ' ');
+        date = Date(tempString);
         getline(inputString, tempString, ',');
-        creationDate = Date(tempString);  
+        time = Time(tempString);
+        creationDate=DateTime(date,time);
 
         getline(inputString, tempString, ','); 
         getline(inputString,tempString, ',');
@@ -88,6 +91,7 @@ void getBookingInput(ifstream& bookingFile){
         getline(inputString, tempString, ',');
         time = Time(tempString);  
         arrDTML = DateTime(date, time);
+
         int inventoryID=getFlight(flightNum,srcCity,destCity,depDTML, arrDTML);
 
         Journey* curJourney = new Journey(uuid,actionCD,clsCD,srcCity,destCity);
