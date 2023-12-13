@@ -95,7 +95,14 @@ void getInventoryInput(ifstream& inventoryFile){
 
         Inventory* newInventory;
 
-        if(INVENTORY_LEVEL_CANCELLATION){
+        if(RANDOM_INPUT_SIMULATIOM){
+            newInventory = new Inventory(uuid, departureDate, arrivalDate, totalCapacity, totalInventory,0,
+                                         fcTotalCapacity, fcTotalInventory,0,
+                                         bcTotalCapacity,bcTotalInventory,0,
+                                         pcTotalCapacity, pcTotalInventory,0,
+                                         ecTotalCapacity, ecTotalInventory, 0);
+        }
+        else{
             string status;
             Time delayTime;
             getline(inputString, tempString, ',');
@@ -117,13 +124,6 @@ void getInventoryInput(ifstream& inventoryFile){
             if(newInventory->status == INVENTORY_STATUS::INVENTORY_DELAYED) DelayedFlights[uuid]=delayTime;
 
 
-        }
-        else{
-            newInventory = new Inventory(uuid, departureDate, arrivalDate, totalCapacity, totalInventory,0,
-                                        fcTotalCapacity, fcTotalInventory,0,
-                                        bcTotalCapacity,bcTotalInventory,0,
-                                        pcTotalCapacity, pcTotalInventory,0,
-                                        ecTotalCapacity, ecTotalInventory, 0);
         }
         
         inventoryMap[uuid]=newInventory;

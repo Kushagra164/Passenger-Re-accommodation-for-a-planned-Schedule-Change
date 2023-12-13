@@ -3,8 +3,9 @@
 #include<algorithm>
 using namespace std;
 #define CITY_CODE_LENGTH 3
-#define SCHEDULE_LEVEL_CANCELLATION true
-#define INVENTORY_LEVEL_CANCELLATION false
+#define RANDOM_INPUT_SIMULATION true
+#define PROBABILITY_FLIGHT_CANCELLED 0.6
+#define PROBABILITY_FLIGHT_AFFECTED 0.1
 #define SSR_SCORE 1
 #define PAX_SCORE 1
 #define MAXIMUM_ALLOWED_TIME_DIFF Time(72, 0)

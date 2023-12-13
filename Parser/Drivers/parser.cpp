@@ -5,6 +5,7 @@
 #include "../Input/booking.h"
 #include "../Input/passenger.h"
 #include "../Utils/graphOutput.h"
+#include <cstdlib>
 using namespace std;
 
 int main(int argc,char* argv[]) {
@@ -25,6 +26,16 @@ int main(int argc,char* argv[]) {
     getInventoryInput(inventoryFile);
     getBookingInput(bookingFile);
     getPassengerInput(passengerFile);
+
+    //Random Input Simulation
+    for(auto [inventoryID,curInventory]:inventoryMap){
+        double x=rand()%10000;
+        x=x/100000;
+        if(x<PROBABILITY_FLIGHT_AFFECTED){
+
+        }
+        else
+    }
 
      //Graph Creation
     graphWUGenerator();
