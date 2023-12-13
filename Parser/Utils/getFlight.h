@@ -1,4 +1,4 @@
-// we hope in the final run this is not needed
+// we hoped in the final run this is not needed
 #pragma once
 #include<map>
 #include "DateTime/dateTime.h"
