@@ -23,7 +23,7 @@ public:
 
     Passenger(int _passengerID, string _lastName, string _firstName, string _nationality,
               string _phoneNum, string _email, string _docId, string _docType,
-              SPECIAL_NAME1 _specialName1, SPECIAL_NAME2 _specialName2, SSR_CD _ssrCode,Loyalty_CD _loyaltyCode):
+              SPECIAL_NAME1 _specialName1, SPECIAL_NAME2 _specialName2, SSR_CD _ssrCode,LOYALTY_CD _loyaltyCode):
               passengerID(_passengerID),
               lastName(_lastName),
               firstName(_firstName),

@@ -43,8 +43,8 @@ void getPassengerInput(ifstream& passengerFile){
 
         getline(inputString, lastName, ',');
         getline(inputString, firstName, ',');
-        getline(inputString, nationality, ',')
-        getline(inputString, tempString, ',');;
+        getline(inputString, nationality, ',');
+        getline(inputString, tempString, ',');
         getline(inputString, phoneNum, ',');
         getline(inputString, email, ',');
         getline(inputString, docType, ',');
@@ -70,8 +70,8 @@ void getPassengerInput(ifstream& passengerFile){
         if(specialNameCD1 != INS){
             for(int journeyID: pnr->journeys){
                 for(int inventoryID: journeyMap[journeyID]->flights){
-                    Inventory* curInventory=inventoryMap[inventoryID];
-                    I->bookedInventory++;
+                    Inventory* curInventory = inventoryMap[inventoryID];
+                    curInventory->bookedInventory++;
                     if(journeyMap[journeyID]->classCD == FC) curInventory->fcBookedInventory++;
                     else if(journeyMap[journeyID]->classCD == BC) curInventory->bcBookedInventory++;
                     else if(journeyMap[journeyID]->classCD == PC) curInventory->pcBookedInventory++;
@@ -83,4 +83,5 @@ void getPassengerInput(ifstream& passengerFile){
 
         uuid++;
     }
+    cout<<"Passenger Finished"<<endl;
 }

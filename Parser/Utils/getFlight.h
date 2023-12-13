@@ -4,7 +4,7 @@
 #include "DateTime/dateTime.h"
 #include "../DataModels/inventory.h"
 #include "../DataModels/schedule.h"
-using namespace std
+using namespace std;
 // Map to get the corresponding InventoryID for a pair of Flight Number and Departure DTML
 // Used while parsing passenger booking details and creating Journey
 
@@ -12,14 +12,13 @@ map<pair<pair<int,CityPair>,pair<DateTime,DateTime>>,int> flightNumberWithDateTi
 bool flightInventoryMapCal = false;
 
 void calculateFlightInventoryMap(){
-    for(auto x:inventoryMap){
-        int curInvID = x.first;
-        Inventory curInventory= *(x.second);
-        int curScheduleID = inventoryToScheduleMap[curInvID];
+    for(auto [curInventoryID, curInventory]:inventoryMap){
+        int curScheduleID = inventoryToScheduleMap[curInventoryID];
+        //cout<<__LINE__<<" "<<inventoryUuidGenerator.getString(curInventoryID)<<" "<<scheduleUuidGenerator.getString(curScheduleID)<<endl;
         Schedule *curSchedule = scheduleMap[curScheduleID];
 
-        DateTime departureTime(curInventory.departureDate, curSchedule->departureTime);
-        DateTime arrivalTime(curInventory.arrivalDate, curSchedule->arrivalTime);
+        DateTime departureTime(curInventory->departureDate, curSchedule->departureTime);
+        DateTime arrivalTime(curInventory->arrivalDate, curSchedule->arrivalTime);
 
         auto cur = make_pair(
                     make_pair(
@@ -31,13 +30,10 @@ void calculateFlightInventoryMap(){
                                 arrivalTime
                             )
                 );
+        //cout<<(curSchedule->flightNum)<<" "<<(curSchedule->srcCity)<<" "<<curSchedule->destCity<<endl;
+        //cout<<departureTime.to_string()<<" "<<arrivalTime.to_string()<<endl;
         assert(flightNumberWithDateTimeToInventoryMap.find(cur) == flightNumberWithDateTimeToInventoryMap.end());
-        flightNumberWithDateTimeToInventoryMap[cur].insert(
-            make_pair(
-                cur,
-                curInvID
-            )
-        );
+        flightNumberWithDateTimeToInventoryMap[cur] = curInventoryID;
     }
 }
 
@@ -50,13 +46,12 @@ int getFlight(int flightNumber,string srcCity, string destCity,DateTime departur
     auto cur = make_pair(
                 make_pair(
                         flightNumber,
-                        CityPair(srcCity, destCity),
+                        CityPair(srcCity, destCity)
                 ),
                 make_pair(
                         departureTime,
                         arrivalTime
-                        )
-
+                )
             );
 
     if(flightNumberWithDateTimeToInventoryMap.find(cur)==flightNumberWithDateTimeToInventoryMap.end()){

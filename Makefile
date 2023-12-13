@@ -1,3 +1,5 @@
+test:
+	python Parser/Drivers/excelToCsv.py	--input_file_path="./Input/schedule.xlsx"	--output_file_path="./Processing/Intermediates/schedule.csv"
 excel-to-csv:
 	python Parser/Drivers/excelToCsv.py	--input_file_path="./Input/inventory.xlsx"	--output_file_path="./Processing/Intermediates/inventory.csv"
 	python Parser/Drivers/excelToCsv.py	--input_file_path="./Input/booking.xlsx"	--output_file_path="./Processing/Intermediates/booking.csv"
@@ -50,7 +52,7 @@ edges-to-txt:
 txt-to-excel:
 	python ./Parser/Drivers/txtToExcel.py \
 	--input_file_path ./Processing/Intermediates/solution.txt \
-	--output_folder ./Output/Experiment
+	--output_folder ./Output
 
 clean-Executables:
 	rm -rf ./Processing/Executables

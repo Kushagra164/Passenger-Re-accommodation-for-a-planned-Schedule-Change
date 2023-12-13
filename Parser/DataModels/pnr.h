@@ -13,7 +13,7 @@ public:
     vector<int> passengers;          //vector<PassengerID>
     vector<int> journeys;            //vector<JourneyID>
 
-    Pnr(int _pnrID,Date _creationDate, int _paxCnt):
+    Pnr(int _pnrID,DateTime _creationDate, int _paxCnt):
         pnrID(_pnrID), creationDate(_creationDate), paxCnt(_paxCnt){}
 };
 

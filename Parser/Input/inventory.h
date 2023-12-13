@@ -125,7 +125,8 @@ void getInventoryInput(ifstream& inventoryFile){
                                         pcTotalCapacity, pcTotalInventory,0,
                                         ecTotalCapacity, ecTotalInventory, 0);
         }
-
+        
         inventoryMap[uuid]=newInventory;
     }
+    cout<<"Inventory Finished"<<endl;
 }

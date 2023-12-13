@@ -59,7 +59,6 @@ void getBookingInput(ifstream& bookingFile){
             Pnr *P = new Pnr(pnrID,creationDate,paxCnt);
             pnrMap[pnrID] = P;
             flag=false;
-            prevSegSeq=0;
         }
 
 
@@ -91,7 +90,6 @@ void getBookingInput(ifstream& bookingFile){
         getline(inputString, tempString, ',');
         time = Time(tempString);  
         arrDTML = DateTime(date, time);
-
         int inventoryID=getFlight(flightNum,srcCity,destCity,depDTML, arrDTML);
 
         Journey* curJourney = new Journey(uuid,actionCD,clsCD,srcCity,destCity);
@@ -101,4 +99,5 @@ void getBookingInput(ifstream& bookingFile){
         pnrMap[pnrID]->journeys.push_back(uuid);
         uuid++;
     }
+    cout<<"Booking Finished"<<endl;
 }

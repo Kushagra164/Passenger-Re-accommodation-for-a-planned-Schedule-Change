@@ -47,7 +47,7 @@ static CLASS_CD getClassCode(string str){
     exit(-1);
 }
 
-enum SPECIAL_NAME1 {SPECIAL_NAME1_NULL,INS,INF,CHD,ADT,S65};
+enum SPECIAL_NAME1 {SPECIAL_NAME1_NULL,INS,INF,CHD,ADT,S65,UNN};
 static SPECIAL_NAME1 getSpecialName1(string str){
     transform(str.begin(), str.end(), str.begin(), ::toupper);
     if(str=="INS") return INS;

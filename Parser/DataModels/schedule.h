@@ -33,9 +33,6 @@ public:
             if(endDate<startDate){
                 cout<<"Schedule Date Mismatch"<<endl;
             }
-            if(arrivalTime<departureTime){
-                cout<<"Schedule timings mismatch"<<endl;
-            }
             if(carrierCD.length()!=CARRIER_CODE_LENGTH){
                 cout<<"Carrier Code length differs:"<<carrierCD<<endl;
             }

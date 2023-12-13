@@ -89,4 +89,5 @@ void getScheduleInput(ifstream& scheduleFile){
 
         scheduleMap[uuid]=S;
     }
+    cout<<"Schedule Finished"<<endl;
 }

@@ -9,14 +9,15 @@ vector<int> findAllRelevantFlightsFromSrc(int originalInventoryID){
 
     vector<int> result;
 
-    auto [srcCity, destCity] = flightNumberMap[originalSchedule->flightNum];
+    auto srcCity = originalSchedule->srcCity;
+    auto destCity = originalSchedule->destCity;
 
     for(auto [curInventoryID, curInventory]: inventoryMap){
         if (curInventoryID == originalInventoryID) continue;
         Schedule* curSchedule = scheduleMap[inventoryToScheduleMap[curInventoryID]];
         if ((CancelledFlights.find(curInventoryID)==CancelledFlights.end()) 
-                && (flightNumberMap[curSchedule->flightNum].srcCity == srcCity) 
-                && (flightNumberMap[curSchedule->flightNum].destCity != destCity)){
+                && (curSchedule->srcCity == srcCity) 
+                && (curSchedule->destCity != destCity)){
             
             Time ArrivalTimeDiff = getArrTimeDiff(curInventoryID, originalInventoryID);
             if (ArrivalTimeDiff <= MAXIMUM_ALLOWED_TIME_DIFF){
@@ -34,13 +35,15 @@ vector<int> findAllRelevantFlightsToDest(int originalInventoryID){
 
     vector<int> result;
 
-    auto [srcCity, destCity] = flightNumberMap[originalSchedule->flightNum];
+    auto srcCity = originalSchedule->srcCity;
+    auto destCity = originalSchedule->destCity;
+
     for(auto [curInventoryID, curInventory]: inventoryMap){
         if (curInventoryID == originalInventoryID) continue;
         Schedule* curSchedule = scheduleMap[inventoryToScheduleMap[curInventoryID]];
         if ((CancelledFlights.find(curInventoryID)==CancelledFlights.end()) 
-                && (flightNumberMap[curSchedule->flightNum].srcCity != srcCity) 
-                && (flightNumberMap[curSchedule->flightNum].destCity == destCity)){
+                && (curSchedule->srcCity != srcCity) 
+                && (curSchedule->destCity == destCity)){
 
             Time DepartureTimeDiff = getDepTimeDiff(curInventoryID, originalInventoryID);
             if (DepartureTimeDiff <= MAXIMUM_ALLOWED_TIME_DIFF){
@@ -60,7 +63,7 @@ vector<vector<int>> getConnectingFlights(vector<int> &fromSrc, vector<int> &toDe
         Schedule* srcSchedule = scheduleMap[inventoryToScheduleMap[srcFlight]];
         for(int destFlight: toDest){
             Schedule* destSchedule = scheduleMap[inventoryToScheduleMap[destFlight]];
-            if((flightNumberMap[srcSchedule->flightNum].destCity == flightNumberMap[destSchedule->flightNum].srcCity) &&
+            if((srcSchedule->destCity == destSchedule->srcCity) &&
                     (getArrDepTimeDiff(srcFlight, destFlight)) >= MINIMUM_CONNECTING_TIME){
                 connectingFlights.push_back({srcFlight,destFlight});
             }
