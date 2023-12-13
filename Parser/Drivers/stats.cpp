@@ -28,7 +28,7 @@ class Delay{
             output<<lt12<<" ";
             output<<lt18<<" ";
             output<<lt24<<" ";
-            output<<mt24<<endl;;
+            output<<mt24<<endl;
         }    
 };
 
