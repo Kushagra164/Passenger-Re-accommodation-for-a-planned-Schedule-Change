@@ -7,7 +7,10 @@ void graphWDGenerator(){
         int curWIdx = wIndexGenerator.getIndex(cancelledInventoryID);
         for (auto [inventoryID, _]: inventoryMap){
             if ((CancelledFlights.find(inventoryID) == CancelledFlights.end()) 
-                    && (isSameCityPair(inventoryID, cancelledInventoryID))){
+                    && (isSameCityPair(inventoryID, cancelledInventoryID))
+                    && ((getDepTimeDiff(cancelledInventoryID,inventoryID)
+                    + getArrTimeDiff(cancelledInventoryID,inventoryID))
+                    <= MAXIMUM_ALLOWED_TIME_DIFF*2)){
                 int curDIdx = dIndexGenerator.getIndex(inventoryID);
                 graphWD[curWIdx].push_back(curDIdx);
             }

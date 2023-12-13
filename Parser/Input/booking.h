@@ -16,6 +16,8 @@ void getBookingInput(ifstream& bookingFile){
 
     int uuid=0;
 
+    int multipleFlightJourneys=0;
+
     map<int,int> pnrToFlightMap;               //To generate connections
 
     while (getline(bookingFile, line)) {
@@ -99,7 +101,7 @@ void getBookingInput(ifstream& bookingFile){
             int prevInventoryID = pnrToFlightMap[pnrID];
             DateTime prevArrivalTime = DateTime(inventoryMap[prevInventoryID]->arrivalDate,scheduleMap[inventoryToScheduleMap[prevInventoryID]]->arrivalTime);
             DateTime curDepartureTime = DateTime(inventoryMap[curInventoryID]->departureDate,scheduleMap[inventoryToScheduleMap[curInventoryID]]->departureTime);
-            Journey* curJourney = pnrMap[pnrID]->journeys.back();
+            Journey* curJourney = journeyMap[pnrMap[pnrID]->journeys.back()];
             cond = (((curDepartureTime-prevArrivalTime) <= MAXIMUM_ALLOWED_TIME_DIFF_FOR_CONNECTING) &&
                     (scheduleMap[inventoryToScheduleMap[curInventoryID]]->destCity != curJourney->src) &&
                     (scheduleMap[inventoryToScheduleMap[curInventoryID]]->srcCity == curJourney->dest));
@@ -107,6 +109,8 @@ void getBookingInput(ifstream& bookingFile){
             if(cond){
                 curJourney->dest = scheduleMap[inventoryToScheduleMap[curInventoryID]]->destCity;
                 curJourney->flights.push_back(curInventoryID);
+
+                if(curJourney->flights.size()==2) multipleFlightJourneys++;
             }
         }
 
@@ -124,4 +128,5 @@ void getBookingInput(ifstream& bookingFile){
 
     }
     cout<<"Booking Finished   Total Journeys: "<<uuid+1<<endl;
+    cout<<"Multiple Flight Journeys: "<<multipleFlightJourneys<<endl;
 }
