@@ -154,7 +154,7 @@ int main(int argc,char* argv[]) {
         output << solvedJourneys - solvedDefault << " ";
         output << totalAffectedJourneys - solvedJourneys << endl;
         
-        delay.display();
+        delay.display(output);
     }
 
 }
