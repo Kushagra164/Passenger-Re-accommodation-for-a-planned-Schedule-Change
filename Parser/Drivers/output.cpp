@@ -73,122 +73,114 @@ int main(int argc,char* argv[]) {
     //Output File Generation
     ifstream input(argv[5]);
 
-    int noOfSolutions;
-    input>>noOfSolutions;
-
     string outputFilePath = argv[6];
     ofstream output(outputFilePath, ofstream::out);
 
-    output<<noOfSolutions<<"\n";
-    for(int i=0;i<noOfSolutions;i++){
-        //For Output
-        map<int,vector<pair<int,CLASS_CD>>> journeyToConnectingMap;
-        map<int,pair<int,CLASS_CD>> journeyToFlightMap;
-        map<int,int> cancelledFlightToSolutionFlightMap;
+    //For Output
+    map<int,vector<pair<int,CLASS_CD>>> journeyToConnectingMap;
+    map<int,pair<int,CLASS_CD>> journeyToFlightMap;
+    map<int,int> cancelledFlightToSolutionFlightMap;
 
-        //For Statistics
-        int solvedJourneys = 0;
-        set<pair<int, int>> edgesUC, edgesUV, edgesWD;
-        Delay delay;
-        int oneOne = 0;
-        int oneMul = 0;
-        int mulOne = 0;
-        int mulMul = 0;
+    //For Statistics
+    int solvedJourneys = 0;
+    set<pair<int, int>> edgesUC, edgesUV, edgesWD;
+    Delay delay;
+    int oneOne = 0;
+    int oneMul = 0;
+    int mulOne = 0;
+    int mulMul = 0;
 
-        int noOfUCEdges;
-        input>>noOfUCEdges;
+    int noOfUCEdges;
+    input>>noOfUCEdges;
 
-        solvedJourneys += noOfUCEdges;
+    solvedJourneys += noOfUCEdges;
 
-        for(int j=0;j<noOfUCEdges;j++){
-            int u,c;
-            input>>u>>c;
-            int journeyID = uIndexGenerator.getVal(u);
-            journeyToConnectingMap[journeyID]=cIndexGenerator.getVal(c);
+    for(int j=0;j<noOfUCEdges;j++){
+        int u,c;
+        input>>u>>c;
+        int journeyID = uIndexGenerator.getVal(u);
+        journeyToConnectingMap[journeyID]=cIndexGenerator.getVal(c);
 
-            Time totalDelay = Time(0, 0);
-            edgesUC.insert(make_pair(u, c));
-            journeyMap[journeyID]->flights.size() == 1 ? oneMul += 1: mulMul += 1;
-            vector<int> curFlights;
-            for(auto x:cIndexGenerator.getVal(c)) curFlights.push_back(x.first);
-            totalDelay += getDepTimeDiff((journeyMap[journeyID]->flights).front(),curFlights.front()) + getArrTimeDiff((journeyMap[journeyID]->flights).back(),curFlights.back());
-            delay.checkAndIncrement(totalDelay.value()/2);
-        }
-
-        int noOfUVEdges;
-        input>>noOfUVEdges;
-
-        solvedJourneys += noOfUVEdges;
-
-        for(int j=0;j<noOfUVEdges;j++){
-            int u,v;
-            input>>u>>v;
-
-            int journeyID = uIndexGenerator.getVal(u);
-
-            journeyToFlightMap[journeyID]=vIndexGenerator.getVal(v);
-
-            Time totalDelay = Time(0, 0);
-            edgesUV.insert(make_pair(u, v));
-            journeyMap[journeyID]->flights.size() == 1 ? oneOne += 1: mulOne += 1;
-            pair<int, CLASS_CD> pr = vIndexGenerator.getVal(v);
-            totalDelay += getDepTimeDiff((journeyMap[journeyID]->flights).front(),pr.first) + getArrTimeDiff((journeyMap[journeyID]->flights).back(),pr.first);
-            delay.checkAndIncrement(totalDelay.value()/2);
-        }
-
-        int noOfWDEdges;
-        input>>noOfWDEdges;
-        for (int i=0;i<noOfWDEdges;i++){
-            int w,d;
-            input>>w>>d;
-            int cancelledFlightInventoryID = wIndexGenerator.getVal(w);
-            int solutionFlightInventoryID = dIndexGenerator.getVal(d);
-
-            cancelledFlightToSolutionFlightMap[cancelledFlightInventoryID]=solutionFlightInventoryID;
-
-            edgesWD.insert(make_pair(w, d));
-        }
-
-        int solvedDefault = 0;
-
-        function<bool(int, int)> checkDefaultSolution = [&](int d, int u)->bool{
-            for(auto &wd: edgesWD){
-                if (d == wd.second){
-                    for(auto &wu: edgesWU){
-                        if (wd.first == wu.first and wu.second == u) return true;
-                    }
-                }
-            }
-            return false;
-        };
-
-        for (auto &uv: edgesUV){
-            for (auto &dv: edgesDV){
-                if (uv.second == dv.second and checkDefaultSolution(dv.first,uv.first)){
-                    solvedDefault += 1;
-                    break;
-                }
-            }
-        }
-        
-        getScheduleOutput(output);
-        output<<"break\n";
-        getInventoryOutput(output,cancelledFlightToSolutionFlightMap);
-        output<<"break\n";
-        getBookingOutput(output,journeyToConnectingMap,journeyToFlightMap);
-        output<<"break\n";
-
-        output << oneOne << " ";
-        output << oneMul << " ";
-        output << mulOne << " ";
-        output << mulMul << endl;
-
-        output << solvedDefault  << " ";
-        output << solvedJourneys - solvedDefault << " ";
-        output << totalAffectedJourneys - solvedJourneys << endl;
-
-        delay.display(output);
-
+        Time totalDelay = Time(0, 0);
+        edgesUC.insert(make_pair(u, c));
+        journeyMap[journeyID]->flights.size() == 1 ? oneMul += 1: mulMul += 1;
+        vector<int> curFlights;
+        for(auto x:cIndexGenerator.getVal(c)) curFlights.push_back(x.first);
+        totalDelay += getDepTimeDiff((journeyMap[journeyID]->flights).front(),curFlights.front()) + getArrTimeDiff((journeyMap[journeyID]->flights).back(),curFlights.back());
+        delay.checkAndIncrement(totalDelay.value()/2);
     }
+
+    int noOfUVEdges;
+    input>>noOfUVEdges;
+
+    solvedJourneys += noOfUVEdges;
+
+    for(int j=0;j<noOfUVEdges;j++){
+        int u,v;
+        input>>u>>v;
+
+        int journeyID = uIndexGenerator.getVal(u);
+        journeyToFlightMap[journeyID]=vIndexGenerator.getVal(v);
+
+        Time totalDelay = Time(0, 0);
+        edgesUV.insert(make_pair(u, v));
+        journeyMap[journeyID]->flights.size() == 1 ? oneOne += 1: mulOne += 1;
+        pair<int, CLASS_CD> pr = vIndexGenerator.getVal(v);
+        totalDelay += getDepTimeDiff((journeyMap[journeyID]->flights).front(),pr.first) + getArrTimeDiff((journeyMap[journeyID]->flights).back(),pr.first);
+        delay.checkAndIncrement(totalDelay.value()/2);
+    }
+
+    int noOfWDEdges;
+    input>>noOfWDEdges;
+    for (int i=0;i<noOfWDEdges;i++){
+        int w,d;
+        input>>w>>d;
+        int cancelledFlightInventoryID = wIndexGenerator.getVal(w);
+        int solutionFlightInventoryID = dIndexGenerator.getVal(d);
+
+        cancelledFlightToSolutionFlightMap[cancelledFlightInventoryID]=solutionFlightInventoryID;
+
+        edgesWD.insert(make_pair(w, d));
+    }
+
+    int solvedDefault = 0;
+
+    function<bool(int, int)> checkDefaultSolution = [&](int d, int u)->bool{
+        for(auto &wd: edgesWD){
+            if (d == wd.second){
+                for(auto &wu: edgesWU){
+                    if (wd.first == wu.first and wu.second == u) return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    for (auto &uv: edgesUV){
+        for (auto &dv: edgesDV){
+            if (uv.second == dv.second and checkDefaultSolution(dv.first,uv.first)){
+                solvedDefault += 1;
+                break;
+            }
+        }
+    }
+        
+    getScheduleOutput(output);
+    output<<"break\n";
+    getInventoryOutput(output,cancelledFlightToSolutionFlightMap);
+    output<<"break\n";
+    getBookingOutput(output,journeyToConnectingMap,journeyToFlightMap);
+    output<<"break\n";
+
+    output << oneOne << " ";
+    output << oneMul << " ";
+    output << mulOne << " ";
+    output << mulMul << endl;
+
+    output << solvedDefault  << " ";
+    output << solvedJourneys - solvedDefault << " ";
+    output << totalAffectedJourneys - solvedJourneys << endl;
+
+    delay.display(output);
 
 }
