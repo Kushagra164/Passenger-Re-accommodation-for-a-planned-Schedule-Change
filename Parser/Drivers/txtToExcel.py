@@ -8,11 +8,13 @@ InventoryHeader = ["InventoryID","ScheduleID","FlightNum","AircraftType","Depart
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--input_file_path", required=True, help="input file")
+parser.add_argument("--tmp_folder", required=True, help="temp folder")
 parser.add_argument("--output_folder", required=True, help="output file")
 args = parser.parse_args()
 
 outputFolderPath = args.output_folder
 inputFilePath = args.input_file_path
+tmpFolderPath = args.tmp_folder
 
 inputFile = open(inputFilePath)
 
@@ -21,7 +23,7 @@ for line in inputFile:
     lines.append(line)
 
 def toFile(counter):
-    outputFile = open(outputFolderPath+"/tmp/file.txt","w")
+    outputFile = open(tmpFolderPath+"/tmpFile.txt","w")
     while True:
         curLine = lines[counter]
         counter += 1
@@ -39,22 +41,22 @@ if not os.path.exists(outputFolderPath):
 # Inventory
 
 counter = toFile(counter)
-csvFile = pandas.read_csv(outputFolderPath+"/tmp/file.txt",sep="\s+",header=None)
+csvFile = pandas.read_csv(tmpFolderPath+"/tmpFile.txt",sep="\s+",header=None)
 
-csvFile.to_csv(outputFolderPath+"/tmp/intermediate.csv",header=InventoryHeader,index=None)
-csvFile = pandas.read_csv(outputFolderPath+"/tmp/intermediate.csv")
+csvFile.to_csv(tmpFolderPath+"/intermediate.csv",header=InventoryHeader,index=None)
+csvFile = pandas.read_csv(tmpFolderPath+"/intermediate.csv")
 
 csvFile.to_excel(outputFolderPath+"/inventory.xlsx",index=False)
 
 # Booking
 
 counter = toFile(counter)
-csvFile = pandas.read_csv(outputFolderPath+"/tmp/file.txt",sep="\s+",header=None)
+csvFile = pandas.read_csv(tmpFolderPath+"/tmpFile.txt",sep="\s+",header=None)
 
-csvFile.to_csv(outputFolderPath+"/tmp/intermediate.csv",header=BookingHeader,index=None)
-csvFile = pandas.read_csv(outputFolderPath+"/tmp/intermediate.csv")
+csvFile.to_csv(tmpFolderPath+"/intermediate.csv",header=BookingHeader,index=None)
+csvFile = pandas.read_csv(tmpFolderPath+"/intermediate.csv")
 
-csvFile.to_excel(outputFolderPath+"/booking.xlsx",index=False)
+csvFile.to_excel(tmpFolderPath+"/booking.xlsx",index=False)
 
 # statistics
 

@@ -33,8 +33,8 @@ int main(int argc, char *argv[])
     quboInput.open(argv[2]);
     ifstream input;
     input.open(argv[3]);
-    int N = (argc > 4) ? stoi(argv[4]) : 5000000;
-    int M = (argc > 5) ? stoi(argv[5]) : 100;
+    int N = (argc > 4) ? stoi(argv[4]) : 500000;
+    int M = (argc > 5) ? stoi(argv[5]) : 50000;
 
     // input handling
     int U, C, V, D, W;
@@ -99,6 +99,7 @@ int main(int argc, char *argv[])
             vector<int> cur;
 
             dfs(i, g, visit, cur);
+            // non relocatable node
             if(cur.size()==1){
                 int x = cur[0];
                 if(x<U)cout<<"U"<<endl;
@@ -139,9 +140,12 @@ int main(int argc, char *argv[])
                             curInd.push_back(mappingUV[mp(u, v)] = Q.addVariable(e.S));
                         }
                     }
-                    
-                    val += N;
-                    eq.addByIndex(curInd,Q.addVariable(N));
+                    // contribution to rellocation in scoring
+                    val += (N*1ll*(curInd.size()));
+                    for(int ind:curInd)
+                        Q.add(ind,ind,N);
+                    // at max passenger can be seated once
+                    eq.atMaxOneAdd(curInd);
                 }
             }
 
@@ -212,14 +216,17 @@ int main(int argc, char *argv[])
                             }
                         }
                     }
-                    eq.addByIndex(curVar,Q.addVariable());
+                    // at max flight can be reschedule to one other flight
+                    eq.atMaxOneAdd(curVar);
                 }
             }
 
             eq.addInq(inq, Q);
-            eq.adjustToQubo(Q,val+1);
+            eq.adjustToQubo(Q,val*5*Q.size());
             quboInstances.push_back(Q);
-            cout<<(val+1)<<" "<<Q.size()<<endl;
+
+            cout<<"Inf: "<<(val*5*Q.size())<<" QuboSize: "<<Q.size()<<endl;
+
             mappingOutput(graphMapping, mappingUC);
             mappingOutput(graphMapping, mappingUV);
             mappingOutput(graphMapping, mappingWD);
