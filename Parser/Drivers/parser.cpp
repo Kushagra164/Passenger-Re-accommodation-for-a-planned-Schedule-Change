@@ -21,6 +21,7 @@ int main(int argc,char* argv[]) {
     passengerFile.open(argv[4]);
     
     ofstream fw(argv[5],ofstream::out);
+    ofstream output(argv[6],ofstream::out);
 
     getScheduleInput(scheduleFile);
     getInventoryInput(inventoryFile);
@@ -48,6 +49,19 @@ int main(int argc,char* argv[]) {
             }
         }
     }
+
+    //Cancelled and Delayed Flights txt file generation
+
+    output<<CancelledFlights.size()<<endl;
+    for(auto inventoryID:CancelledFlights){
+        output<<inventoryID<<endl;
+    }
+
+    output<<DelayedFlights.size()<<endl;
+    for(auto [inventoryID,timeDelay]:DelayedFlights){
+        output<<inventoryID<<" "<<timeDelay.to_string()<<endl;
+    }
+
     //Graph Creation
     graphWUGenerator();
     cout<<"WU finished"<<endl;

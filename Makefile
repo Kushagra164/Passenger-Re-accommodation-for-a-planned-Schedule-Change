@@ -13,7 +13,8 @@ csv-to-graph:
 	./Processing/Intermediates/inventory.csv \
 	./Processing/Intermediates/booking.csv \
 	./Processing/Intermediates/passenger.csv \
-	./Processing/Intermediates/graph.txt
+	./Processing/Intermediates/graph.txt \
+	./Processing/Intermediates/cancelledAndDelayedFlights.txt
 
 graph-to-qubo:
 	g++ ./GraphQUBO/graphToQubo.cpp -o ./Processing/Executables/graphToQubo.out -std=c++20
@@ -46,6 +47,7 @@ edges-to-txt:
 	./Processing/Intermediates/inventory.csv \
 	./Processing/Intermediates/booking.csv \
 	./Processing/Intermediates/passenger.csv \
+	./Processing/Intermediates/cancelledAndDelayedFlights.txt \
 	./Processing/Intermediates/edges.txt \
 	./Processing/Intermediates/solution.txt
 

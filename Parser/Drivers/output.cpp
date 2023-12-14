@@ -5,7 +5,6 @@
 #include "../Input/booking.h"
 #include "../Input/passenger.h"
 #include "../Utils/graphOutput.h"
-#include "../Output/schedule.h"
 #include "../Output/inventory.h"
 #include "../Output/booking.h"
 #include "../Utils/uuidGenerator.h"
@@ -49,10 +48,17 @@ int main(int argc,char* argv[]) {
     ifstream passengerFile;
     passengerFile.open(argv[4]);
 
+    ifstream cancelledAndDelayedFlightsFile(argv[5]);
+
     getScheduleInput(scheduleFile);
     getInventoryInput(inventoryFile);
     getBookingInput(bookingFile);
     getPassengerInput(passengerFile);
+
+
+    //Cancelled Flights set and Delayed Flights Map creation
+    getCancelledAndDelayedFlightsInput(ifstream& cancelledAndDelayedFlightsFile);
+
 
     //Graph Creation
     graphWUGenerator();
@@ -71,9 +77,9 @@ int main(int argc,char* argv[]) {
     }
 
     //Output File Generation
-    ifstream input(argv[5]);
+    ifstream input(argv[6]);
 
-    string outputFilePath = argv[6];
+    string outputFilePath = argv[7];
     ofstream output(outputFilePath, ofstream::out);
 
     //For Output
@@ -164,9 +170,7 @@ int main(int argc,char* argv[]) {
             }
         }
     }
-        
-    getScheduleOutput(output);
-    output<<"break\n";
+
     getInventoryOutput(output,cancelledFlightToSolutionFlightMap);
     output<<"break\n";
     getBookingOutput(output,journeyToConnectingMap,journeyToFlightMap);
