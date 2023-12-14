@@ -51,19 +51,19 @@
 - `PremiumEconomyClass` Total seats in premium economy class 
 - `EconomyClass` Total seats in economy class
 - `FC_TotalInventory` Total seats in first class that can be booked
-- `FC_BookedInventory` seats in first class that were already booked
+- `FC_BookedInventory` Seats in first class that were already booked
 - `FC_Oversold` = `FC_BookedInventory` - `FirstClass`
 - `FC_AvailableInventory` Available seats in first class to be booked
 - `BC_TotalInventory` Total seats in business class that can be booked
-- `BC_BookedInventory` seats in business class that were already booked
+- `BC_BookedInventory` Seats in business class that were already booked
 - `BC_Oversold` = `BC_BookedInventory` - `BusinessClass`
 - `BC_AvailableInventory` Available seats in business class to be booked
 - `PC_TotalInventory` Total seats in premium economy class that can be booked
-- `PC_BookedInventory` seats in premium economy class that were already booked
+- `PC_BookedInventory` Seats in premium economy class that were already booked
 - `PC_Oversold` = `PC_BookedInventory` - `PremiumEconomyClass`
 - `PC_AvailableInventory` Available seats in premium economy class to be booked
 - `EC_TotalInventory` Total seats in economy class that can be booked
-- `EC_BookedInventory` seats in economy class that were already booked
+- `EC_BookedInventory` Seats in economy class that were already booked
 - `EC_Oversold` = `PC_BookedInventory` - `EconomyClass`
 - `EC_AvailableInventory` Available seats in economy class to be booked
 - `FC_CD` Distribution of seats cabin wise in first class
