@@ -41,7 +41,7 @@
 &nbsp; &nbsp; &nbsp; &nbsp; Adds an equality constraint to our QUBO<br>
 
 Functions used by these classes are<br>
-- <strong>function</strong> `addByIndex` Adding constraint to an index<br>
+- <strong>function</strong> `atMaxOneAdd` Adding at maximum one constraint for given indices<br>
 - <strong>function</strong> `addInq` Adding inequality constraint<br>
 - <strong>function</strong> `adjustToQubo` Adjusting QUBO according to constraint<br>
 
@@ -65,7 +65,7 @@ Then we converted 5-partite graph into QUBO instances and then output it.<br>
 <h2 align = "left"> binaryToEdges.cpp </h2>
 <span style="font-size: 15px;"> binaryToEdges.cpp file consists of utility used for </span> 
 
-Reading input from QUBO output and map edges to `UC`, `UV` and `WD` edges<br>
+Reading input from QUBO output and map edges to `UV`, `UC` and `WD` edges<br>
 
 
 
