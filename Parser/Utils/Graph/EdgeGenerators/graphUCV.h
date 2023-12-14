@@ -75,10 +75,16 @@ void graphUCAndGraphCVGenerator(){
             if(find(graphUC[curUIdx].begin(), graphUC[curUIdx].end(), cur)  == graphUC[curUIdx].end()){
                 graphUC[curUIdx].push_back(cur);
             }
-        }
-        int toProposedFlights = graphUC[curUIdx].size()+graphUV[curUIdx].size();
-        if(toProposedFlights<MINIMUM_PROPOSED_FLIGHTS){
-            
+            for(auto curFlight: curFlights){
+                int curVIdx = vIndexGenerator.getIndex(curFlight);
+                for(auto curFlight: curFlights){
+                    int curVIdx = vIndexGenerator.getIndex(curFlight);
+                    if(find(graphCV[curCIdx].begin(), graphCV[curCIdx].end(), curVIdx)  == graphCV[curCIdx].end()){
+                        graphCV[curCIdx].push_back(curVIdx);
+                    }
+                }
+            }
+
         }
     }
 }
