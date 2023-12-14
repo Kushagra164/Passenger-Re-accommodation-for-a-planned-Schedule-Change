@@ -1,5 +1,5 @@
-#include<fstream>
-#include<string>
+#include <fstream>
+#include <string>
 #include "../Input/schedule.h"
 #include "../Input/inventory.h"
 #include "../Input/booking.h"
@@ -8,7 +8,8 @@
 #include <cstdlib>
 using namespace std;
 
-int main(int argc,char* argv[]) {
+int main(int argc, char *argv[])
+{
 
     // handling command line arguments
     ifstream scheduleFile;
@@ -19,63 +20,66 @@ int main(int argc,char* argv[]) {
     bookingFile.open(argv[3]);
     ifstream passengerFile;
     passengerFile.open(argv[4]);
-    
-    ofstream fw(argv[5],ofstream::out);
-    ofstream output(argv[6],ofstream::out);
+
+    ofstream fw(argv[5], ofstream::out);
+    ofstream output(argv[6], ofstream::out);
 
     getScheduleInput(scheduleFile);
     getInventoryInput(inventoryFile);
     getBookingInput(bookingFile);
     getPassengerInput(passengerFile);
 
-    //Random Input Simulation
-    if(RANDOM_INPUT_SIMULATION){
+    // Random Input Simulation
+    if (RANDOM_INPUT_SIMULATION)
+    {
         srand(RANDOM_SEED);
-        for(auto [curInventoryID, _]:inventoryMap){
-            if(CancelledFlights.find(curInventoryID)!=CancelledFlights.end())
+        for (auto [curInventoryID, _] : inventoryMap)
+        {
+            if (CancelledFlights.find(curInventoryID) != CancelledFlights.end())
                 continue;
             double x = rand();
             x /= RAND_MAX;
-            if(x<PROBABILITY_FLIGHT_AFFECTED){
+            if (x < PROBABILITY_FLIGHT_AFFECTED)
+            {
                 x = rand();
                 x /= RAND_MAX;
-                if(x<PROBABILITY_FLIGHT_CANCELLED){
+                if (x < PROBABILITY_FLIGHT_CANCELLED)
+                {
                     CancelledFlights.insert(curInventoryID);
                 }
-                else{
+                else
+                {
                     // Flight Delay
-                    DelayedFlights[curInventoryID] = Time((rand()%4)+1);
+                    DelayedFlights[curInventoryID] = Time((rand() % 4) + 1);
                 }
             }
         }
     }
 
-    //Cancelled and Delayed Flights txt file generation
+    // Cancelled and Delayed Flights txt file generation
 
-    output<<CancelledFlights.size()<<endl;
-    for(auto inventoryID:CancelledFlights){
-        output<<inventoryID<<endl;
+    output << CancelledFlights.size() << endl;
+    for (auto inventoryID : CancelledFlights)
+    {
+        output << inventoryID << endl;
     }
 
-    output<<DelayedFlights.size()<<endl;
-    for(auto [inventoryID,timeDelay]:DelayedFlights){
-        output<<inventoryID<<" "<<timeDelay.to_string()<<endl;
+    output << DelayedFlights.size() << endl;
+    for (auto [inventoryID, timeDelay] : DelayedFlights)
+    {
+        output << inventoryID << " " << timeDelay.to_string() << endl;
     }
 
-    //Graph Creation
+    // Graph Creation
     graphWUGenerator();
-    cout<<"WU finished"<<endl;
+    cout << "WU finished" << endl;
     graphUVAndGraphDVGenerator();
-    cout<<"UVD finished"<<endl;
+    cout << "UVD finished" << endl;
     graphUCAndGraphCVGenerator();
-    cout<<"UCV finished"<<endl;
+    cout << "UCV finished" << endl;
     graphWDGenerator();
-    cout<<"WD finished"<<endl;
+    cout << "WD finished" << endl;
     graphOutput(fw);
 
     fw.close();
-
-
 }
-
-

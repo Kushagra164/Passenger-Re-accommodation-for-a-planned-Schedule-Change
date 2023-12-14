@@ -2,10 +2,10 @@
 
 <span style="font-size: 20px; "> We get the information from `xlsx` files namely.</span>
 
-- [<span style="font-size: 18px;"> Schedule </span>](../Input/schedule.xlsx)
-- [<span style="font-size: 18px;"> Inventory </span>](../Input/inventory.xlsx)
-- [<span style="font-size: 18px;"> Booking </span>](../Input/booking.xlsx)
-- [<span style="font-size: 18px;"> Passenger </span>](../Input/passenger.xlsx)
+- [<span style="font-size: 18px; color: orange"> Schedule </span>](../Input/schedule.xlsx)
+- [<span style="font-size: 18px; color: orange"> Inventory </span>](../Input/inventory.xlsx)
+- [<span style="font-size: 18px; color: orange"> Booking </span>](../Input/booking.xlsx)
+- [<span style="font-size: 18px; color: orange"> Passenger </span>](../Input/passenger.xlsx)
 
 ![-----------------------------------------------------](../Images/rainbow.png)
 
