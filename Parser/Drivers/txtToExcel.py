@@ -77,6 +77,7 @@ pyplot.close()
 
 solutionLabels = ["Default" , "Non-Default" , "No Flight"]
 solutionLabelValues=lines[counter].split()
+solutionLabelValues=[int(i) for i in solutionLabelValues]
 counter+=1
 
 pyplot.bar(solutionLabels,solutionLabelValues)
@@ -91,10 +92,10 @@ pyplot.close()
 
 solutionLabels = ["0-6","6-12","12-18","18-24","24+"]
 solutionLabelValues=lines[counter].split()
+solutionLabelValues=[int(i) for i in solutionLabelValues]
 counter+=1
 
 pyplot.bar(solutionLabels,solutionLabelValues)
-solutionLabelValues=[int(i) for i in solutionLabelValues]
 pyplot.xlabel("Flight Delay in Hours(""Average Flight Delay = " + 
     str(sum(solutionLabelValues)/len(solutionLabelValues))+")")
 pyplot.ylabel("Number of PNRs")
