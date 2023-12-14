@@ -30,7 +30,7 @@ int main(int argc,char* argv[]) {
     cout<<CancelledFlights.size()<<endl;
     //Random Input Simulation
     if(RANDOM_INPUT_SIMULATION){
-        srand(500);
+        srand(RANDOM_SEED);
         for(auto [curInventoryID, _]:inventoryMap){
             if(CancelledFlights.find(curInventoryID)!=CancelledFlights.end())
                 continue;

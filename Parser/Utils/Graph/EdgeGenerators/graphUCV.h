@@ -55,4 +55,35 @@ void graphUCAndGraphCVGenerator(){
             }
         }
     }
+    for(int curJourneyID: AffectedJourneys){
+        int curUIdx = uIndexGenerator.getIndex(curJourneyID);
+        int curProposedFlights = graphUC[curUIdx].size()+graphUV[curUIdx].size();
+        if(curProposedFlights >= MINIMUM_PROPOSED_FLIGHTS) continue;
+        string recLoc = pnrUuidGenerator.getString(journeyToPnrMap[curJourneyID]);
+        Journey *curJourney = journeyMap[curJourneyID];
+        vector<int> flightsFromSrc = findAllRelevantFlightsFromSrc(curJourney->flights[0]);
+        vector<int> flightsToDest = findAllRelevantFlightsToDest(curJourney->flights.back());
+
+        vector<vector<int>> connectingFlights = getConnectingFlights(flightsFromSrc, flightsToDest);
+        if(recLoc=="TFFS23"){
+            cout<<__LINE__<<" "<<connectingFlights.size()<<" "<<flightsFromSrc.size()<<" "
+                <<flightsToDest.size()<<" "<<journeyMap[curJourneyID]->src<<" "<<
+                    journeyMap[curJourneyID]->dest<<endl;
+        }
+        vector<pair<long long,vector<pair<int,CLASS_CD>>>> bestConnectingFlights 
+                        = getBestConnectingFlightsForJourney(curJourneyID, connectingFlights);
+        for(auto [curScore, curFlights]: bestConnectingFlights){
+            int curCIdx = cIndexGenerator.getIndex(curFlights);
+
+            auto cur = make_pair(curCIdx, curScore*
+                            pnrScore(curJourneyID, journeyMap[curJourneyID]->classCD));
+            if(find(graphUC[curUIdx].begin(), graphUC[curUIdx].end(), cur)  == graphUC[curUIdx].end()){
+                graphUC[curUIdx].push_back(cur);
+            }
+        }
+        int toProposedFlights = graphUC[curUIdx].size()+graphUV[curUIdx].size();
+        if(toProposedFlights<MINIMUM_PROPOSED_FLIGHTS){
+            
+        }
+    }
 }

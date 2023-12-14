@@ -61,6 +61,20 @@ long long getConnectingFlightScore(int originalInventoryID, vector<pair<int, CLA
     return score;
 }
 
+long long getConnectingFlightScoreForJourney(int affectedJourneyID, vector<pair<int, CLASS_CD>> connectingFlight){
+    long long score = 0;
+    Journey *curJourney = journeyMap[affectedJourneyID];
+
+    Time ArrivalTimeDiff = getArrTimeDiff(connectingFlight[0].first, curJourney->flights.back());
+    Time DepartureTimeDiff = getDepTimeDiff(connectingFlight.back().first, curJourney->flights[0]);
+    
+    score += getFlightScoreWithTimeDiff(ArrivalTimeDiff, DepartureTimeDiff);
+
+    score += CITYPAIR_SCORE;
+
+    return score;
+}
+
 long long getFinalConnectingFlightScore(int cancelInventoryID, vector<pair<int, CLASS_CD>> proposedFlight){
 
     long double avgPnrScore = 0;
@@ -74,5 +88,21 @@ long long getFinalConnectingFlightScore(int cancelInventoryID, vector<pair<int, 
 
     avgPnrScore /= totalTime;
 
-    return getConnectingFlightScore(cancelInventoryID, proposedFlight)*avgPnrScore;
+    return getConnectingFlightScore(cancelInventoryID, proposedFlight)*avgPnrScore/proposedFlight.size();
+}
+
+long long getFinalConnectingFlightScoreForJourney(int affectedJourneyID, vector<pair<int, CLASS_CD>> proposedFlight){
+
+    long double avgPnrScore = 0;
+    long double totalTime = 0;
+
+    for(auto [curFlightID, curClassCD]: proposedFlight){
+        long double curTime = getFlightDuration(curFlightID).value();
+        totalTime += curTime;
+        avgPnrScore += (curTime*classScoresMap[curClassCD]);
+    }
+
+    avgPnrScore /= totalTime;
+
+    return getConnectingFlightScoreForJourney(affectedJourneyID, proposedFlight)*avgPnrScore/proposedFlight.size();
 }
