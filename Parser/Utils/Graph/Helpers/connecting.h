@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 #include "scoring.h"
 #include "validity.h"
 using namespace std;

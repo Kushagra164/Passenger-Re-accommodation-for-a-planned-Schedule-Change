@@ -57,6 +57,16 @@ void graphWUGenerator(){
                     ++affectedOthers;
                     uIndexGenerator.getIndex(curJourneyID);
                     AffectedJourneys.push_back(curJourneyID);
+
+                    for(auto flightID:curJourney->flights){
+                        Inventory *curFlight = inventoryMap[flightID];
+                        CLASS_CD classCD = curJourney->classCD;
+                        curFlight->bookedInventory--;
+                        if(classCD == FC) curFlight->fcBookedInventory--;
+                        if(classCD == BC) curFlight->bcBookedInventory--;
+                        if(classCD == PC) curFlight->pcBookedInventory--;
+                        if(classCD == EC) curFlight->ecBookedInventory--;
+                    }
                     break;
                 }
 

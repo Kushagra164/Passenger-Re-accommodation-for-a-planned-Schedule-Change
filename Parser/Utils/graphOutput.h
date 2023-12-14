@@ -2,6 +2,7 @@
 #include<vector>
 #include<fstream>
 #include "Graph/graph.h"
+#include "uuidGenerator.h"
 using namespace std;
 template<typename T>int calEdges(ExtendableVector<vector<T>> &adj){
     int edges = 0;
@@ -47,6 +48,15 @@ void graphOutput(ofstream& fw){
         int j_id = uIndexGenerator.getVal(u);
         int pax_cnt=pnrMap[journeyToPnrMap[j_id]]->paxCnt;
         fw<<pax_cnt<<" ";
+
+        //Debugging
+        if(graphUV[u].empty() && graphUC[u].empty()){
+            cout<<"Empty U Nodes "<<pnrUuidGenerator.getString(journeyToPnrMap[j_id])<<" ";
+            for(auto flightID:journeyMap[j_id]->flights){
+                cout<<inventoryUuidGenerator.getString(flightID)<<" ";
+            }
+            cout<<endl;
+        }
     }
     fw<<"\n";
 
