@@ -10,6 +10,7 @@
 ![-----------------------------------------------------](../Images/rainbow.png)
 
 <h2 align = "left"> Schedule </h2>
+
 <span style="font-size: 15px;"> In `schedule.xlsx` we get the information about filght schedules, It consists of</span> 
 
 - `ScheduleID` Unique id used to identify a specific schedule
@@ -31,6 +32,7 @@
 
 ![-----------------------------------------------------](../Images/rainbow.png)
 <h2 align = "left"> Inventory </h2>
+
 <span style="font-size: 15px;"> In `inventory.xlsx` we get the information about distribution of seats in flights</span> 
 
 - `InventoryId` Unique id used to identify a specific inventory
@@ -73,6 +75,7 @@
 
 ![-----------------------------------------------------](../Images/rainbow.png)
 <h2 align = "left"> Booking </h2>
+
 <span style="font-size: 15px;"> In `booking.xlsx` we get the information about bookings, It consists of</span> 
 
 - `RECLOC` Also known as Record Locator, Used to identify booking
@@ -94,6 +97,7 @@
 
 ![-----------------------------------------------------](../Images/rainbow.png)
 <h2 align = "left"> Passenger </h2>
+
 <span style="font-size: 15px;"> In `passenger.xlsx` we get the information about passenger details, It consists of</span> 
 
 - `RECLOC` Also known as Record Locator, Used to identify booking
