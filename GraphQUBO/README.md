@@ -63,9 +63,9 @@ Then we converted 5-partite graph into QUBO instances and then output it.<br>
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
 <h2 align = "left"> binaryToEdges.cpp </h2>
-<span style="font-size: 15px;"> binaryToEdges.cpp file consists of </span> 
+<span style="font-size: 15px;"> binaryToEdges.cpp file consists of utility used for </span> 
 
-We will read input from QUBO output and map edges to `UC`, `UV` and `WD` edges<br>
+Reading input from QUBO output and map edges to `UC`, `UV` and `WD` edges<br>
 
 
 
