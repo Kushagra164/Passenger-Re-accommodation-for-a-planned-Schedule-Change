@@ -22,10 +22,10 @@
 
 - **Mathematical Formulation:**
   - General QUBO equation:
-    ```latex
-    minimize f(x) = ∑_{i=1}^{N} q_i x_i + ∑_{i=1}^{N}∑_{j=i+1}^{N} q_{ij} x_i x_j
-    ```
-  - where \(x_i\) is a binary variable, \(q_i\) is the linear coefficient, and \(q_{ij}\) is the quadratic coefficient.
+    
+    $$\min_{x} f(x) = ∑_{i=1}^{N} q_i x_i + ∑_{i=1}^{N}∑_{j=i+1}^{N} q_{ij} x_i x_j$$
+    
+  - where \($x_i$\) is a binary variable, \($q_i$\) is the linear coefficient, and \($q_{ij}$\) is the quadratic coefficient.
 
 ## Using Quantum Computing to Solve QUBO
 
@@ -60,9 +60,9 @@
 
 - **Mathematical Expression (Adiabatic Theorem):**
   - Adiabatic theorem:
-    ```latex
-    E_0(t) ≤ E_1(t) ≤ E_2(t) ≤ ...
-    ```
+    
+    $$E_0(t) ≤ E_1(t) ≤ E_2(t) ≤ ...$$
+    
   - If a quantum system starts in its ground state, a slow enough evolution ensures it remains in the ground state if the evolution is slow compared to the energy gap.
 
 ## Optimization Using Multithreading to Solve Subgraphs Simultaneously
