@@ -4,6 +4,7 @@
 using namespace std;
 class qubo{
     vector<vector<long long> > Q;
+    vector<bool> initialValue;
     //upper triangulation
     void adjust(){
         for(int i=0;i<Q.size();++i){
@@ -19,15 +20,17 @@ class qubo{
             for(auto &row:Q){
                 row.resize(_n);
             }
+            initialValue.resize(_n);
         }
         qubo(){}
-        int addVariable(long long val = 0){
+        int addVariable(long long val = 0, bool curValue = false){
             for(auto &row:Q){
                 row.push_back(0);
             }
             vector<long long> temp(Q.size());
             temp.push_back(val);
             Q.push_back(temp);
+            initialValue.push_back(curValue);
             return Q.size()-1;
         }
         void add(int i,int j,long long val){
@@ -41,6 +44,10 @@ class qubo{
 ofstream& operator << (ofstream &out, qubo &q){
     q.adjust();
     //printing -Q
+    for(bool val:q.initialValue){
+        out<<val<<" ";
+    }
+    out<<"\n";
     out<<q.Q.size()<<"\n";
     for(auto &row: q.Q){
         for(auto &elem: row){

@@ -2,6 +2,9 @@
 #include<fstream>
 #include<sstream>
 #include<string>
+#include<algorithm>
+#include <cctype>
+#include <cstring>
 #include "../Utils/DateTime/dateTime.h"
 #include "../DataModels/flight.h"
 #include "../DataModels/inventory.h"
@@ -18,7 +21,11 @@ void getInventoryOutput(ofstream& fw,map<int,int> &cancelledFlightToSolutionFlig
         fw<<inventoryUuidGenerator.getString(curInventoryID)<<" ";
         fw<<scheduleUuidGenerator.getString(inventoryToScheduleMap[curInventoryID])<<" ";
         fw<<scheduleMap[inventoryToScheduleMap[curInventoryID]]->flightNum<<" ";
-        fw<<scheduleMap[inventoryToScheduleMap[curInventoryID]]->equipmentNo.first<<" ";
+        string flightType;
+        for(auto c:scheduleMap[inventoryToScheduleMap[curInventoryID]]->equipmentNo.first)
+            if(c!=' ')
+                flightType.push_back(c);
+        fw<<flightType<<" ";
         fw<<curInventory->departureDate.to_string()<<" ";
         fw<<curInventory->arrivalDate.to_string()<<" ";
         fw<<scheduleMap[inventoryToScheduleMap[curInventoryID]]->srcCity<<" ";

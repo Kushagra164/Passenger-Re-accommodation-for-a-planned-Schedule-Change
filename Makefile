@@ -7,7 +7,7 @@ excel-to-csv:
 	python Parser/Drivers/excelToCsv.py	--input_file_path="./Input/schedule.xlsx"	--output_file_path="./Processing/Intermediates/schedule.csv"
 
 csv-to-graph:
-	g++ ./Parser/Drivers/parser.cpp -o ./Processing/Executables/parser.out -std=c++20
+	g++ ./Parser/Drivers/parser.cpp -o ./Processing/Executables/parser.out -std=c++17
 	./Processing/Executables/parser.out \
 	./Processing/Intermediates/schedule.csv \
 	./Processing/Intermediates/inventory.csv \
@@ -41,7 +41,7 @@ graph-to-edges:
 	$(MAKE) binary-to-edges 
 
 edges-to-txt:
-	g++ ./Parser/Drivers/output.cpp -o ./Processing/Executables/output.out -std=c++20
+	g++ ./Parser/Drivers/output.cpp -o ./Processing/Executables/output.out -std=c++17
 	./Processing/Executables/output.out \
 	./Processing/Intermediates/schedule.csv \
 	./Processing/Intermediates/inventory.csv \
