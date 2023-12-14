@@ -81,12 +81,9 @@ int allowedPassengers(vector<pair<int,CLASS_CD>> flight){
     return getPassengers(flightID, curClass);
 }
 
-vector<pair<long long,vector<pair<int,CLASS_CD>>>> getBestConnectingFlights(int journeyID, vector<vector<int>> proposedFlights){
+vector<pair<long long,vector<pair<int,CLASS_CD>>>> getBestConnectingFlights(int cancelledInventoryID, vector<vector<int>> proposedFlights){
 
     vector<pair<long long, vector<pair<int, CLASS_CD>>>> allConnectingFlightsWithScore;
-
-    CLASS_CD originalClassCD = journeyMap[journeyID]->classCD;
-    int paxCnt = pnrMap[journeyToPnrMap[journeyID]]->paxCnt;
 
     for(auto curFlight: proposedFlights){
         vector<pair<int,CLASS_CD>> curProposedFlight; 
@@ -94,22 +91,17 @@ vector<pair<long long,vector<pair<int,CLASS_CD>>>> getBestConnectingFlights(int 
             if(index == curFlight.size()){
                 allConnectingFlightsWithScore.push_back(
                     make_pair(
-                        getFinalConnectingFlightScore(journeyID, curProposedFlight),
+                        getFinalConnectingFlightScore(cancelledInventoryID, curProposedFlight),
                         curProposedFlight
                     )
                 );
             }
             else{
                 for(int toClassCD = 0; toClassCD < 4; toClassCD++){
-                    if((toClassCD<originalClassCD)&&(!CLASS_UPGRADE_ALLOWED))continue;
-                    if((toClassCD>originalClassCD)&&(!CLASS_DOWNGRADE_ALLOWED))continue;
-                    if(isSufficientInventoryAvailable(paxCnt, curFlight[index],
-                        static_cast <CLASS_CD> (toClassCD))){
-                        curProposedFlight.push_back(make_pair(curFlight[index],
-                                                              static_cast <CLASS_CD> (toClassCD)));
-                        generateConnectingFlightWithClass(index+1);
-                        curProposedFlight.pop_back();
-                    }
+                    curProposedFlight.push_back(make_pair(curFlight[index],
+                                                            static_cast <CLASS_CD> (toClassCD)));
+                    generateConnectingFlightWithClass(index+1);
+                    curProposedFlight.pop_back();
                 }
             }
         };

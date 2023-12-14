@@ -35,7 +35,7 @@ void getInventoryInput(ifstream& inventoryFile){
 
         getline(inputString, tempString, ',');        //CarrierCode
 
-        if(SCHEDULE_LEVEL_CANCELLATION && scheduleMap[scheduleID]->status == SCHEDULE_STATUS::SCHEDULE_CANCELLED) CancelledFlights.insert(uuid);
+        if(scheduleMap[scheduleID]->status == SCHEDULE_STATUS::SCHEDULE_CANCELLED) CancelledFlights.insert(uuid);
 
         scheduleMap[scheduleID]->DepartureDates.push_back(uuid);
 
@@ -95,7 +95,7 @@ void getInventoryInput(ifstream& inventoryFile){
 
         Inventory* newInventory;
 
-        if(RANDOM_INPUT_SIMULATIOM){
+        if(RANDOM_INPUT_SIMULATION){
             newInventory = new Inventory(uuid, departureDate, arrivalDate, totalCapacity, totalInventory,0,
                                          fcTotalCapacity, fcTotalInventory,0,
                                          bcTotalCapacity,bcTotalInventory,0,
@@ -103,6 +103,7 @@ void getInventoryInput(ifstream& inventoryFile){
                                          ecTotalCapacity, ecTotalInventory, 0);
         }
         else{
+            // we assumed inventory status during our initial testing
             string status;
             Time delayTime;
             getline(inputString, tempString, ',');
@@ -122,8 +123,6 @@ void getInventoryInput(ifstream& inventoryFile){
             if(newInventory->status == INVENTORY_STATUS::INVENTORY_CANCELLED) CancelledFlights.insert(uuid);
 
             if(newInventory->status == INVENTORY_STATUS::INVENTORY_DELAYED) DelayedFlights[uuid]=delayTime;
-
-
         }
         
         inventoryMap[uuid]=newInventory;

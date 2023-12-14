@@ -27,22 +27,40 @@ int main(int argc,char* argv[]) {
     getBookingInput(bookingFile);
     getPassengerInput(passengerFile);
 
+    cout<<CancelledFlights.size()<<endl;
     //Random Input Simulation
-    for(auto [inventoryID,curInventory]:inventoryMap){
-        double x=rand()%10000;
-        x=x/100000;
-        if(x<PROBABILITY_FLIGHT_AFFECTED){
-
+    if(RANDOM_INPUT_SIMULATION){
+        srand(500);
+        for(auto [curInventoryID, _]:inventoryMap){
+            if(CancelledFlights.find(curInventoryID)!=CancelledFlights.end())
+                continue;
+            double x = rand();
+            x /= RAND_MAX;
+            if(x<PROBABILITY_FLIGHT_AFFECTED){
+                cout<<x<<endl;
+                x = rand();
+                x /= RAND_MAX;
+                if(x<PROBABILITY_FLIGHT_CANCELLED){
+                    cout<<x<<endl;
+                    CancelledFlights.insert(curInventoryID);
+                }
+                else{
+                    // Flight Delay
+                    DelayedFlights[curInventoryID] = Time((rand()%4)+1);
+                }
+            }
         }
-        else
     }
-
-     //Graph Creation
+    cout<<"check"<<" "<<inventoryMap.size()<<" "<<CancelledFlights.size()<<" "<<DelayedFlights.size()<<endl;
+    //Graph Creation
     graphWUGenerator();
+    cout<<"WU finished"<<endl;
     graphUVAndGraphDVGenerator();
+    cout<<"UVD finished"<<endl;
     graphUCAndGraphCVGenerator();
+    cout<<"UCV finished"<<endl;
     graphWDGenerator();
-
+    cout<<"WD finished"<<endl;
     graphOutput(fw);
 
     fw.close();

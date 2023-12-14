@@ -1,6 +1,7 @@
 import pandas
 import argparse
 import os
+import matplotlib.pyplot as pyplot
 
 BookingHeader = ["RECLOC","CreationDate","ActionCD","ClassCD","SegSeq","PaxCnt","FlightNum","Orig_CD","Dest_CD","DepDate","DepTime","ArrDate","ArrTime"]
 ScheduleHeader = ["ScheduleID","CarrierCD","FlightNum","AircraftType","AircraftTailNumber","DepartureAirport","ArrivalAirport","DepartureTime","ArrivalTime","StartDate","EndDate","Status","FrequencyPattern"]
@@ -72,3 +73,46 @@ for i in range(T):
     csvFile = pandas.read_csv("/tmp/intermediate.csv")
 
     csvFile.to_excel(curOutputFolderPath+"/booking.xlsx",index=False)
+
+    # statistics
+
+    solutionTypes=["oneOne","oneMulti","multiOne","multiMulti"]
+    solutionTypeValues=lines[counter].split()
+    counter+=1
+
+    pyplot.pie(
+        solutionTypeValues,
+        labels=solutionTypes,
+        startangle=90,
+        autopct = "%1.1f%%",
+    )
+    pyplot.title("Flight Solutions")
+
+    pyplot.savefig(curOutputFolderPath+"/FlightSolution.png")
+
+    # Histogram 1 - Distribution of Passengers with Default , Non-Default and No Flight Solutions
+
+    solutionLabels = ["Default" , "Non-Default" , "No Flight"]
+    solutionLabelValues=lines[counter].split()
+    counter+=1
+
+    pyplot.bar(solutionLabels,solutionLabelValues)
+    pyplot.xlabel("Flight Solutions")
+    pyplot.ylabel("Number of PNRs")
+    pyplot.title("Flight Solution Distribution")
+
+    pyplot.savefig(curOutputFolderPath+"/DefaultSolution.png")
+
+    # Histogram 2 - Distribution of Passengers with Different Flight Delays
+
+    solutionLabels = ["0-6","6-12","12-18","18-24","24+"]
+    solutionLabelValues=lines[counter].split()
+    counter+=1
+
+    pyplot.bar(solutionLabels,solutionLabelValues)
+    pyplot.xlabel("Flight Delay in Hours(""Average Flight Delay = " + 
+        str(sum(solutionLabelValues)/len(solutionLabelValues))+")")
+    pyplot.ylabel("Number of PNRs")
+    pyplot.title("Flight Delay Distribution")
+
+    pyplot.savefig(curOutputFolderPath+"/PassengerDelay.png")

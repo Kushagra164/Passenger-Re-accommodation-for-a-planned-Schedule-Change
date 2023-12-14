@@ -8,6 +8,7 @@
 #include "../Utils/uuidGenerator.h"
 #include "../Utils/constants.h"
 #include "../Utils/getFlight.h"
+#include "../Utils/Graph/Helpers/timeDiff.h"
 using namespace std;
 
 void getBookingInput(ifstream& bookingFile){
@@ -24,7 +25,7 @@ void getBookingInput(ifstream& bookingFile){
         string tempString = "";
         Date date;
         Time time;
-        bool newPnr=false;
+        bool newPnr = false;
 
         stringstream inputString(line);
 
@@ -94,18 +95,20 @@ void getBookingInput(ifstream& bookingFile){
         getline(inputString, tempString, ',');
         time = Time(tempString);  
         arrDTML = DateTime(date, time);
-        int curInventoryID=getFlight(flightNum,srcCity,destCity,depDTML, arrDTML);
-
+        int curInventoryID = getFlight(flightNum,srcCity,destCity,depDTML, arrDTML);
         bool cond = false;
         if(!newPnr){
             int prevInventoryID = pnrToFlightMap[pnrID];
-            DateTime prevArrivalTime = DateTime(inventoryMap[prevInventoryID]->arrivalDate,scheduleMap[inventoryToScheduleMap[prevInventoryID]]->arrivalTime);
-            DateTime curDepartureTime = DateTime(inventoryMap[curInventoryID]->departureDate,scheduleMap[inventoryToScheduleMap[curInventoryID]]->departureTime);
             Journey* curJourney = journeyMap[pnrMap[pnrID]->journeys.back()];
-            cond = (((curDepartureTime-prevArrivalTime) <= MAXIMUM_ALLOWED_TIME_DIFF_FOR_CONNECTING) &&
+            cond = ((getArrDepTimeDiff(prevInventoryID, curInventoryID) <= MAXIMUM_ALLOWED_TIME_DIFF_FOR_CONNECTING) &&
                     (scheduleMap[inventoryToScheduleMap[curInventoryID]]->destCity != curJourney->src) &&
                     (scheduleMap[inventoryToScheduleMap[curInventoryID]]->srcCity == curJourney->dest));
-
+            if(pnrUuidGenerator.getString(pnrID)=="PKLV71"){
+                cout<<__LINE__<<" "<<getInventoryTime(prevInventoryID).first.to_string()<<" "<<getInventoryTime(prevInventoryID).second.to_string()<<endl;
+                cout<<(getArrDepTimeDiff(prevInventoryID, curInventoryID).to_string())<<" "<<(getArrDepTimeDiff(prevInventoryID, curInventoryID).days)<<endl;
+                cout<<(depDTML.to_string())<<" "<<(arrDTML.to_string())<<" "<<(arrDTML-depDTML).to_string()<<endl;
+                cout<<__LINE__<<" "<<cond<<endl;
+            }
             if(cond){
                 curJourney->dest = scheduleMap[inventoryToScheduleMap[curInventoryID]]->destCity;
                 curJourney->flights.push_back(curInventoryID);

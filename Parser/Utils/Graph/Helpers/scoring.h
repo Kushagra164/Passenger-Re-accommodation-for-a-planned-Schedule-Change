@@ -32,18 +32,19 @@ long long getFlightScoreWithTimeDiff(Time ArrivalTimeDiff, Time DepartureTimeDif
     return score;
 }
 
-long long getFlightScore(int curInventoryID, int nextInventoryID){
+long long getFlightScore(int curJourneyID, int nextInventoryID){
     long long score = 0;
 
-    Time ArrivalTimeDiff = getArrTimeDiff(curInventoryID, nextInventoryID);
-    Time DepartureTimeDiff = getDepTimeDiff(curInventoryID, nextInventoryID);
+    Time ArrivalTimeDiff = getArrTimeDiff(journeyMap[curJourneyID]->flights.back(), nextInventoryID);
+    Time DepartureTimeDiff = getDepTimeDiff(journeyMap[curJourneyID]->flights[0], nextInventoryID);
     
     score += getFlightScoreWithTimeDiff(ArrivalTimeDiff, DepartureTimeDiff);
 
     score += CITYPAIR_SCORE;
-    score += scheduleMap[inventoryToScheduleMap[curInventoryID]]->equipmentNo ==
+    if(journeyMap[curJourneyID]->flights.size()==1){
+        score += scheduleMap[inventoryToScheduleMap[journeyMap[curJourneyID]->flights[0]]]->equipmentNo ==
              scheduleMap[inventoryToScheduleMap[nextInventoryID]]->equipmentNo ? EQUIPMENT_SCORE: 0;
-
+    }
     return score;
 }
 
@@ -60,8 +61,7 @@ long long getConnectingFlightScore(int originalInventoryID, vector<pair<int, CLA
     return score;
 }
 
-long long getFinalConnectingFlightScore(int journeyID, vector<pair<int, CLASS_CD>> proposedFlight){
-    long long originalPnrScore = pnrScore(journeyID, journeyMap[journeyID]->classCD);
+long long getFinalConnectingFlightScore(int cancelInventoryID, vector<pair<int, CLASS_CD>> proposedFlight){
 
     long double avgPnrScore = 0;
     long double totalTime = 0;
@@ -69,10 +69,10 @@ long long getFinalConnectingFlightScore(int journeyID, vector<pair<int, CLASS_CD
     for(auto [curFlightID, curClassCD]: proposedFlight){
         long double curTime = getFlightDuration(curFlightID).value();
         totalTime += curTime;
-        avgPnrScore += (curTime*pnrScore(journeyID, curClassCD));
+        avgPnrScore += (curTime*classScoresMap[curClassCD]);
     }
 
     avgPnrScore /= totalTime;
 
-    return originalPnrScore*getConnectingFlightScore(journeyID, proposedFlight)*avgPnrScore;
+    return getConnectingFlightScore(cancelInventoryID, proposedFlight)*avgPnrScore;
 }
