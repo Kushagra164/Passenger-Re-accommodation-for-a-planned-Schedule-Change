@@ -56,7 +56,7 @@ csvFile = pandas.read_csv(tmpFolderPath+"/tmpFile.txt",sep="\s+",header=None)
 csvFile.to_csv(tmpFolderPath+"/intermediate.csv",header=BookingHeader,index=None)
 csvFile = pandas.read_csv(tmpFolderPath+"/intermediate.csv")
 
-csvFile.to_excel(tmpFolderPath+"/booking.xlsx",index=False)
+csvFile.to_excel(outputFolderPath+"/booking.xlsx",index=False)
 
 # statistics
 

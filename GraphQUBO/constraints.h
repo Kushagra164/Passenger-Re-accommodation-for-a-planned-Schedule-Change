@@ -35,8 +35,8 @@ class eqConstraints{
         }
         void adjustToQubo(qubo &Q,long long inf){
             // less weightage to inequality constraints
-            long long inf2 = (inf/100)*2;
-            long long negInf = -(inf/100);
+            long long inf2 = (inf/50)*2;
+            long long negInf = -(inf/50);
             for(pair<vector<int>,int> curEq: q){
                 for(int i=0;i<curEq.F.size();++i){
                     Q.add(i,i,curEq.F[i]*inf2*curEq.S);
