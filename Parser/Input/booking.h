@@ -100,7 +100,8 @@ void getBookingInput(ifstream& bookingFile){
         if(!newPnr){
             int prevInventoryID = pnrToFlightMap[pnrID];
             Journey* curJourney = journeyMap[pnrMap[pnrID]->journeys.back()];
-            cond = ((getArrDepTimeDiff(prevInventoryID, curInventoryID) <= MAXIMUM_ALLOWED_TIME_DIFF_FOR_CONNECTING) &&
+            Time timeDiff = getArrDepTimeDiff(prevInventoryID, curInventoryID);
+            cond = ((timeDiff >= MINIMUM_CONNECTING_TIME) && (timeDiff <= MAXIMUM_ALLOWED_TIME_DIFF_FOR_CONNECTING) &&
                     (scheduleMap[inventoryToScheduleMap[curInventoryID]]->destCity != curJourney->src) &&
                     (scheduleMap[inventoryToScheduleMap[curInventoryID]]->srcCity == curJourney->dest));
             if(pnrUuidGenerator.getString(pnrID)=="PKLV71"){
