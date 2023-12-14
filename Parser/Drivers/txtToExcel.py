@@ -71,6 +71,7 @@ pyplot.pie(
 pyplot.title("Flight Solutions")
 
 pyplot.savefig(outputFolderPath+"/FlightSolution.png")
+pyplot.close()
 
 # Histogram 1 - Distribution of Passengers with Default , Non-Default and No Flight Solutions
 
@@ -84,6 +85,7 @@ pyplot.ylabel("Number of PNRs")
 pyplot.title("Flight Solution Distribution")
 
 pyplot.savefig(outputFolderPath+"/DefaultSolution.png")
+pyplot.close()
 
 # Histogram 2 - Distribution of Passengers with Different Flight Delays
 
@@ -99,3 +101,4 @@ pyplot.ylabel("Number of PNRs")
 pyplot.title("Flight Delay Distribution")
 
 pyplot.savefig(outputFolderPath+"/PassengerDelay.png")
+pyplot.close()
