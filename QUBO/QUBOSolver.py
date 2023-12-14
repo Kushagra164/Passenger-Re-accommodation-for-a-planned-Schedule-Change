@@ -1,6 +1,6 @@
 # Install Dwave Library
 # !pip install dwave-ocean-sdk dotenv
-from dwave.system import LeapHybridSampler
+from dwave.system import EmbeddingComposite,DWaveSampler
 import os
 from dotenv import load_dotenv
 import concurrent.futures
@@ -15,28 +15,31 @@ def read_test_cases(file_path):
         i = 1
         for _ in range(t):
             test_case_number = int(lines[i].strip())
+            i+=1
+            initial_state_list = list(map(int, lines[i].split()))
+            initial_state = {i: initial_state_list[i] for i in range(len(initial_state_list))}
             matrix_size = int(lines[i + 1].strip())
             qubo_matrix = [list(map(int, lines[j + i + 2].split())) for j in range(matrix_size)]
-            test_cases.append((test_case_number, matrix_size, qubo_matrix))
+            test_cases.append((test_case_number, matrix_size, initial_state,qubo_matrix))
             i += matrix_size + 2  # Move to the next test case
     return test_cases
 
 # Solve the QUBO using D-Wave Leap Hybrid Solver for a single test case
 def solve_qubo(test_case, no_samples, api_key):
-    test_case_number, matrix_size, qubo_matrix = test_case
+    test_case_number, matrix_size, initial_state,qubo_matrix = test_case
     QUBO = {(i, j): qubo_matrix[i][j] for i in range(matrix_size) for j in range(matrix_size)}
-    sampler = LeapHybridSampler(token=api_key,anneal_time = 20)
-    Assignments = []
+    sampler = DWaveSampler(token = api_key)
+    
     SortedAssignments = {}
-
-    for _ in range(no_samples):
-        response = sampler.sample_qubo(QUBO)
-        Assignments.append(response)
-
-    Assignments.sort(key = lambda x: x.first.energy)
-
+    sampler_embedded = EmbeddingComposite(sampler)
+    # print(sampler_embedded.parameters)
+    response = sampler_embedded.sample_qubo(QUBO,anneal_schedule=[[0,1],[20.0,0.5],[40,1]],num_reads = 5,
+                                            initial_state = initial_state)
+    # print(response)
+    response_samples = response.samples()
+    
     for i in range(no_samples):
-        SortedAssignments[i] = Assignments[i]
+        SortedAssignments[i] = response_samples[i]
 
     return test_case_number, SortedAssignments
 
