@@ -21,11 +21,14 @@ void getInventoryOutput(ofstream& fw,map<int,int> &cancelledFlightToSolutionFlig
         fw<<scheduleMap[inventoryToScheduleMap[curInventoryID]]->equipmentNo.first<<" ";
         fw<<curInventory->departureDate.to_string()<<" ";
         fw<<curInventory->arrivalDate.to_string()<<" ";
-        fw<<flightNumberMap[scheduleMap[inventoryToScheduleMap[curInventoryID]]->flightNum].srcCity<<" ";
-        fw<<flightNumberMap[scheduleMap[inventoryToScheduleMap[curInventoryID]]->flightNum].destCity<<" ";
+        fw<<scheduleMap[inventoryToScheduleMap[curInventoryID]]->srcCity<<" ";
+        fw<<scheduleMap[inventoryToScheduleMap[curInventoryID]]->destCity<<" ";
 
         if(RANDOM_INPUT_SIMULATION){
             if(DelayedFlights.find(curInventoryID)!=DelayedFlights.end()) fw<<"Delayed"<<" "<<"null";
+            else if((CancelledFlights.find(curInventoryID)!=CancelledFlights.end())
+                && (cancelledFlightToSolutionFlightMap.find(curInventoryID) !=
+                    cancelledFlightToSolutionFlightMap.end())) fw<<"Rescheduled"<<" "<<cancelledFlightToSolutionFlightMap[curInventoryID];
             else if(scheduleMap[inventoryToScheduleMap[curInventoryID]]->status == SCHEDULE_SCHEDULED) fw<<"Scheduled"<<" "<<"null";
             else if(scheduleMap[inventoryToScheduleMap[curInventoryID]]->status == SCHEDULE_PLANNED) fw<<"Planned"<<" "<<"null";
         }
@@ -33,13 +36,6 @@ void getInventoryOutput(ofstream& fw,map<int,int> &cancelledFlightToSolutionFlig
             if(curInventory->status == INVENTORY_STATUS::INVENTORY_SCHEDULED) fw<<"Scheduled"<<" "<<"null";
             else if(curInventory->status == INVENTORY_STATUS::INVENTORY_PLANNED) fw<<"Planned"<<" "<<"null";
             else if(curInventory->status == INVENTORY_STATUS::INVENTORY_DELAYED) fw<<"Delayed"<<" "<<"null";
-        }
-
-
-        if(CancelledFlights.find(curInventoryID)!=CancelledFlights.end()){
-            if((cancelledFlightToSolutionFlightMap.find(curInventoryID) !=
-                cancelledFlightToSolutionFlightMap.end())) fw<<"Rescheduled"<<" "<<cancelledFlightToSolutionFlightMap[curInventoryID];
-            else fw<<"Cancelled"<<" "<<"null";
         }
         fw<<endl;
     }

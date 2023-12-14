@@ -30,8 +30,8 @@ void printDetails(ofstream& fw,string recLoc, Pnr* curPnr,int curJourneyID,int s
     fw<<segSeq<<" ";
     fw<<curPnr->paxCnt<<" ";
     fw<<scheduleMap[inventoryToScheduleMap[curInventoryID]]->flightNum<<" ";
-    fw<<flightNumberMap[scheduleMap[inventoryToScheduleMap[curInventoryID]]->flightNum].srcCity<<" ";
-    fw<<flightNumberMap[scheduleMap[inventoryToScheduleMap[curInventoryID]]->flightNum].destCity<<" ";
+    fw<<scheduleMap[inventoryToScheduleMap[curInventoryID]]->srcCity<<" ";
+    fw<<scheduleMap[inventoryToScheduleMap[curInventoryID]]->destCity<<" ";
 
     Date departureDate = inventoryMap[curInventoryID]->departureDate;
     Time departureTime = scheduleMap[inventoryToScheduleMap[curInventoryID]]->departureTime;
@@ -50,17 +50,17 @@ map<int,pair<int,CLASS_CD>> &journeyToFlightMap){
         string recLoc=pnrUuidGenerator.getString(curPnrID);
         int segSeq=1;
         for(int curJourneyID:curPnr->journeys){
-            if(journeyToConnectingMap.find(curJourneyID)!=journeyToConnectingMap.end()){
+            if(journeyToFlightMap.find(curJourneyID)!=journeyToFlightMap.end()){
+            auto itr = journeyToFlightMap.find(curJourneyID);
+            printDetails(fw,recLoc,curPnr,curJourneyID,segSeq,itr->second.first,itr->second.second);
+            segSeq++;
+            }
+            else if(journeyToConnectingMap.find(curJourneyID)!=journeyToConnectingMap.end()){
                 auto itr = journeyToConnectingMap.find(curJourneyID);
                 for(auto e: itr->second){
                     printDetails(fw,recLoc,curPnr,curJourneyID,segSeq,e.first,e.second);
                     segSeq++;
                 }
-            }
-            else if(journeyToFlightMap.find(curJourneyID)!=journeyToFlightMap.end()){
-                auto itr = journeyToFlightMap.find(curJourneyID);
-                printDetails(fw,recLoc,curPnr,curJourneyID,segSeq,itr->second.first,itr->second.second);
-                segSeq++;
             }
             else if(find(AffectedJourneys.begin(),AffectedJourneys.end(),curJourneyID) != AffectedJourneys.end()) segSeq++;
             else{

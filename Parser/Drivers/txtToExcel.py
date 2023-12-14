@@ -4,7 +4,7 @@ import os
 import matplotlib.pyplot as pyplot
 
 BookingHeader = ["RECLOC","CreationDate","ActionCD","ClassCD","SegSeq","PaxCnt","FlightNum","Orig_CD","Dest_CD","DepDate","DepTime","ArrDate","ArrTime"]
-ScheduleHeader = ["ScheduleID","CarrierCD","FlightNum","AircraftType","AircraftTailNumber","DepartureAirport","ArrivalAirport","DepartureTime","ArrivalTime","StartDate","EndDate","Status","FrequencyPattern"]
+#ScheduleHeader = ["ScheduleID","CarrierCD","FlightNum","AircraftType","AircraftTailNumber","DepartureAirport","ArrivalAirport","DepartureTime","ArrivalTime","StartDate","EndDate","Status","FrequencyPattern"]
 InventoryHeader = ["InventoryID","ScheduleID","FlightNum","AircraftType","DepartureDate","ArrivalDate","DepartureAirport","ArrivalAirport","Status","RescheduledTo"]
 
 parser = argparse.ArgumentParser()
@@ -21,7 +21,7 @@ lines = []
 for line in inputFile:
     lines.append(line)
 
-T = int(lines[0])
+# T = int(lines[0])
 def toFile(counter):
     outputFile = open("/tmp/file","w")
     while True:
@@ -34,7 +34,7 @@ def toFile(counter):
     return counter
 
 counter = 1
-for i in range(T):
+for i in range(1):
 
     curOutputFolderPath = outputFolderPath + "/Solution" + str(i+1)
 
@@ -43,15 +43,15 @@ for i in range(T):
 
     # Schedule
 
-    counter = toFile(counter)
-    csvFile = pandas.read_csv("/tmp/file",sep="\s+",header=None)
-    csvFile.iloc[:,3]=csvFile.iloc[:,3].astype(str)+csvFile.iloc[:,4].astype(str)
-    csvFile=csvFile.drop([4],axis=1)
-
-    csvFile.to_csv("/tmp/intermediate.csv",header=ScheduleHeader,index=None)
-    csvFile = pandas.read_csv("/tmp/intermediate.csv")
-
-    csvFile.to_excel(curOutputFolderPath+"/schedule.xlsx",index=False)
+    # counter = toFile(counter)
+    # csvFile = pandas.read_csv("/tmp/file",sep="\s+",header=None)
+    # csvFile.iloc[:,3]=csvFile.iloc[:,3].astype(str)+csvFile.iloc[:,4].astype(str)
+    # csvFile=csvFile.drop([4],axis=1)
+    #
+    # csvFile.to_csv("/tmp/intermediate.csv",header=ScheduleHeader,index=None)
+    # csvFile = pandas.read_csv("/tmp/intermediate.csv")
+    #
+    # csvFile.to_excel(curOutputFolderPath+"/schedule.xlsx",index=False)
 
     # Inventory
 

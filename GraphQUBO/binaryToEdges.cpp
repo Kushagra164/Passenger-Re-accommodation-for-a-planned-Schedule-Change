@@ -40,7 +40,7 @@ int main(int argc,char *argv[]){
             }
         }
     }
-
+//[TODO: Change order of UC and UV]
     for(int i=0;i<K;++i){
         printSelectedEdges(selectedEdges, selectedUC[i]);
         printSelectedEdges(selectedEdges, selectedUV[i]);
