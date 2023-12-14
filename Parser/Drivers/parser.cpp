@@ -27,7 +27,6 @@ int main(int argc,char* argv[]) {
     getBookingInput(bookingFile);
     getPassengerInput(passengerFile);
 
-    cout<<CancelledFlights.size()<<endl;
     //Random Input Simulation
     if(RANDOM_INPUT_SIMULATION){
         srand(RANDOM_SEED);
@@ -37,11 +36,9 @@ int main(int argc,char* argv[]) {
             double x = rand();
             x /= RAND_MAX;
             if(x<PROBABILITY_FLIGHT_AFFECTED){
-                cout<<x<<endl;
                 x = rand();
                 x /= RAND_MAX;
                 if(x<PROBABILITY_FLIGHT_CANCELLED){
-                    cout<<x<<endl;
                     CancelledFlights.insert(curInventoryID);
                 }
                 else{
@@ -51,7 +48,6 @@ int main(int argc,char* argv[]) {
             }
         }
     }
-    cout<<"check"<<" "<<inventoryMap.size()<<" "<<CancelledFlights.size()<<" "<<DelayedFlights.size()<<endl;
     //Graph Creation
     graphWUGenerator();
     cout<<"WU finished"<<endl;

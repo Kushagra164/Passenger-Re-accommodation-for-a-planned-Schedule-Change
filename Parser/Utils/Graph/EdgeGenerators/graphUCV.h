@@ -65,11 +65,6 @@ void graphUCAndGraphCVGenerator(){
         vector<int> flightsToDest = findAllRelevantFlightsToDest(curJourney->flights.back());
 
         vector<vector<int>> connectingFlights = getConnectingFlights(flightsFromSrc, flightsToDest);
-        if(recLoc=="TFFS23"){
-            cout<<__LINE__<<" "<<connectingFlights.size()<<" "<<flightsFromSrc.size()<<" "
-                <<flightsToDest.size()<<" "<<journeyMap[curJourneyID]->src<<" "<<
-                    journeyMap[curJourneyID]->dest<<endl;
-        }
         vector<pair<long long,vector<pair<int,CLASS_CD>>>> bestConnectingFlights 
                         = getBestConnectingFlightsForJourney(curJourneyID, connectingFlights);
         for(auto [curScore, curFlights]: bestConnectingFlights){

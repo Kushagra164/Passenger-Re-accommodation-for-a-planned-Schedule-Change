@@ -104,12 +104,6 @@ void getBookingInput(ifstream& bookingFile){
             cond = ((timeDiff >= MINIMUM_CONNECTING_TIME) && (timeDiff <= MAXIMUM_ALLOWED_TIME_DIFF_FOR_CONNECTING) &&
                     (scheduleMap[inventoryToScheduleMap[curInventoryID]]->destCity != curJourney->src) &&
                     (scheduleMap[inventoryToScheduleMap[curInventoryID]]->srcCity == curJourney->dest));
-            if(pnrUuidGenerator.getString(pnrID)=="PKLV71"){
-                cout<<__LINE__<<" "<<getInventoryTime(prevInventoryID).first.to_string()<<" "<<getInventoryTime(prevInventoryID).second.to_string()<<endl;
-                cout<<(getArrDepTimeDiff(prevInventoryID, curInventoryID).to_string())<<" "<<(getArrDepTimeDiff(prevInventoryID, curInventoryID).days)<<endl;
-                cout<<(depDTML.to_string())<<" "<<(arrDTML.to_string())<<" "<<(arrDTML-depDTML).to_string()<<endl;
-                cout<<__LINE__<<" "<<cond<<endl;
-            }
             if(cond){
                 curJourney->dest = scheduleMap[inventoryToScheduleMap[curInventoryID]]->destCity;
                 curJourney->flights.push_back(curInventoryID);
@@ -131,6 +125,5 @@ void getBookingInput(ifstream& bookingFile){
         pnrToFlightMap[pnrID]=curInventoryID;
 
     }
-    cout<<"Booking Finished   Total Journeys: "<<uuid+1<<endl;
-    cout<<"Multiple Flight Journeys: "<<multipleFlightJourneys<<endl;
+    cout<<"Booking Finished"<<endl;
 }

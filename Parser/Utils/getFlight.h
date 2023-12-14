@@ -14,7 +14,6 @@ bool flightInventoryMapCal = false;
 void calculateFlightInventoryMap(){
     for(auto [curInventoryID, curInventory]:inventoryMap){
         int curScheduleID = inventoryToScheduleMap[curInventoryID];
-        //cout<<__LINE__<<" "<<inventoryUuidGenerator.getString(curInventoryID)<<" "<<scheduleUuidGenerator.getString(curScheduleID)<<endl;
         Schedule *curSchedule = scheduleMap[curScheduleID];
 
         DateTime departureTime(curInventory->departureDate, curSchedule->departureTime);
@@ -30,8 +29,6 @@ void calculateFlightInventoryMap(){
                                 arrivalTime
                             )
                 );
-        //cout<<(curSchedule->flightNum)<<" "<<(curSchedule->srcCity)<<" "<<curSchedule->destCity<<endl;
-        //cout<<departureTime.to_string()<<" "<<arrivalTime.to_string()<<endl;
         assert(flightNumberWithDateTimeToInventoryMap.find(cur) == flightNumberWithDateTimeToInventoryMap.end());
         flightNumberWithDateTimeToInventoryMap[cur] = curInventoryID;
     }

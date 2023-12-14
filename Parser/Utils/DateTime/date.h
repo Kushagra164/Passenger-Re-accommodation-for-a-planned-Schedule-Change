@@ -15,7 +15,6 @@ public:
         for (int x = 0; x < (int) s.size(); x++){
             (s[x] == '/' or s[x] == '-') ? date.push_back("") : date.back().push_back(s[x]);
         }
-        if(date.size()!=3)cout<<"hi "<<s<<" bi"<<endl;
         assert((int) date.size() == 3);
         if ((int) date[2].size() == 2) date[2] = "20" + date[2];
         month = stoi(date[0]);
