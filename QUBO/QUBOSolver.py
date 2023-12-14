@@ -33,7 +33,7 @@ def solve_qubo(test_case, no_samples, api_key):
     SortedAssignments = {}
     sampler_embedded = EmbeddingComposite(sampler)
     # print(sampler_embedded.parameters)
-    response = sampler_embedded.sample_qubo(QUBO,anneal_schedule=[[0,1],[20.0,0.5],[40,1]],num_reads = 5,
+    response = sampler_embedded.sample_qubo(QUBO,anneal_schedule=[[0,1],[20.0,0.5],[40,1]],num_reads = no_samples,
                                             initial_state = initial_state)
     # print(response)
     response_samples = response.samples()
