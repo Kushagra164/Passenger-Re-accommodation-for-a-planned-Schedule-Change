@@ -4,7 +4,6 @@ import os
 import matplotlib.pyplot as pyplot
 
 BookingHeader = ["RECLOC","CreationDate","ActionCD","ClassCD","SegSeq","PaxCnt","FlightNum","Orig_CD","Dest_CD","DepDate","DepTime","ArrDate","ArrTime"]
-ScheduleHeader = ["ScheduleID","CarrierCD","FlightNum","AircraftType","AircraftTailNumber","DepartureAirport","ArrivalAirport","DepartureTime","ArrivalTime","StartDate","EndDate","Status","FrequencyPattern"]
 InventoryHeader = ["InventoryID","ScheduleID","FlightNum","AircraftType","DepartureDate","ArrivalDate","DepartureAirport","ArrivalAirport","Status","RescheduledTo"]
 
 parser = argparse.ArgumentParser()
@@ -21,7 +20,6 @@ lines = []
 for line in inputFile:
     lines.append(line)
 
-T = int(lines[0])
 def toFile(counter):
     outputFile = open("/tmp/file","w")
     while True:
@@ -34,85 +32,70 @@ def toFile(counter):
     return counter
 
 counter = 1
-for i in range(T):
 
-    curOutputFolderPath = outputFolderPath + "/Solution" + str(i+1)
+if not os.path.exists(outputFolderPath):
+    os.makedirs(outputFolderPath)
 
-    if not os.path.exists(curOutputFolderPath):
-        os.makedirs(curOutputFolderPath)
+# Inventory
 
-    # Schedule
+counter = toFile(counter)
+csvFile = pandas.read_csv("/tmp/file",sep="\s+",header=None)
+csvFile.iloc[:,3]=csvFile.iloc[:,3].astype(str)+csvFile.iloc[:,4].astype(str)
+csvFile=csvFile.drop([4],axis=1)
 
-    counter = toFile(counter)
-    csvFile = pandas.read_csv("/tmp/file",sep="\s+",header=None)
-    csvFile.iloc[:,3]=csvFile.iloc[:,3].astype(str)+csvFile.iloc[:,4].astype(str)
-    csvFile=csvFile.drop([4],axis=1)
+csvFile.to_csv("/tmp/intermediate.csv",header=InventoryHeader,index=None)
+csvFile = pandas.read_csv("/tmp/intermediate.csv")
 
-    csvFile.to_csv("/tmp/intermediate.csv",header=ScheduleHeader,index=None)
-    csvFile = pandas.read_csv("/tmp/intermediate.csv")
+csvFile.to_excel(outputFolderPath+"/inventory.xlsx",index=False)
 
-    csvFile.to_excel(curOutputFolderPath+"/schedule.xlsx",index=False)
+# Booking
 
-    # Inventory
+counter = toFile(counter)
+csvFile = pandas.read_csv("/tmp/file",sep="\s+",header=None)
+csvFile.to_csv("/tmp/intermediate.csv",header=BookingHeader,index=None)
+csvFile = pandas.read_csv("/tmp/intermediate.csv")
 
-    counter = toFile(counter)
-    csvFile = pandas.read_csv("/tmp/file",sep="\s+",header=None)
-    csvFile.iloc[:,3]=csvFile.iloc[:,3].astype(str)+csvFile.iloc[:,4].astype(str)
-    csvFile=csvFile.drop([4],axis=1)
+csvFile.to_excel(outputFolderPath+"/booking.xlsx",index=False)
 
-    csvFile.to_csv("/tmp/intermediate.csv",header=InventoryHeader,index=None)
-    csvFile = pandas.read_csv("/tmp/intermediate.csv")
+# statistics
 
-    csvFile.to_excel(curOutputFolderPath+"/inventory.xlsx",index=False)
+solutionTypes=["oneOne","oneMulti","multiOne","multiMulti"]
+solutionTypeValues=lines[counter].split()
+counter+=1
 
-    # Booking
+pyplot.pie(
+    solutionTypeValues,
+    labels=solutionTypes,
+    startangle=90,
+    autopct = "%1.1f%%",
+)
+pyplot.title("Flight Solutions")
 
-    counter = toFile(counter)
-    csvFile = pandas.read_csv("/tmp/file",sep="\s+",header=None)
-    csvFile.to_csv("/tmp/intermediate.csv",header=BookingHeader,index=None)
-    csvFile = pandas.read_csv("/tmp/intermediate.csv")
+pyplot.savefig(outputFolderPath+"/FlightSolution.png")
 
-    csvFile.to_excel(curOutputFolderPath+"/booking.xlsx",index=False)
+# Histogram 1 - Distribution of Passengers with Default , Non-Default and No Flight Solutions
 
-    # statistics
+solutionLabels = ["Default" , "Non-Default" , "No Flight"]
+solutionLabelValues=lines[counter].split()
+counter+=1
 
-    solutionTypes=["oneOne","oneMulti","multiOne","multiMulti"]
-    solutionTypeValues=lines[counter].split()
-    counter+=1
+pyplot.bar(solutionLabels,solutionLabelValues)
+pyplot.xlabel("Flight Solutions")
+pyplot.ylabel("Number of PNRs")
+pyplot.title("Flight Solution Distribution")
 
-    pyplot.pie(
-        solutionTypeValues,
-        labels=solutionTypes,
-        startangle=90,
-        autopct = "%1.1f%%",
-    )
-    pyplot.title("Flight Solutions")
+pyplot.savefig(outputFolderPath+"/DefaultSolution.png")
 
-    pyplot.savefig(curOutputFolderPath+"/FlightSolution.png")
+# Histogram 2 - Distribution of Passengers with Different Flight Delays
 
-    # Histogram 1 - Distribution of Passengers with Default , Non-Default and No Flight Solutions
+solutionLabels = ["0-6","6-12","12-18","18-24","24+"]
+solutionLabelValues=lines[counter].split()
+counter+=1
 
-    solutionLabels = ["Default" , "Non-Default" , "No Flight"]
-    solutionLabelValues=lines[counter].split()
-    counter+=1
+pyplot.bar(solutionLabels,solutionLabelValues)
+pyplot.xlabel("Flight Delay in Hours(""Average Flight Delay = " + 
+    str(sum(solutionLabelValues)/len(solutionLabelValues))+")")
+pyplot.ylabel("Number of PNRs")
+pyplot.title("Flight Delay Distribution")
 
-    pyplot.bar(solutionLabels,solutionLabelValues)
-    pyplot.xlabel("Flight Solutions")
-    pyplot.ylabel("Number of PNRs")
-    pyplot.title("Flight Solution Distribution")
-
-    pyplot.savefig(curOutputFolderPath+"/DefaultSolution.png")
-
-    # Histogram 2 - Distribution of Passengers with Different Flight Delays
-
-    solutionLabels = ["0-6","6-12","12-18","18-24","24+"]
-    solutionLabelValues=lines[counter].split()
-    counter+=1
-
-    pyplot.bar(solutionLabels,solutionLabelValues)
-    pyplot.xlabel("Flight Delay in Hours(""Average Flight Delay = " + 
-        str(sum(solutionLabelValues)/len(solutionLabelValues))+")")
-    pyplot.ylabel("Number of PNRs")
-    pyplot.title("Flight Delay Distribution")
-
-    pyplot.savefig(curOutputFolderPath+"/PassengerDelay.png")
+pyplot.savefig(outputFolderPath+"/PassengerDelay.png")

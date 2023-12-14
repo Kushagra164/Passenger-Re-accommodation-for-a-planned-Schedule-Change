@@ -14,9 +14,6 @@ class ineqConstraints{
 class eqConstraints{
     vector<pair<vector<int>,long long> > q;
     public:
-        void addByValue(vector<int> eq){
-
-        }
         void addByIndex(vector<int> indices,int totind = -1,int val = 0){
             vector<int> curEq;
             for(int ind: indices){
@@ -37,7 +34,7 @@ class eqConstraints{
                 curInq.F.resize(Q.size());
                 for (int i = 1; i <= curInq.S; i <<= 1)
                 {
-                    Q.addVariable();
+                    Q.addVariable(0,(curInq.S&i));
                     curInq.F.push_back(i);
                 }
                 q.push_back(curInq);

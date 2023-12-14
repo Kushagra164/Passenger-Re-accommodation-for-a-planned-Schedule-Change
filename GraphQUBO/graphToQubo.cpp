@@ -33,9 +33,8 @@ int main(int argc, char *argv[])
     quboInput.open(argv[2]);
     ifstream input;
     input.open(argv[3]);
-    int N = (argc > 4) ? stoi(argv[4]) : 300000;
+    int N = (argc > 4) ? stoi(argv[4]) : 5000000;
     int M = (argc > 5) ? stoi(argv[5]) : 100;
-    int L = (argc > 6) ? stoi(argv[6]) : 3;
 
     // input handling
     int U, C, V, D, W;
@@ -100,7 +99,16 @@ int main(int argc, char *argv[])
             vector<int> cur;
 
             dfs(i, g, visit, cur);
-
+            if(cur.size()==1){
+                int x = cur[0];
+                if(x<U)cout<<"U"<<endl;
+                else if(x<offsetV)cout<<"C"<<endl;
+                else if(x<offsetD)cout<<"V"<<endl;
+                else if(x<offsetW)cout<<"D"<<endl;
+                else if(x<T)cout<<"W"<<endl;
+                else cout<<"error"<<endl;
+                continue;
+            }
             qubo Q;
             eqConstraints eq;
             ineqConstraints inq;
@@ -127,8 +135,8 @@ int main(int argc, char *argv[])
                         int v = getV(e.F);
                         if(v!=-1)
                         {
-                            val += (e.S*L);
-                            curInd.push_back(mappingUV[mp(u, v)] = Q.addVariable(e.S*L));
+                            val += (e.S);
+                            curInd.push_back(mappingUV[mp(u, v)] = Q.addVariable(e.S));
                         }
                     }
                     
@@ -211,7 +219,7 @@ int main(int argc, char *argv[])
             eq.addInq(inq, Q);
             eq.adjustToQubo(Q,val+1);
             quboInstances.push_back(Q);
-
+            cout<<(val+1)<<" "<<Q.size()<<endl;
             mappingOutput(graphMapping, mappingUC);
             mappingOutput(graphMapping, mappingUV);
             mappingOutput(graphMapping, mappingWD);
