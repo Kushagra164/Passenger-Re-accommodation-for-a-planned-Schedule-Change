@@ -1,6 +1,6 @@
 <h1 align = "center"> Parser </h1>
 
-<span style="font-size: 20px; "> We get the information from `xlsx` files namely.</span>
+<span style="font-size: 20px; "> Our input corresponds to the following Excel files :</span>
 
 - [<span style="font-size: 18px; color: orange"> Schedule </span>](../Input/schedule.xlsx)
 - [<span style="font-size: 18px; color: orange"> Inventory </span>](../Input/inventory.xlsx)
@@ -11,41 +11,41 @@
 
 <h2 align = "left"> Schedule </h2>
 
-<span style="font-size: 15px;"> In `schedule.xlsx` we get the information about filght schedules, It consists of</span> 
+<span style="font-size: 15px;"> In `schedule.xlsx`, we received data regarding flight schedules, consisting of:</span> 
 
 - `ScheduleID` Unique id used to identify a specific schedule
-- `CarrierCode` Assumed to be Unique for all schedules
-- `FlightNumber` Assumed to be Unique for Unique citypairs
-- `AircraftType` Type of airplane
-- `AircraftTailNumber` Assumed to distinct for all airplanes
+- `CarrierCode` Assumed to be unique for all schedules
+- `FlightNumber` Flight ID
+- `AircraftType` Aircraft model
+- `AircraftTailNumber` Tail number on aircraft
 - `DepartureAirport` Departure Airport ID
 - `ArrivalAirport` Arrival Airport ID
 - `DepartureTime` Departure Time specified in __HH/MM__ format
 - `ArrivalTime` Arrival Time specified in __HH/MM__ format
 - `StartDate` Starting Date of schedule specified in __MM/DD/YYYY__ format
 - `EndDate` Ending Date of schedule specified in __MM/DD/YYYY__ format
-- `Status` Status of schedule 
-- `Frequency_per_week` Number of departures in week
+- `Status` Schedule status
+- `Frequency_per_week` Number of departures per week
 - `Frequency` Represents the pattern of departures in a week
 - `NoOfDepartures` Total number of departures between `StartDate` and `EndDate`
-- `DepartureDates` Assumed that all weekdays specified in `Frequency` that were in between `StartDate` and `EndDate`
+- `DepartureDates` List of dates corresponding to the aircraft's flight schedule
 
 ![-----------------------------------------------------](../Images/rainbow.png)
 <h2 align = "left"> Inventory </h2>
 
-<span style="font-size: 15px;"> In `inventory.xlsx` we get the information about distribution of seats in flights</span> 
+<span style="font-size: 15px;"> In `inventory.xlsx`, we received data regarding distribution of flight inventory,consisting of:</span> 
 
 - `InventoryId` Unique id used to identify a specific inventory
-- `ScheduleId` Corresponds to schedule in schedule.xlxs
-- `FlightNumber` Assumed to be Unique for Unique citypairs
+- `ScheduleId` Corresponds to flight schedule
+- `FlightNumber` Flight ID
 - `AircraftType` Type of airplane
 - `DepartureDate` Departure date specified in __MM/DD/YYYY__ format
 - `ArrivalDate` Arrival date specified in __MM/DD/YYYY__ format
 - `DepartureAirport` Departure Airport ID
 - `ArrivalAirport` Arrival Airport ID
-- `TotalCapacity` Total seats in airplane
+- `TotalCapacity` Total airplane capacity
 - `TotalInventory` Total seats that can be booked
-- `BookedInventory` seats that were already booked
+- `BookedInventory` Seats that are already booked
 - `Oversold` = `BookedInventory` - `TotalCapacity`
 - `AvailableInventory` = Available seats to be booked
 - `FirstClass` Total seats in first class
@@ -66,7 +66,7 @@
 - `PC_AvailableInventory` Available seats in premium economy class to be booked
 - `EC_TotalInventory` Total seats in economy class that can be booked
 - `EC_BookedInventory` Seats in economy class that were already booked
-- `EC_Oversold` = `PC_BookedInventory` - `EconomyClass`
+- `EC_Oversold` = `EC_BookedInventory` - `EconomyClass`
 - `EC_AvailableInventory` Available seats in economy class to be booked
 - `FC_CD` Distribution of seats cabin wise in first class
 - `BC_CD` Distribution of seats cabin wise in business class
@@ -76,14 +76,14 @@
 ![-----------------------------------------------------](../Images/rainbow.png)
 <h2 align = "left"> Booking </h2>
 
-<span style="font-size: 15px;"> In `booking.xlsx` we get the information about bookings, It consists of</span> 
+<span style="font-size: 15px;"> In `booking.xlsx`, we received data regarding pasenger bookings,consisting of:</span> 
 
-- `RECLOC` Also known as Record Locator, Used to identify booking
-- `CREATION_DTZ` Date of booking done, Specified in __MM/DD/YYYY__ format
+- `RECLOC` Also known as Record Locator, to identify booking 
+- `CREATION_DTZ` Booking date, represented in __MM/DD/YYYY__ format
 - `DEP_KEY` Carrier Code + Departure Date + Departure Airport + Arrival Airport + FlightNumber
 - `ACTION_CD` Status of Booking
 - `COS_CD` Class of Booking
-- `SEG_SEQ` Segment of Flight Journey in overall PNR
+- `SEG_SEQ` Segment of Flight Journey for PNR
 - `PAX_CNT` Number of passengers in that PNR
 - `CARRIER_CD` Code of flight operating company
 - `FLT_NUM` Flight number
@@ -98,9 +98,9 @@
 ![-----------------------------------------------------](../Images/rainbow.png)
 <h2 align = "left"> Passenger </h2>
 
-<span style="font-size: 15px;"> In `passenger.xlsx` we get the information about passenger details, It consists of</span> 
+<span style="font-size: 15px;"> In `passenger.xlsx` we received data regarding passenger details,consisting of:</span> 
 
-- `RECLOC` Also known as Record Locator, Used to identify booking
+- `RECLOC` Also known as Record Locator, to identify booking
 - `CREATION_DTZ` Date of booking specified in __MM/DD/YYYY__ format
 - `LAST_NAME` Last Name of passenger
 - `FIRST_NAME` First Name of passenger

@@ -3,8 +3,7 @@
 
 ## Contents
 
-- [Using Quantum Computing to Solve QUBO](#using-quantum-computing-to-solve-qubo)
-  - [Contents](#contents)
+
   - [Quadratic Unconstrained Binary Optimization (QUBO)](#quadratic-unconstrained-binary-optimization-qubo)
   - [Using Quantum Computing to Solve QUBO](#using-quantum-computing-to-solve-qubo-1)
   - [D-Wave Systems and D-Wave Leap](#d-wave-systems-and-d-wave-leap)
@@ -17,7 +16,7 @@
 
 - **Definition:**
   - QUBO: Quadratic Unconstrained Binary Optimization.
-  - Mathematical framework for optimization with binary variables (0 or 1).
+  - It is a mathematical framework for optimization with binary variables (0 or 1).
   - Objective: Minimize or maximize a quadratic objective function.
 
 - **Mathematical Formulation:**
@@ -31,7 +30,7 @@
 
 - **Quantum Annealing:**
   - Approach in quantum computing for optimization problems, including QUBO.
-  - Quantum system evolves from higher-energy state to find optimal solution.
+  - Quantum system evolves from higher-energy state to lower-energy states to find an optimal solution.
   - Process governed by a quantum Hamiltonian, gradually changing over time.
 
 - **Mapping to Ising Model:**
@@ -67,8 +66,9 @@
 
 ## Optimization Using Multithreading to Solve Subgraphs Simultaneously
 
-In the pursuit of enhanced computational efficiency, a sophisticated optimization framework has been devised, leveraging a concurrent and parallelized approach. The optimization problem at hand, characterized by multiple subgraphs, is addressed through the implementation of multithreading, where each distinct subgraph is assigned to a dedicated computational thread.
+A sophisticated optimization framework has been developed with the aim of improving computational efficiency. This framework utilizes a concurrent and parallelized approach. The optimization issue at hand, which is distinguished by the presence of numerous subgraphs, is resolved by employing multithreading, in which a dedicated computational thread is allocated to each unique subgraph.
 
-The optimization process involves the formulation of Quantum Unconstrained Binary Optimization (QUBO) matrices for individual subgraphs, encapsulating the specific constraints and objectives unique to each subset. Subsequently, simultaneous API requests are dispatched to the D-Wave sampler, orchestrating a concurrent and parallelized exploration of the solution space. This multithreaded execution not only expedites the overall optimization procedure but also capitalizes on the parallel processing capabilities, allowing for a more expedient resolution of complex problem instances. The seamless integration of multithreading with quantum optimization techniques constitutes a robust and scalable methodology, poised to significantly enhance the computational efficacy of the overall optimization framework. This concurrent approach underscores a commitment to harnessing cutting-edge technologies to address intricate problem domains with unprecedented speed and efficiency.
+The formulation of Quantum Unconstrained Binary Optimization (QUBO) matrices for individual subgraphs, which encapsulate the constraints and objectives that are distinct to each subset, is an integral part of the optimization process. Following this, the D-Wave sampler is notified of simultaneous API requests, which coordinates a parallel and concurrent exploration of the solution space. The utilization of multithreaded execution not only accelerates the optimization process as a whole, but also leverages the capabilities of parallel processing to resolve complex problem instances more quickly.
+
 
 --------------------------------------------

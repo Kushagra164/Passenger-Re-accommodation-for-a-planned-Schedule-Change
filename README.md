@@ -20,17 +20,16 @@
 
 Airlines frequently adjust flight schedules, impacting passengers who need to be re-accommodated on alternative flights. This project aims to automate the analysis of schedule changes, identify affected flights and passengers, and provide optimal re-accommodation solutions.
 
-We need to Develop a system to identify and rank optimal alternate flight solutions for passengers affected by planned schedule changes. Utilize provided rule sets to ensure solution validity, considering factors like time, ancillary services impact, and passenger priority based on type and loyalty.
+We need to develop a system to identify and rank optimal alternate flight solutions for passengers affected by planned schedule changes.Additionally, we  need to utilize provided rule sets to ensure solution validity, considering factors like time, ancillary services impact, and passenger priority based on cabin and loyalty.
 
-The Objectives are:
+Our objectives are to:
 
 1. Identify impacted flights and passengers.
-2. Optimize alternate flight selection based on time, ancillary services impact, etc.
-3. Prioritize passenger re-accommodation based on factors like passenger type and loyalty.
-4. Allow flexibility to customize business rules for flight and passenger ranking.
-5. Generate and rank re-accommodation solutions for airlines to choose from.
-6. Provide flexibility in altering business rules and reproducing solutions.
-7. Implement expiration date and time for solutions.
+1. Optimize alternate flight selection based on time, ancillary services impact, etc.
+1. Prioritize passenger re-accommodation based on factors like passenger cabin and loyalty.
+1. Allow flexibility to customize business rules for flight and passenger ranking.
+1. Generate and rank re-accommodation solutions for airlines to choose from.
+1. Implement expiration date and time for solutions.
 
 
 :point_right: Click <a href="https://drive.google.com/file/d/1Ppkx6Iz7R2zpg1qSGHCDRIupKZ-0LBpM/view">here</a> to get the detailed problem statement. 
@@ -48,11 +47,11 @@ We can streamline our problem-solving approach by reducing the complexity in the
 </p>
 
 Here,
-- $W$ represents set of nodes denoting canceled flights.
-- $U$ represents set of nodes denoting affecting PNRs.
+- $W$ represents set of nodes denoting cancelled flights.
+- $U$ represents set of nodes denoting affected PNRs.
 - $D$ represents set of nodes denoting proposed flights.
-- $V$ represents set of nodes denoting direct proposed flight, class.
-- $C$ represents set of nodes denoting Connecting proposed flights, class.
+- $V$ represents set of nodes denoting direct proposed flight with class.
+- $C$ represents set of nodes denoting connected proposed flight with class.
 
 
 
@@ -64,7 +63,7 @@ Here,
 2. It is imperative to ensure that seat allocations do not exceed the available number of seats, maintaining a meticulous alignment between the number of seats allocated and the actual capacity.
 
 
-3. Let D denote the set comprising all proposed flights for rescheduling, and W represent the set of cancelled flights. A critical constraint demands that each cancelled flight, residing within set W, be exclusively assigned to a single new rescheduled flight from the set D.
+3. Let D denote the set comprising all proposed flights for rescheduling, and W represent the set of cancelled flights. We must ensure that each cancelled flight, residing within set W, be exclusively assigned to a single new rescheduled flight from the set D.
 
 
 ## Proposed Scoring Function
@@ -74,9 +73,9 @@ Here,
 The proposed scoring function for Optimization is shown above :
 
 where,
-- $n_{PNR}$ = Number of PNR reallocated;
-- $n_{Passengers}$ = Number of Passengers allocated through the default solution;
-- $s_v$ = Score of Edges selected in (U, V);
+- $n_{PNR}$ = Number of PNR reallocated
+- $n_{Passengers}$ = Number of Passengers allocated through the default solution
+- $s_v$ = Score of Edges selected in (U, V)
 - $s_c$ = Score of Edges selected in (U, C).
 - $\lambda_c$ = Number of Flights in C.
 
@@ -88,7 +87,7 @@ Here, $N$, $M$ are scaling factors for each individual property used to quantify
 
 
 Quadratic Unconstrained Binary Optimization (QUBO) serves as a mathematical framework for binary optimization, with the primary goal of minimizing or maximizing a quadratic objective function.
-To leverage quantum computing for solving QUBO matrices, quantum annealing is employed—an approach that begins in a higher-energy state, enabling the system to find optimal solutions. This process is facilitated through the utilization of the Ising model, which transforms QUBO problems into the Ising Hamiltonian.
+To leverage quantum computing for solving QUBO matrices, quantum annealing is employed—an approach that begins in a higher-energy state,and thereafter keeps transitioning to lower energy states, thus enabling the system to find optimal solutions. This process is facilitated through the utilization of the Ising model, which transforms QUBO problems into the Ising Hamiltonian.
 
 D-Wave Systems, a pioneer in quantum computing, offers D-Wave Leap—a cloud-based service providing remote access to quantum processors. The Leap Hybrid Solver, a feature of D-Wave Leap, seamlessly integrates classical and quantum processing. By leveraging D-Wave's quantum processing unit (QPU) in conjunction with classical computing, it offers an effective solution for addressing complex optimization problems.
 
@@ -113,9 +112,9 @@ Check out each repository's `README.md` to know about the specific usages.
 
 <h2 id="usage"> ✨ Contributors </h2>
 
-- **[Sarthak Gupta](https://www.linkedin.com/in/sg1729/) - Team Lead**
-- **[Kushagra Khare](https://www.linkedin.com/in/kushagra-khare-5b76b8215/) - Team Vice Lead**
-- **[Akshat Rampuria](https://www.linkedin.com/in/akshat-rampuria/)**
-- **[Arihant Garg](https://www.linkedin.com/in/arihant-garg-22a535247/)**
-- **[Thatparthi Ajay Reddy](https://www.linkedin.com/in/ajay-reddy-5671b2247/)**
-- **[Shreyan Bagchi](https://www.linkedin.com/in/shreyan-bagchi/)**
+- **Kushagra Khare - Team Lead**
+- **Akshat Rampuria - Team Vice Lead**
+- **Sarthak Gupta**
+- **Arihant Garg**
+- **Thatparthi Ajay Reddy**
+- **Shreyan Bagchi**
