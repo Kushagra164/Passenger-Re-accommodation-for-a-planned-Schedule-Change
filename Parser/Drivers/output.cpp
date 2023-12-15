@@ -13,12 +13,12 @@
 
 class Delay{
 private:
-    int lt6,lt12,lt18,lt24,mt24,cnt;
+    int lt6,lt12,lt18,lt24,lt36,lt48,mt48,cnt;
     double totalDelay;
 
 public:
     Delay():
-            lt6(0),lt12(0),lt18(0),lt24(0),mt24(0),cnt(0),totalDelay(0.0){}
+            lt6(0),lt12(0),lt18(0),lt24(0),lt36(0),lt48(0),mt48(0),cnt(0),totalDelay(0.0){}
 
     void checkAndIncrement(double timeDelay){
         cnt++;
@@ -27,16 +27,19 @@ public:
         else if(timeDelay <= 12) lt12++;
         else if(timeDelay <= 18) lt18++;
         else if(timeDelay <= 24) lt24++;
-        else mt24++;}
+        else if(timeDelay <= 36) lt36++;
+        else if(timeDelay <= 48) lt48++;
+        else mt48++;
+    }
     void display(ofstream& output){
         output<<lt6<<" ";
         output<<lt12<<" ";
         output<<lt18<<" ";
         output<<lt24<<" ";
-        output<<mt24<<" ";
-
-        //Debugging
-        cout<<(totalDelay/cnt)<<endl;
+        output<<lt36<<" ";
+        output<<lt48<<" ";
+        output<<mt48<<" ";
+        output<<(totalDelay/cnt)<<endl;
     }
 };
 
