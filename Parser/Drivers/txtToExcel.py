@@ -67,10 +67,10 @@ counter+=1
 pyplot.figure(figsize=(8,8))
 pyplot.pie(
     solutionTypeValues,
-    labels=solutionTypes,
     startangle=90,
     autopct = "%1.1f%%",
 )
+pyplot.legend()
 pyplot.title("Flight Solutions")
 
 pyplot.savefig(outputFolderPath+"/FlightSolution.png")
