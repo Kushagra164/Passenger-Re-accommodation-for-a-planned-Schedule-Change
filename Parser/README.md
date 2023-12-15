@@ -1,16 +1,17 @@
 <h1 align = "center"> Parser </h1>
 
-<span style="font-size: 20px; "> We get the information from xlsx files namely.</span>
+<span style="font-size: 20px; "> We get the information from `xlsx` files namely.</span>
 
-- [<span style="font-size: 18px; color: orange"> Schedule </span>]()
-- [<span style="font-size: 18px; color: orange"> Inventory </span>]()
-- [<span style="font-size: 18px; color: orange"> Booking </span>]()
-- [<span style="font-size: 18px; color: orange"> Passenger </span>]()
+- [<span style="font-size: 18px; color: orange"> Schedule </span>](../Input/schedule.xlsx)
+- [<span style="font-size: 18px; color: orange"> Inventory </span>](../Input/inventory.xlsx)
+- [<span style="font-size: 18px; color: orange"> Booking </span>](../Input/booking.xlsx)
+- [<span style="font-size: 18px; color: orange"> Passenger </span>](../Input/passenger.xlsx)
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+![-----------------------------------------------------](../Images/rainbow.png)
 
 <h2 align = "left"> Schedule </h2>
-<span style="font-size: 15px;"> In schedule.xlsx we get the information about filght schedules, It consists of</span> 
+
+<span style="font-size: 15px;"> In `schedule.xlsx` we get the information about filght schedules, It consists of</span> 
 
 - `ScheduleID` Unique id used to identify a specific schedule
 - `CarrierCode` Assumed to be Unique for all schedules
@@ -29,9 +30,10 @@
 - `NoOfDepartures` Total number of departures between `StartDate` and `EndDate`
 - `DepartureDates` Assumed that all weekdays specified in `Frequency` that were in between `StartDate` and `EndDate`
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+![-----------------------------------------------------](../Images/rainbow.png)
 <h2 align = "left"> Inventory </h2>
-<span style="font-size: 15px;"> In inventory.xlsx we get the information about distribution of seats in flights</span> 
+
+<span style="font-size: 15px;"> In `inventory.xlsx` we get the information about distribution of seats in flights</span> 
 
 - `InventoryId` Unique id used to identify a specific inventory
 - `ScheduleId` Corresponds to schedule in schedule.xlxs
@@ -71,9 +73,10 @@
 - `PC_CD` Distribution of seats cabin wise in premium economy class
 - `EC_CD` Distribution of seats cabin wise in economy class
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+![-----------------------------------------------------](../Images/rainbow.png)
 <h2 align = "left"> Booking </h2>
-<span style="font-size: 15px;"> In booking.xlsx we get the information about bookings, It consists of</span> 
+
+<span style="font-size: 15px;"> In `booking.xlsx` we get the information about bookings, It consists of</span> 
 
 - `RECLOC` Also known as Record Locator, Used to identify booking
 - `CREATION_DTZ` Date of booking done, Specified in __MM/DD/YYYY__ format
@@ -92,9 +95,10 @@
 - `DEP_DTMZ` Global Departure DateTime specified in __MM/DD/YYYY HH:MM__ format
 - `ARR_DTMZ` Global Arrival DateTime specified in __MM/DD/YYYY HH:MM__ format
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+![-----------------------------------------------------](../Images/rainbow.png)
 <h2 align = "left"> Passenger </h2>
-<span style="font-size: 15px;"> In passenger.xlsx we get the information about passenger details, It consists of</span> 
+
+<span style="font-size: 15px;"> In `passenger.xlsx` we get the information about passenger details, It consists of</span> 
 
 - `RECLOC` Also known as Record Locator, Used to identify booking
 - `CREATION_DTZ` Date of booking specified in __MM/DD/YYYY__ format
@@ -109,7 +113,7 @@
 - `SPECIAL_NAME_CD2` Any of NRPS, NRSA
 - `SSR_CODE_CD1` Any of WCHR, BLND, DEAF
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+![-----------------------------------------------------](../Images/rainbow.png)
 
 
 
