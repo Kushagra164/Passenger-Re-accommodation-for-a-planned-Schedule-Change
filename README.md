@@ -11,7 +11,8 @@
 
  1. [Problem Statement](#problem)
  2. [Proposed Solution](#solution)
- 3. [Usage Instructions](#usage)
+ 3. [Analysis](#Analysis)
+ 4. [Usage Instructions](#usage)
 
 ![-----------------------------------------------------](./Images/rainbow.png)
 
