@@ -37,10 +37,12 @@ void getInventoryOutput(ofstream &fw, map<int, int> &cancelledFlightToSolutionFl
         {
             if (DelayedFlights.find(curInventoryID) != DelayedFlights.end())
                 fw << "Delayed"<< " " << "null";
-            else if ((CancelledFlights.find(curInventoryID) != CancelledFlights.end()) 
-                        && (cancelledFlightToSolutionFlightMap.find(curInventoryID) !=
-                            cancelledFlightToSolutionFlightMap.end()))
-                fw << "Rescheduled" << " " << cancelledFlightToSolutionFlightMap[curInventoryID];
+            else if (CancelledFlights.find(curInventoryID) != CancelledFlights.end()){
+                if(cancelledFlightToSolutionFlightMap.find(curInventoryID) !=
+                    cancelledFlightToSolutionFlightMap.end())
+                    fw << "Rescheduled " << " " << cancelledFlightToSolutionFlightMap[curInventoryID];
+                else fw<< "Cancelled" << " " << " null" << endl;
+            }
             else if (scheduleMap[inventoryToScheduleMap[curInventoryID]]->status == SCHEDULE_SCHEDULED)
                 fw << "Scheduled" << " " << "null";
             else if (scheduleMap[inventoryToScheduleMap[curInventoryID]]->status == SCHEDULE_PLANNED)
