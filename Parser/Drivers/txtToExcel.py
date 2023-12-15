@@ -62,7 +62,7 @@ csvFile.to_excel(outputFolderPath+"/booking.xlsx",index=False)
 
 solutionTypes=["oneOne","oneMulti","multiOne","multiMulti","unallocated"]
 solutionTypeValues=lines[counter].split()
-solutionTypeValues=[int(i) for i in solutionLabelValues]
+solutionTypeValues=[int(i) for i in solutionTypeValues]
 totalAffectedPassengers=sum(solutionTypeValues)
 counter+=1
 
