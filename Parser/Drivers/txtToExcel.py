@@ -92,14 +92,17 @@ pyplot.close()
 
 # Histogram 2 - Distribution of Passengers with Different Flight Delays
 
-solutionLabels = ["0-6","6-12","12-18","18-24","24+"]
+solutionLabels = ["0-6","6-12","12-18","18-24","24-36","36-48","48-72"]
 solutionLabelValues=lines[counter].split()
+averageDelay=solutionLabelValues[-1]
+solutionLabelValues.pop()
+
 solutionLabelValues=[int(i) for i in solutionLabelValues]
 counter+=1
 
 pyplot.bar(solutionLabels,solutionLabelValues)
 pyplot.xlabel("Flight Delay in Hours(""Average Flight Delay = " + 
-    str(sum(solutionLabelValues)/len(solutionLabelValues))+")")
+    str(averageDelay)+")")
 pyplot.ylabel("Number of PNRs")
 pyplot.title("Flight Delay Distribution")
 
