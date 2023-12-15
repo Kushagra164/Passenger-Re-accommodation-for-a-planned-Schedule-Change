@@ -85,27 +85,15 @@ Here, $N$, $M$ are scaling factors for each individual property used to quantify
 
 ## Using Quantum Computing to Solve QUBO
 
-### Quadratic Unconstrained Binary Optimization (QUBO)
 
-QUBO is a mathematical framework for binary optimization, aiming to minimize or maximize a quadratic objective function expressed as:
+Quadratic Unconstrained Binary Optimization (QUBO) serves as a mathematical framework for binary optimization, with the primary goal of minimizing or maximizing a quadratic objective function.
+To leverage quantum computing for solving QUBO matrices, quantum annealing is employed—an approach that begins in a higher-energy state, enabling the system to find optimal solutions. This process is facilitated through the utilization of the Ising model, which transforms QUBO problems into the Ising Hamiltonian.
 
-\[ f(x) = \sum_{i=1}^{N} q_i x_i + \sum_{i=1}^{N}\sum_{j=i+1}^{N} q_{ij} x_i x_j \]
+D-Wave Systems, a pioneer in quantum computing, offers D-Wave Leap—a cloud-based service providing remote access to quantum processors. The Leap Hybrid Solver, a feature of D-Wave Leap, seamlessly integrates classical and quantum processing. By leveraging D-Wave's quantum processing unit (QPU) in conjunction with classical computing, it offers an effective solution for addressing complex optimization problems.
 
-### Quantum Annealing and Ising Model Mapping
+Adiabatic quantum computing, a broader approach encompassing quantum annealing, relies on the adiabatic theorem to ensure that a quantum system remains in its ground state during a slow evolution between initial and final Hamiltonians.
 
-Quantum annealing, a process in quantum computing, finds optimal solutions by starting in a higher-energy state. This approach utilizes the Ising model, transforming QUBO problems into the Ising Hamiltonian.
-
-### D-Wave Systems and Leap Hybrid Solver
-
-D-Wave Systems, specializing in quantum computing, provides D-Wave Leap—a cloud-based service for remote quantum processor access. The Leap Hybrid Solver seamlessly combines classical and quantum processing, leveraging D-Wave's quantum processing unit (QPU) alongside classical computing.
-
-### Adiabatic Quantum Computing
-
-Adiabatic quantum computing, a broader approach encompassing quantum annealing, relies on the adiabatic theorem. This theorem ensures that a quantum system remains in its ground state during a slow evolution between initial and final Hamiltonians, expressed as:
-
-\[ E_0(t) \leq E_1(t) \leq E_2(t) \leq \ldots \]
-
-This approach enables effective problem-solving by exploring various possibilities simultaneously.
+This comprehensive approach enables efficient problem-solving by concurrently exploring various possibilities.
 
 
 ![-----------------------------------------------------](./Images/rainbow.png)
