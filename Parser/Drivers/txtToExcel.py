@@ -92,7 +92,8 @@ pyplot.close()
 
 # Histogram 2 - Distribution of Passengers with Different Flight Delays
 
-for i in range(0,66,6):
+solutionLabels=list()
+for i in range(0,72,6):
     solutionLabels.append(str(i)+"-"+str(i+6))
 solutionLabelValues=lines[counter].split()
 averageDelay=solutionLabelValues[-1]
