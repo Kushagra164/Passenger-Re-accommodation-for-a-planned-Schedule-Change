@@ -18,13 +18,11 @@ vector<int> findAllRelevantFlightsFromSrc(int originalInventoryID)
 
     for (auto [curInventoryID, curInventory] : inventoryMap)
     {
-        if (curInventoryID == originalInventoryID)
-            continue;
         Schedule *curSchedule = scheduleMap[inventoryToScheduleMap[curInventoryID]];
         if ((CancelledFlights.find(curInventoryID) == CancelledFlights.end()) && (curSchedule->srcCity == srcCity))
         {
 
-            Time ArrivalTimeDiff = getArrTimeDiff(curInventoryID, originalInventoryID);
+            Time ArrivalTimeDiff = getDepTimeDiff(curInventoryID, originalInventoryID);
             if (ArrivalTimeDiff <= MAXIMUM_ALLOWED_TIME_DIFF)
             {
                 result.push_back(curInventoryID);
@@ -47,13 +45,11 @@ vector<int> findAllRelevantFlightsToDest(int originalInventoryID)
 
     for (auto [curInventoryID, curInventory] : inventoryMap)
     {
-        if (curInventoryID == originalInventoryID)
-            continue;
         Schedule *curSchedule = scheduleMap[inventoryToScheduleMap[curInventoryID]];
         if ((CancelledFlights.find(curInventoryID) == CancelledFlights.end()) && (curSchedule->destCity == destCity))
         {
 
-            Time DepartureTimeDiff = getDepTimeDiff(curInventoryID, originalInventoryID);
+            Time DepartureTimeDiff = getArrTimeDiff(curInventoryID, originalInventoryID);
             if (DepartureTimeDiff <= MAXIMUM_ALLOWED_TIME_DIFF)
             {
                 result.push_back(curInventoryID);
@@ -93,8 +89,8 @@ vector<vector<int>> getConnectingFlights(vector<int> &fromSrc, vector<int> &toDe
     return connectingFlights;
 }
 
-// populates 
-void createConnectingFlightGraph(vector<vector<int>> flightAdj){
+// populates graph
+void createConnectingFlightGraph(vector<vector<int>> &flightAdj){
     for(auto [srcInventoryID, srcInventory]: inventoryMap){
         for(auto [destInventoryID, destInventory]: inventoryMap){
             if(canConnect(srcInventoryID, destInventoryID)){
@@ -243,7 +239,7 @@ vector<pair<int, CLASS_CD>> multiSourceBFS(
             if(destGoal.find(make_pair(flight, classCD))!=destGoal.end()){
                 pair<int, CLASS_CD> cur = make_pair(flight, classCD);
                 vector<pair<int, CLASS_CD>> connectingFlight;
-                while(parent[cur].first!=-1){
+                while(cur.first!=-1){
                     connectingFlight.push_back(cur);
                     cur = parent[cur];
                 }
@@ -257,7 +253,7 @@ vector<pair<int, CLASS_CD>> multiSourceBFS(
                     CLASS_CD castClassCD = static_cast<CLASS_CD>(toClassCD);
                     if(parent.find(make_pair(toFlight, castClassCD))!=parent.end()) continue;
                     int maxPaxCnt = getPassengers(toFlight, castClassCD);
-                    if( maxPaxCnt<curPaxCnt)
+                    if(maxPaxCnt<curPaxCnt)
                         continue;
                     parent[make_pair(toFlight, castClassCD)] = make_pair(flight, classCD);
                     flights.push(make_pair(toFlight, castClassCD));

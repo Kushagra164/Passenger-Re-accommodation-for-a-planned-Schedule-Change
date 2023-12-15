@@ -10,6 +10,7 @@ void graphUCAndGraphCVGenerator()
     set<vector<pair<int, CLASS_CD>>> C;
 
     auto addUCEdge = [&](int curJourneyID, vector<pair<int,CLASS_CD>> curConnectingFlight, long long score){
+
         int curUIdx = uIndexGenerator.getIndex(curJourneyID);
         int curCIdx = cIndexGenerator.getIndex(curConnectingFlight);
         if(UCEdges.find(make_pair(curUIdx, curCIdx))!=UCEdges.end())
@@ -33,7 +34,7 @@ void graphUCAndGraphCVGenerator()
 
         if(curDiff > (MAXIMUM_ALLOWED_TIME_DIFF*2))
             return;
-        
+
         bool isClassNotAllowed = false;
         CLASS_CD journeyClassCD = journeyMap[curJourneyID]->classCD;
         for (auto [curFlight, curClassCD] : curConnectingFlight)
@@ -109,14 +110,14 @@ void graphUCAndGraphCVGenerator()
         int curUIdx = uIndexGenerator.getIndex(curJourneyID);
         int curProposedFlights = graphUC[curUIdx].size() + graphUV[curUIdx].size();
         string recLoc = pnrUuidGenerator.getString(journeyToPnrMap[curJourneyID]);
-        if(recLoc == "ERUF30")cout<<__LINE__<<" "<<recLoc<<" "<<curProposedFlights<<endl;
+
         if (curProposedFlights >= MINIMUM_PROPOSED_FLIGHTS)
             continue;
         
         Journey *curJourney = journeyMap[curJourneyID];
         vector<int> flightsFromSrc = findAllRelevantFlightsFromSrc(curJourney->flights[0]);
         vector<int> flightsToDest = findAllRelevantFlightsToDest(curJourney->flights.back());
-        cout<<__LINE__<<" "<<recLoc<<" "<<flightsFromSrc.size()<<endl;
+
         int curPaxCnt = pnrMap[journeyToPnrMap[curJourneyID]]->paxCnt;
 
         vector<pair<int, CLASS_CD>> bestConnectingFlight = multiSourceBFS(flightAdj, flightsFromSrc, flightsToDest, 
