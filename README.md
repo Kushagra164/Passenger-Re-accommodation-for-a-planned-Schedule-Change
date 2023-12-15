@@ -43,7 +43,7 @@ We can streamline our problem-solving approach by reducing the complexity in the
 ## Problem Reduced to Graph Representation
 
 <p align="center"> 
-<img src="Images/pentagraph.png" alt="Graph Representaion" height="400px" width="600px">
+<img src="Images/pentagraph.png" alt="Graph Representaion" height="500px" width="600px">
 </p>
 
 Here,
