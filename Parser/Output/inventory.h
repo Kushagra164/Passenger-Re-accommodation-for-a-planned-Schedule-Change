@@ -41,7 +41,7 @@ void getInventoryOutput(ofstream &fw, map<int, int> &cancelledFlightToSolutionFl
                 if(cancelledFlightToSolutionFlightMap.find(curInventoryID) !=
                     cancelledFlightToSolutionFlightMap.end())
                     fw << "Rescheduled " << " " << cancelledFlightToSolutionFlightMap[curInventoryID];
-                else fw<< "Cancelled" << " " << " null";
+                else fw<< "Cancelled" << " " << "null";
             }
             else if (scheduleMap[inventoryToScheduleMap[curInventoryID]]->status == SCHEDULE_SCHEDULED)
                 fw << "Scheduled" << " " << "null";
