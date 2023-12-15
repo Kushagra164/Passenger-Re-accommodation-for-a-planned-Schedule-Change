@@ -38,7 +38,7 @@ counter = 1
 if not os.path.exists(outputFolderPath):
     os.makedirs(outputFolderPath)
 
-# Inventory
+# Inventory Excel File
 
 counter = toFile(counter)
 csvFile = pandas.read_csv(tmpFolderPath+"/tmpFile.txt",sep="\s+",header=None)
@@ -48,7 +48,7 @@ csvFile = pandas.read_csv(tmpFolderPath+"/intermediate.csv")
 
 csvFile.to_excel(outputFolderPath+"/inventory.xlsx",index=False)
 
-# Booking
+# Booking Excel File
 
 counter = toFile(counter)
 csvFile = pandas.read_csv(tmpFolderPath+"/tmpFile.txt",sep="\s+",header=None)
@@ -58,7 +58,7 @@ csvFile = pandas.read_csv(tmpFolderPath+"/intermediate.csv")
 
 csvFile.to_excel(outputFolderPath+"/booking.xlsx",index=False)
 
-# statistics
+# Pie Chart - Distribution of 1-1, 1-Multi, Multi-1, Multi-Multi and Unallocated Flight Solutions
 
 solutionTypes=["oneOne","oneMulti","multiOne","multiMulti","unallocated"]
 solutionTypeValues=lines[counter].split()
@@ -69,6 +69,7 @@ pyplot.pie(
     solutionTypeValues,
     startangle=90,
     autopct = "%1.1f%%",
+    colors=["red","orange","violet","aqua","lightgreen"]
 )
 pyplot.legend(solutionTypes)
 pyplot.title("Flight Solutions")

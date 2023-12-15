@@ -30,7 +30,7 @@ using namespace std;
 #define MAXIMUM_ALLOWED_CONNECTING_FLIGHTS_PER_JOURNEY 5
 #define CARRIER_CODE_LENGTH 2
 #define MINIMUM_PROPOSED_FLIGHTS 2
-#define RANDOM_SEED 790
+#define RANDOM_SEED 500
 
 enum ACTION_CD{GN,HK,HL,XX};
 static ACTION_CD getActionCode(string str){
