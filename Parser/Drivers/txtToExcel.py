@@ -88,10 +88,13 @@ solutionLabelValues=[int(i) for i in solutionLabelValues]
 counter+=1
 
 pyplot.figure(figsize=(10,6))
-pyplot.bar(solutionLabels,solutionLabelValues)
+pyplot.bar(solutionLabels,solutionLabelValues,color="skyblue")
 pyplot.xlabel("Flight Solutions")
 pyplot.ylabel("Number of PNRs")
 pyplot.title("Flight Solution Distribution")
+pyplot.grid(axis='y',linestyle="--",alpha=0.7)
+for i, value in enumerate(solutionLabelValues):
+    pyplot.text(i, value + 2, str(value), ha='center', va='bottom')
 
 pyplot.savefig(outputFolderPath+"/DefaultSolution.png")
 pyplot.close()
@@ -109,11 +112,14 @@ solutionLabelValues=[int(i) for i in solutionLabelValues]
 counter+=1
 
 pyplot.figure(figsize=(10,6))
-pyplot.bar(solutionLabels,solutionLabelValues)
+pyplot.bar(solutionLabels,solutionLabelValues,color="skyblue")
 pyplot.xlabel("Flight Delay in Hours(""Average Flight Delay = " + 
     str(averageDelay)+")")
 pyplot.ylabel("Number of PNRs")
 pyplot.title("Flight Delay Distribution")
+pyplot.grid(axis='y',linestyle="--",alpha=0.7)
+for i, value in enumerate(solutionLabelValues):
+    pyplot.text(i, value + 2, str(value), ha='center', va='bottom')
 
 pyplot.savefig(outputFolderPath+"/PassengerDelay.png")
 pyplot.close()
