@@ -1,9 +1,60 @@
 #pragma once
+#include<set>
 #include "../Helpers/helper.h"
 using namespace std;
 
 void graphUCAndGraphCVGenerator()
 {
+    // add UC edge 
+    set<pair<int,int>> UCEdges;
+    set<vector<pair<int, CLASS_CD>>> C;
+
+    auto addUCEdge = [&](int curJourneyID, vector<pair<int,CLASS_CD>> curConnectingFlight, long long score){
+        int curUIdx = uIndexGenerator.getIndex(curJourneyID);
+        int curCIdx = cIndexGenerator.getIndex(curConnectingFlight);
+        if(UCEdges.find(make_pair(curUIdx, curCIdx))!=UCEdges.end())
+            return;
+        UCEdges.insert(make_pair(curUIdx, curCIdx));
+        Journey *curJourney = journeyMap[curJourneyID];
+
+        string flightSrcCity = scheduleMap[inventoryToScheduleMap[curConnectingFlight[0].first]]->srcCity;
+        string flightDestCity = scheduleMap[inventoryToScheduleMap[curConnectingFlight.back().first]]->destCity;
+
+        if(curJourney->src!=flightSrcCity) return;
+        if(curJourney->dest!=flightDestCity) return;
+
+        int maxPaxCnt = allowedPassengers(curConnectingFlight);
+        int curPaxCnt = pnrMap[journeyToPnrMap[curJourneyID]]->paxCnt;
+        
+        if(maxPaxCnt<curPaxCnt) return;
+        
+        Time curDiff = getDepTimeDiff(journeyMap[curJourneyID]->flights[0], curConnectingFlight[0].first) 
+                        + getArrTimeDiff(journeyMap[curJourneyID]->flights.back(), curConnectingFlight.back().first);
+
+        if(curDiff > (MAXIMUM_ALLOWED_TIME_DIFF*2))
+            return;
+        
+        bool isClassNotAllowed = false;
+        CLASS_CD journeyClassCD = journeyMap[curJourneyID]->classCD;
+        for (auto [curFlight, curClassCD] : curConnectingFlight)
+        {
+            if (
+                ((curClassCD < journeyClassCD) && !CLASS_UPGRADE_ALLOWED) ||
+                ((curClassCD > journeyClassCD) && !CLASS_DOWNGRADE_ALLOWED))
+            {
+                isClassNotAllowed = true;
+                break;
+            }
+        }
+
+        if (isClassNotAllowed)
+            return;
+
+        C.insert(curConnectingFlight);
+        graphUC[curUIdx].push_back(make_pair(curCIdx, score));
+    };
+
+    // hubs
     for (int curInventoryID : CancelledFlights)
     {
         int curScheduleID = inventoryToScheduleMap[curInventoryID];
@@ -17,88 +68,47 @@ void graphUCAndGraphCVGenerator()
         vector<vector<int>> connectingFlights = getConnectingFlights(flightsFromSrc, flightsToDest);
         vector<pair<long long, vector<pair<int, CLASS_CD>>>> bestConnectingFlights = getBestConnectingFlights(curInventoryID, connectingFlights);
 
-        for (auto [curScore, curFlights] : bestConnectingFlights)
+        for (auto [curScore, curConnectingFlight] : bestConnectingFlights)
         {
-            int curCIdx = cIndexGenerator.getIndex(curFlights);
-            if (curCIdx != (cIndexGenerator.getSize() - 1))
-                continue;
-            int maxPaxCnt = allowedPassengers(curFlights);
-
-            // UC
-            for (int curJourneyID : AffectedJourneys)
-            {
-                if (journeyMap[curJourneyID]->src != srcCity)
-                    continue;
-                if (journeyMap[curJourneyID]->dest != destCity)
-                    continue;
-                if (maxPaxCnt < pnrMap[journeyToPnrMap[curJourneyID]]->paxCnt)
-                    continue;
-                Time curDiff = getDepTimeDiff(journeyMap[curJourneyID]->flights[0], curFlights[0].first) + getArrTimeDiff(journeyMap[curJourneyID]->flights.back(), curFlights.back().first);
-                if (curDiff > (MAXIMUM_ALLOWED_TIME_DIFF * 2))
-                    continue;
-
-                bool isClassNotAllowed = false;
-                CLASS_CD journeyClassCD = journeyMap[curJourneyID]->classCD;
-                for (auto [curFlight, curClassCD] : curFlights)
-                {
-                    if (
-                        ((curClassCD < journeyClassCD) && !CLASS_UPGRADE_ALLOWED) ||
-                        ((curClassCD > journeyClassCD) && !CLASS_DOWNGRADE_ALLOWED))
-                    {
-                        isClassNotAllowed = true;
-                        break;
-                    }
-                }
-
-                if (isClassNotAllowed)
-                    continue;
-
-                int curUIdx = uIndexGenerator.getIndex(curJourneyID);
-
-                graphUC[curUIdx].push_back(make_pair(curCIdx, curScore * pnrScore(curJourneyID, journeyMap[curJourneyID]->classCD)));
-            }
-
-            for (auto curFlight : curFlights)
-            {
-                int curVIdx = vIndexGenerator.getIndex(curFlight);
-                graphCV[curCIdx].push_back(curVIdx);
+            for(int curJourneyID: AffectedJourneys){
+                addUCEdge(curJourneyID, curConnectingFlight,
+                    curScore * pnrScore(curJourneyID, journeyMap[curJourneyID]->classCD));
             }
         }
     }
+
+    // Brute Via
     for (int curJourneyID : AffectedJourneys)
     {
         int curUIdx = uIndexGenerator.getIndex(curJourneyID);
         int curProposedFlights = graphUC[curUIdx].size() + graphUV[curUIdx].size();
         if (curProposedFlights >= MINIMUM_PROPOSED_FLIGHTS)
             continue;
+
+        // Via flights
         string recLoc = pnrUuidGenerator.getString(journeyToPnrMap[curJourneyID]);
         Journey *curJourney = journeyMap[curJourneyID];
         vector<int> flightsFromSrc = findAllRelevantFlightsFromSrc(curJourney->flights[0]);
         vector<int> flightsToDest = findAllRelevantFlightsToDest(curJourney->flights.back());
 
         vector<vector<int>> connectingFlights = getConnectingFlights(flightsFromSrc, flightsToDest);
-        vector<pair<long long, vector<pair<int, CLASS_CD>>>> bestConnectingFlights = getBestConnectingFlightsForJourney(curJourneyID, connectingFlights);
-        for (auto [curScore, curFlights] : bestConnectingFlights)
-        {
-            int curCIdx = cIndexGenerator.getIndex(curFlights);
+        vector<pair<long long, vector<pair<int, CLASS_CD>>>> bestConnectingFlights = 
+                                        getBestConnectingFlightsForJourney(curJourneyID, connectingFlights);
 
-            auto cur = make_pair(curCIdx, curScore *
-                                              pnrScore(curJourneyID, journeyMap[curJourneyID]->classCD));
-            if (find(graphUC[curUIdx].begin(), graphUC[curUIdx].end(), cur) == graphUC[curUIdx].end())
-            {
-                graphUC[curUIdx].push_back(cur);
-            }
-            for (auto curFlight : curFlights)
+        for (auto [curScore, curConnectingFlight] : bestConnectingFlights)
+        {
+            addUCEdge(curJourneyID, curConnectingFlight, curScore *
+                        pnrScore(curJourneyID, journeyMap[curJourneyID]->classCD));
+        }
+    }
+
+    // Adding CV edges
+    for(auto curConnectingFlight: C){
+        int curCIdx = cIndexGenerator.getIndex(curConnectingFlight);
+        for (auto curFlight : curConnectingFlight){
             {
                 int curVIdx = vIndexGenerator.getIndex(curFlight);
-                for (auto curFlight : curFlights)
-                {
-                    int curVIdx = vIndexGenerator.getIndex(curFlight);
-                    if (find(graphCV[curCIdx].begin(), graphCV[curCIdx].end(), curVIdx) == graphCV[curCIdx].end())
-                    {
-                        graphCV[curCIdx].push_back(curVIdx);
-                    }
-                }
+                graphCV[curCIdx].push_back(curVIdx);
             }
         }
     }

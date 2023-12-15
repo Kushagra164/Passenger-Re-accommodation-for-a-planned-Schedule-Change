@@ -42,9 +42,10 @@ graph-to-qubo:
 	./Processing/Intermediates/graph.txt > ./Processing/Logs/graphToQubo.txt
 
 qubo-to-binary:
-	python QUBO/QUBOSolver.py --env_file .env \
+	python QUBO/QUBOSolver.py \
 	--input_file_path ./Processing/Intermediates/quboInput.txt \
-	--output_file_path ./Processing/Intermediates/quboOutput.txt > ./Processing/Logs/quboToBinary.txt
+	--output_file_path ./Processing/Intermediates/quboOutput.txt \
+	> ./Processing/Logs/quboToBinary.txt
 
 binary-to-edges:
 	g++ ./GraphQUBO/binaryToEdges.cpp -o ./Processing/Executables/binaryToEdges.out -std=c++20

@@ -222,10 +222,11 @@ int main(int argc, char *argv[])
             }
 
             eq.addInq(inq, Q);
-            eq.adjustToQubo(Q,val*50*Q.size());
+            long long inf = ((Q.size()+1000)/1000)*val*Q.size()*Q.size();
+            eq.adjustToQubo(Q, inf);
             quboInstances.push_back(Q);
 
-            cout<<"Inf: "<<(val*50*Q.size())<<" QuboSize: "<<Q.size()<<endl;
+            cout<<"Inf: "<<inf<<" QuboSize: "<<Q.size()<<endl;
 
             mappingOutput(graphMapping, mappingUC);
             mappingOutput(graphMapping, mappingUV);
