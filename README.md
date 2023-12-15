@@ -13,7 +13,7 @@
  2. [Proposed Solution](#solution)
  3. [Usage Instructions](#usage)
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+![-----------------------------------------------------](./Images/rainbow.png)
 
 <h2 id="problem"> 🌟 Problem Statement </h2>
 
@@ -36,7 +36,7 @@ support navigation on map by prompting the best route between any two points on 
 
 :point_right: Click <a href="https://drive.google.com/file/d/1VVM5SiA0mxap4M-FpOdtfUEJxQu6s27D/view?usp=share_link">here</a> to get the detailed problem statement. 
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+![-----------------------------------------------------](./Images/rainbow.png)
 
 <h2 id="solution"> :brain: Solution and Analysis </h2>
 
@@ -44,7 +44,7 @@ support navigation on map by prompting the best route between any two points on 
 <img src="/profile/images/one-pager.png" alt="One Page Report of Proposed Solution" height="1000px" width="700px">
 </p>
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+![-----------------------------------------------------](./Images/rainbow.png)
 
 <h2 id="solution"> :iphone: App Screens </h2>
 
@@ -73,13 +73,13 @@ b) `Rider` Application Screens
 </table>
 
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+![-----------------------------------------------------](./Images/rainbow.png)
 
 <h2 id="usage"> 📋 Usage Instructions </h2>
 
 Check out each repository's `README.md` to know about the specific usages. 
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+![-----------------------------------------------------](./Images/rainbow.png)
 
 <h2 id="usage"> ✨ Contributors </h2>
 
