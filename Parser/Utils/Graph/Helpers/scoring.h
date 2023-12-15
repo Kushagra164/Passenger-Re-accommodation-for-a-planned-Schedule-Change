@@ -23,11 +23,13 @@ long long getFlightScoreWithTimeDiff(Time ArrivalTimeDiff, Time DepartureTimeDif
     else if (ArrivalTimeDiff <= Time(12, 0)) score += ARRIVAL_DELAY_LT_12_SCORE;
     else if (ArrivalTimeDiff <= Time(24, 0)) score += ARRIVAL_DELAY_LT_24_SCORE;
     else if (ArrivalTimeDiff <= Time(48, 0)) score += ARRIVAL_DELAY_LT_48_SCORE;
+    else if (ArrivalTimeDiff <= Time(72, 0)) score += ARRIVAL_DELAY_LT_72_SCORE;
 
     if (DepartureTimeDiff <= Time(6, 0))       score += DEPARTURE_DELAY_LT_6_SCORE;
     else if (DepartureTimeDiff <= Time(12, 0)) score += DEPARTURE_DELAY_LT_12_SCORE;
     else if (DepartureTimeDiff <= Time(24, 0)) score += DEPARTURE_DELAY_LT_24_SCORE;
     else if (DepartureTimeDiff <= Time(48, 0)) score += DEPARTURE_DELAY_LT_48_SCORE;
+    else if (DepartureTimeDiff <= Time(72, 0)) score += DEPARTURE_DELAY_LT_72_SCORE;
 
     return score;
 }

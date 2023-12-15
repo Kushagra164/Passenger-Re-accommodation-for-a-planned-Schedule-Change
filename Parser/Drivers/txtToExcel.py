@@ -58,7 +58,7 @@ csvFile.to_excel(outputFolderPath+"/booking.xlsx",index=False)
 
 # statistics
 
-solutionTypes=["oneOne","oneMulti","multiOne","multiMulti"]
+solutionTypes=["oneOne","oneMulti","multiOne","multiMulti","unallocated"]
 solutionTypeValues=lines[counter].split()
 counter+=1
 

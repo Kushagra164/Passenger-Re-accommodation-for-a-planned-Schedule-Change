@@ -7,30 +7,36 @@
 #include "../Utils/graphOutput.h"
 #include "../Output/inventory.h"
 #include "../Output/booking.h"
-#include "../Output/cancelledAndDelayedFlights.h"
+#include "../Utils/getCancelledAndDelayedFlights.h"
 #include "../Utils/uuidGenerator.h"
 #include "../Utils/Graph/Helpers/graphIndexGenerator.h"
 
 class Delay{
 private:
-    int lt6,lt12,lt18,lt24,mt24;
+    int lt6,lt12,lt18,lt24,mt24,cnt;
+    double totalDelay;
+
 public:
     Delay():
-            lt6(0),lt12(0),lt18(0),lt24(0),mt24(0){}
+            lt6(0),lt12(0),lt18(0),lt24(0),mt24(0),cnt(0),totalDelay(0.0){}
 
     void checkAndIncrement(double timeDelay){
+        cnt++;
+        totalDelay+=timeDelay;
         if(timeDelay <= 6) lt6++;
         else if(timeDelay <= 12) lt12++;
-        else if(timeDelay <= 12) lt18++;
-        else if(timeDelay <= 12) lt24++;
-        else mt24++;
-    }
+        else if(timeDelay <= 18) lt18++;
+        else if(timeDelay <= 24) lt24++;
+        else mt24++;}
     void display(ofstream& output){
         output<<lt6<<" ";
         output<<lt12<<" ";
         output<<lt18<<" ";
         output<<lt24<<" ";
-        output<<mt24<<endl;
+        output<<mt24<<" ";
+
+        //Debugging
+        cout<<(totalDelay/cnt)<<endl;
     }
 };
 
@@ -112,12 +118,10 @@ int main(int argc,char* argv[]) {
         journeyToFlightMap[journeyID]=vIndexGenerator.getVal(v);
 
         solvedJourneys++;
-
-        Time totalDelay = Time(0, 0);
         edgesUV.insert(make_pair(u, v));
         journeyMap[journeyID]->flights.size() == 1 ? oneOne += 1: mulOne += 1;
         pair<int, CLASS_CD> pr = vIndexGenerator.getVal(v);
-        totalDelay += getDepTimeDiff((journeyMap[journeyID]->flights).front(),pr.first) + getArrTimeDiff((journeyMap[journeyID]->flights).back(),pr.first);
+        Time totalDelay = getDepTimeDiff((journeyMap[journeyID]->flights).front(),pr.first) + getArrTimeDiff((journeyMap[journeyID]->flights).back(),pr.first);
         delay.checkAndIncrement(totalDelay.value()/2);
     }
 
@@ -136,12 +140,11 @@ int main(int argc,char* argv[]) {
 
         solvedJourneys++;
 
-        Time totalDelay = Time(0, 0);
         edgesUC.insert(make_pair(u, c));
         journeyMap[journeyID]->flights.size() == 1 ? oneMul += 1: mulMul += 1;
         vector<int> curFlights;
         for(auto x:cIndexGenerator.getVal(c)) curFlights.push_back(x.first);
-        totalDelay += getDepTimeDiff((journeyMap[journeyID]->flights).front(),curFlights.front()) + getArrTimeDiff((journeyMap[journeyID]->flights).back(),curFlights.back());
+        Time totalDelay = getDepTimeDiff((journeyMap[journeyID]->flights).front(),curFlights.front()) + getArrTimeDiff((journeyMap[journeyID]->flights).back(),curFlights.back());
         delay.checkAndIncrement(totalDelay.value()/2);
     }
 
@@ -188,7 +191,8 @@ int main(int argc,char* argv[]) {
     output << oneOne << " ";
     output << oneMul << " ";
     output << mulOne << " ";
-    output << mulMul << endl;
+    output << mulMul << " ";
+    output << totalAffectedJourneys - solvedJourneys << endl;
 
     output << solvedDefault  << " ";
     output << solvedJourneys - solvedDefault << " ";
