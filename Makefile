@@ -74,7 +74,7 @@ txt-to-excel:
 	python ./Parser/Drivers/txtToExcel.py \
 	--input_file_path ./Processing/Intermediates/solution.txt \
 	--tmp_folder ./Processing/Intermediates \
-	--output_folder ./Output
+	--output_folder ./Output > ./Processing/Logs/txtToExcel.txt
 
 clean-Executables:
 	rm -rf ./Processing/Executables
