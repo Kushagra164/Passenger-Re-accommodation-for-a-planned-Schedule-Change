@@ -71,6 +71,7 @@ pyplot.pie(
     autopct = "%1.1f%%",
 )
 pyplot.title("Flight Solutions")
+pyplot.figure(figsize=(8,8))
 
 pyplot.savefig(outputFolderPath+"/FlightSolution.png")
 pyplot.close()
@@ -86,6 +87,7 @@ pyplot.bar(solutionLabels,solutionLabelValues)
 pyplot.xlabel("Flight Solutions")
 pyplot.ylabel("Number of PNRs")
 pyplot.title("Flight Solution Distribution")
+pyplot.figure(figsize=(10,6))
 
 pyplot.savefig(outputFolderPath+"/DefaultSolution.png")
 pyplot.close()
