@@ -107,6 +107,7 @@ pyplot.xlabel("Flight Delay in Hours(""Average Flight Delay = " +
     str(averageDelay)+")")
 pyplot.ylabel("Number of PNRs")
 pyplot.title("Flight Delay Distribution")
+pyplot.figure(figsize=(10,6))
 
 pyplot.savefig(outputFolderPath+"/PassengerDelay.png")
 pyplot.close()
