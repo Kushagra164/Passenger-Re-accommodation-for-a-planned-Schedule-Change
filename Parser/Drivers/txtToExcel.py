@@ -70,7 +70,7 @@ pyplot.pie(
     startangle=90,
     autopct = "%1.1f%%",
 )
-pyplot.legend()
+pyplot.legend(solutionTypes)
 pyplot.title("Flight Solutions")
 
 pyplot.savefig(outputFolderPath+"/FlightSolution.png")
