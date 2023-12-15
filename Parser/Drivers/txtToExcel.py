@@ -62,6 +62,8 @@ csvFile.to_excel(outputFolderPath+"/booking.xlsx",index=False)
 
 solutionTypes=["oneOne","oneMulti","multiOne","multiMulti","unallocated"]
 solutionTypeValues=lines[counter].split()
+solutionTypeValues=[int(i) for i in solutionLabelValues]
+totalAffectedPassengers=sum(solutionTypeValues)
 counter+=1
 
 pyplot.figure(figsize=(8,8))
@@ -76,6 +78,7 @@ pyplot.pie(
 )
 pyplot.legend(solutionTypes)
 pyplot.title("Flight Solutions")
+pyplot.text(0.5,-0.1,"Total Affected Passengers = " + str(totalAffectedPassengers),ha="center",va="center",transform=pyplot.gca().transAxes)
 
 pyplot.savefig(outputFolderPath+"/FlightSolution.png")
 pyplot.close()
