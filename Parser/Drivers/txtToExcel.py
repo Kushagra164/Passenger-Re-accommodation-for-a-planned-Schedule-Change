@@ -70,7 +70,7 @@ pyplot.pie(
     startangle=90,
     autopct = "%1.1f%%",
     colors=["yellowgreen","aqua","violet","orange","red"],
-    pctdistance=0.8
+    pctdistance=0.7
 )
 pyplot.legend(solutionTypes)
 pyplot.title("Flight Solutions")
