@@ -69,6 +69,7 @@ pyplot.pie(
     solutionTypeValues,
     startangle=90,
     autopct = "%1.1f%%",
+    colors=["red","orange","violet","aqua","lightgreen"]
 )
 pyplot.legend()
 pyplot.title("Flight Solutions")
