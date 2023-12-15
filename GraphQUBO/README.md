@@ -57,8 +57,8 @@ Functions used by these classes are<br>
 
 In graphToQubo, first we will construct a 5-partite graph<br>
 
-- `UV` has weighted edge, weight = OldPNRScore * NewPNRScore * Flightscore<br>
-- `UC` has weighted edge, weight = OldPNRScore * Avg{NewPNRsScore} * connectingFlightscore<br>
+- `UV` has weighted edge, weight = $$OldPNRScore * NewPNRScore * Flightscore$$<br>
+- `UC` has weighted edge, weight = $$OldPNRScore * Avg{NewPNRsScore} * connectingFlightscore$$<br>
 - `UW`, `WD`, `DV`, `CV` are unweighted<br>
 
 Then we converted 5-partite graph into QUBO instances and then output it.<br>
