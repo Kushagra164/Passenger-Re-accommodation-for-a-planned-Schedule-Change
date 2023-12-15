@@ -101,12 +101,28 @@ This comprehensive approach enables efficient problem-solving by concurrently ex
 <h2 id="solution"> :iphone: Analysis </h2>
 
 
+![-----------------------------------------------------](./Images/rainbow.png)
+
+<h2 id="usage"> 📋 Workflow </h2>
+
+<img src="./Images/workflow.png">  
+
 
 ![-----------------------------------------------------](./Images/rainbow.png)
 
 <h2 id="usage"> 📋 Usage Instructions </h2>
 
-Check out each repository's `README.md` to know about the specific usages. 
+Refer to the "Makefile" for specific commands on how to run the program:
+
+- `excel-to-csv` Converts given excel files into csv format.
+- `csv-to-graph` Parses the csv files and creates our resulting 5 partite graph.
+- `graph-to-qubo` Formulates graph constraint into a QUBO matrix  
+- `qubo-to-binary` Solves the QUBO using an API to call D-Wave's cloud-based quantum computers
+- `edges-to-txt` Converts resulting QUBO solution into the resulting flight assignment for affected passengers
+- `txt-to-excel` Creates output excel files giving reassigned flights for affected passengers, along with flight solution statistics
+
+- `make-run` Used to execute the complete workflow in order 
+
 
 ![-----------------------------------------------------](./Images/rainbow.png)
 
