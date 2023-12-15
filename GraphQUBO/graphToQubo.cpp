@@ -224,6 +224,10 @@ int main(int argc, char *argv[])
             eq.addInq(inq, Q);
             long long inf = ((Q.size()+1000)/1000)*val*Q.size()*Q.size();
             eq.adjustToQubo(Q, inf);
+            if(Q.size()==0){
+                continue;
+            }
+            
             quboInstances.push_back(Q);
 
             cout<<"Inf: "<<inf<<" QuboSize: "<<Q.size()<<endl;

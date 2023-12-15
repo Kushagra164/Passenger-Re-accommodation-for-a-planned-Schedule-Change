@@ -86,7 +86,6 @@ void graphUCAndGraphCVGenerator()
             continue;
 
         // Via flights
-        string recLoc = pnrUuidGenerator.getString(journeyToPnrMap[curJourneyID]);
         Journey *curJourney = journeyMap[curJourneyID];
         vector<int> flightsFromSrc = findAllRelevantFlightsFromSrc(curJourney->flights[0]);
         vector<int> flightsToDest = findAllRelevantFlightsToDest(curJourney->flights.back());
@@ -99,6 +98,33 @@ void graphUCAndGraphCVGenerator()
         {
             addUCEdge(curJourneyID, curConnectingFlight, curScore *
                         pnrScore(curJourneyID, journeyMap[curJourneyID]->classCD));
+        }
+    }
+
+    // Multisource BFS
+    // Creating graph
+    vector<vector<int>> flightAdj(inventoryMap.size());
+    createConnectingFlightGraph(flightAdj);
+    for(int curJourneyID: AffectedJourneys){
+        int curUIdx = uIndexGenerator.getIndex(curJourneyID);
+        int curProposedFlights = graphUC[curUIdx].size() + graphUV[curUIdx].size();
+        string recLoc = pnrUuidGenerator.getString(journeyToPnrMap[curJourneyID]);
+        if(recLoc == "ERUF30")cout<<__LINE__<<" "<<recLoc<<" "<<curProposedFlights<<endl;
+        if (curProposedFlights >= MINIMUM_PROPOSED_FLIGHTS)
+            continue;
+        
+        Journey *curJourney = journeyMap[curJourneyID];
+        vector<int> flightsFromSrc = findAllRelevantFlightsFromSrc(curJourney->flights[0]);
+        vector<int> flightsToDest = findAllRelevantFlightsToDest(curJourney->flights.back());
+        cout<<__LINE__<<" "<<recLoc<<" "<<flightsFromSrc.size()<<endl;
+        int curPaxCnt = pnrMap[journeyToPnrMap[curJourneyID]]->paxCnt;
+
+        vector<pair<int, CLASS_CD>> bestConnectingFlight = multiSourceBFS(flightAdj, flightsFromSrc, flightsToDest, 
+                                                        curPaxCnt, curJourney->classCD);
+        if(!bestConnectingFlight.empty()){
+            addUCEdge(curJourneyID, bestConnectingFlight, 
+                        getFinalConnectingFlightScoreForJourney(curJourneyID, bestConnectingFlight)
+                );
         }
     }
 

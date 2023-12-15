@@ -1,5 +1,7 @@
 #pragma once
 #include <functional>
+#include <queue>
+#include <set>
 #include "scoring.h"
 #include "validity.h"
 using namespace std;
@@ -62,6 +64,17 @@ vector<int> findAllRelevantFlightsToDest(int originalInventoryID)
     return result;
 }
 
+bool canConnect(int fromInventoryID, int toInventoryID){
+    if(CancelledFlights.find(fromInventoryID)!=CancelledFlights.end()) return false;
+    if(CancelledFlights.find(toInventoryID)!=CancelledFlights.end()) return false;
+    string fromDestCity = scheduleMap[inventoryToScheduleMap[fromInventoryID]]->destCity;
+    string toSrcCity = scheduleMap[inventoryToScheduleMap[toInventoryID]]->srcCity;
+    Time curDif = getArrDepTimeDiff(fromInventoryID, toInventoryID);
+    return (curDif >= MINIMUM_CONNECTING_TIME) 
+            && (curDif <= MAXIMUM_ALLOWED_TIME_DIFF_FOR_CONNECTING)
+            && (toSrcCity == fromDestCity);
+}
+
 // return relevant journey
 vector<vector<int>> getConnectingFlights(vector<int> &fromSrc, vector<int> &toDest)
 {
@@ -69,18 +82,26 @@ vector<vector<int>> getConnectingFlights(vector<int> &fromSrc, vector<int> &toDe
 
     for (int srcFlight : fromSrc)
     {
-        Schedule *srcSchedule = scheduleMap[inventoryToScheduleMap[srcFlight]];
         for (int destFlight : toDest)
         {
-            Schedule *destSchedule = scheduleMap[inventoryToScheduleMap[destFlight]];
-            if ((srcSchedule->destCity == destSchedule->srcCity) &&
-                (getArrDepTimeDiff(srcFlight, destFlight)) >= MINIMUM_CONNECTING_TIME)
+            if (canConnect(srcFlight, destFlight))
             {
                 connectingFlights.push_back({srcFlight, destFlight});
             }
         }
     }
     return connectingFlights;
+}
+
+// populates 
+void createConnectingFlightGraph(vector<vector<int>> flightAdj){
+    for(auto [srcInventoryID, srcInventory]: inventoryMap){
+        for(auto [destInventoryID, destInventory]: inventoryMap){
+            if(canConnect(srcInventoryID, destInventoryID)){
+                flightAdj[srcInventoryID].push_back(destInventoryID);
+            }
+        }
+    }
 }
 
 int allowedPassengers(vector<pair<int, CLASS_CD>> flight)
@@ -182,4 +203,66 @@ vector<pair<long long, vector<pair<int, CLASS_CD>>>> getBestConnectingFlightsFor
             (int)bestConnectingFlightsWithScore.size()));
 
     return bestConnectingFlightsWithScore;
+}
+
+vector<pair<int, CLASS_CD>> multiSourceBFS(
+    vector<vector<int>> &flightAdj,
+    vector<int> flightFromSrc, vector<int> flightsToDest, 
+    int curPaxCnt, CLASS_CD curClassCD){
+        map<pair<int,CLASS_CD>,pair<int,CLASS_CD>> parent;
+        queue<pair<int,CLASS_CD>> flights;
+        set<pair<int,CLASS_CD>> srcGoal, destGoal;
+        for(auto start: flightFromSrc){
+            for(int toClassCD = 0; toClassCD<4; toClassCD++){
+                if((toClassCD<curClassCD)&&(!CLASS_UPGRADE_ALLOWED))continue;
+                if((toClassCD>curClassCD)&&(!CLASS_DOWNGRADE_ALLOWED))continue;
+                CLASS_CD classCD = static_cast<CLASS_CD>(toClassCD);
+                int maxPaxCnt = getPassengers(start, classCD);
+                if( maxPaxCnt<curPaxCnt)
+                    continue;
+                
+                parent[make_pair(start, classCD)] = make_pair(-1, FC);
+                flights.push(make_pair(start, classCD));
+                srcGoal.insert(make_pair(start, classCD));
+            }
+        }
+        for(auto dest: flightsToDest){
+            for(int toClassCD = 0; toClassCD<4; toClassCD++){
+                if((toClassCD<curClassCD)&&(!CLASS_UPGRADE_ALLOWED))continue;
+                if((toClassCD>curClassCD)&&(!CLASS_DOWNGRADE_ALLOWED))continue;
+                CLASS_CD classCD = static_cast<CLASS_CD>(toClassCD);
+                int maxPaxCnt = getPassengers(dest, classCD);
+                if( maxPaxCnt<curPaxCnt)
+                    continue;
+                destGoal.insert(make_pair(dest, classCD));
+            }
+        }
+        while(!flights.empty()){
+            auto [flight, classCD] = flights.front();
+            flights.pop();
+            if(destGoal.find(make_pair(flight, classCD))!=destGoal.end()){
+                pair<int, CLASS_CD> cur = make_pair(flight, classCD);
+                vector<pair<int, CLASS_CD>> connectingFlight;
+                while(parent[cur].first!=-1){
+                    connectingFlight.push_back(cur);
+                    cur = parent[cur];
+                }
+                reverse(connectingFlight.begin(), connectingFlight.end());
+                return connectingFlight;
+            }
+            for(int toFlight: flightAdj[flight]){
+                for(int toClassCD = 0; toClassCD<4; toClassCD++){
+                    if((toClassCD<curClassCD)&&(!CLASS_UPGRADE_ALLOWED))continue;
+                    if((toClassCD>curClassCD)&&(!CLASS_DOWNGRADE_ALLOWED))continue;
+                    CLASS_CD castClassCD = static_cast<CLASS_CD>(toClassCD);
+                    if(parent.find(make_pair(toFlight, castClassCD))!=parent.end()) continue;
+                    int maxPaxCnt = getPassengers(toFlight, castClassCD);
+                    if( maxPaxCnt<curPaxCnt)
+                        continue;
+                    parent[make_pair(toFlight, castClassCD)] = make_pair(flight, classCD);
+                    flights.push(make_pair(toFlight, castClassCD));
+                }
+            }
+        }
+        return vector<pair<int, CLASS_CD>> ();
 }
