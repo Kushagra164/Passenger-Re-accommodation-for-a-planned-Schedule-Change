@@ -1,6 +1,4 @@
-# Install Dwave Library
-# !pip install dwave-ocean-sdk dotenv
-from dwave.system import EmbeddingComposite,DWaveSampler
+from dwave.system import LeapHybridSampler
 import os
 from dotenv import load_dotenv
 import concurrent.futures
@@ -25,23 +23,18 @@ def read_test_cases(file_path):
     return test_cases
 
 # Solve the QUBO using D-Wave Leap Hybrid Solver for a single test case
-def solve_qubo(test_case, no_samples, api_key):
+def solve_qubo(test_case, api_key):
     test_case_number, matrix_size, initial_state,qubo_matrix = test_case
-    QUBO = {(i, j): qubo_matrix[i][j] for i in range(matrix_size) for j in range(matrix_size)}
-    sampler = DWaveSampler(token = api_key)
-    
-    SortedAssignments = {}
-    sampler_embedded = EmbeddingComposite(sampler)
-    # print(sampler_embedded.parameters)
-    response = sampler_embedded.sample_qubo(QUBO,anneal_schedule=[[0,1],[20.0,0.5],[40,1]],num_reads = no_samples,
-                                            initial_state = initial_state)
-    # print(response)
-    response_samples = response.samples()
-    
-    for i in range(no_samples):
-        SortedAssignments[i] = response_samples[i]
+    QUBO = {(i, j): qubo_matrix[i][j] for i in range(matrix_size) for j in range(matrix_size) if qubo_matrix[i][j]!=0}
+    sampler = LeapHybridSampler(token = api_key, initial_states = [initial_state])
+    response = sampler.sample_qubo(QUBO, time_limit = 15)
 
-    return test_case_number, SortedAssignments
+    initial_energy = sum([qubo_matrix[i][j] for i in range(matrix_size) for j in range(matrix_size) if initial_state[i]==1 and initial_state[j]==1] )
+    result = [response.first.sample[i] for i in range(matrix_size)]
+    calculated_energy = sum([qubo_matrix[i][j] for i in range(matrix_size) for j in range(matrix_size) if result[i]==1 and result[j]==1])
+    print(test_case_number, initial_energy, calculated_energy, response.first.energy)
+    
+    return test_case_number, response.first.sample
 
 def main():
     parser = argparse.ArgumentParser(description="Solve QUBO problems using D-Wave Leap Hybrid Solver.")
@@ -55,13 +48,12 @@ def main():
     api_key = os.getenv('API_KEY')
     input_file_path = args.input_file_path
     output_file_path = args.output_file_path
-    no_samples = int(os.getenv('NO_SAMPLES'))
 
     test_cases = read_test_cases(input_file_path)
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Submit each test case solver task concurrently
-        futures = [executor.submit(solve_qubo, test_case, no_samples, api_key) for test_case in test_cases]
+        futures = [executor.submit(solve_qubo, test_case, api_key) for test_case in test_cases]
 
         # Wait for all tasks to complete
         concurrent.futures.wait(futures)
@@ -71,14 +63,13 @@ def main():
 
         # Do something with the results, e.g., write to output files
         with open(output_file_path, "w") as file:
-            file.write(str(len(test_cases))+" "+str(no_samples)+"\n")
+            file.write(str(len(test_cases))+"\n")
             for test_case_number, result in results:
-                n = len(result[0].first.sample)
+                n = len(result)
                 file.write(str(n)+"\n")
-                for i in range(no_samples):
-                    for j in range(n):
-                        file.write(str(result[i].first.sample[j]))
-                    file.write("\n")
+                for j in range(n):
+                    file.write(str(result[j]))
+                file.write("\n")
             file.close()
 
 if __name__ == "__main__":

@@ -54,8 +54,8 @@ int main(int argc,char *argv[]){
         }
     }
 
-    printSelectedEdges(selectedEdges, selectedUC);
     printSelectedEdges(selectedEdges, selectedUV);
+    printSelectedEdges(selectedEdges, selectedUC);
     printSelectedEdges(selectedEdges, selectedWD);
 
 }
