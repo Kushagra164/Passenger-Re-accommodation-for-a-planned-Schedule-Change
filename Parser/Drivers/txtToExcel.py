@@ -64,6 +64,7 @@ solutionTypes=["oneOne","oneMulti","multiOne","multiMulti","unallocated"]
 solutionTypeValues=lines[counter].split()
 counter+=1
 
+pyplot.figure(figsize=(8,8))
 pyplot.pie(
     solutionTypeValues,
     labels=solutionTypes,
@@ -71,7 +72,6 @@ pyplot.pie(
     autopct = "%1.1f%%",
 )
 pyplot.title("Flight Solutions")
-pyplot.figure(figsize=(8,8))
 
 pyplot.savefig(outputFolderPath+"/FlightSolution.png")
 pyplot.close()
@@ -83,11 +83,11 @@ solutionLabelValues=lines[counter].split()
 solutionLabelValues=[int(i) for i in solutionLabelValues]
 counter+=1
 
+pyplot.figure(figsize=(10,6))
 pyplot.bar(solutionLabels,solutionLabelValues)
 pyplot.xlabel("Flight Solutions")
 pyplot.ylabel("Number of PNRs")
 pyplot.title("Flight Solution Distribution")
-pyplot.figure(figsize=(10,6))
 
 pyplot.savefig(outputFolderPath+"/DefaultSolution.png")
 pyplot.close()
@@ -104,12 +104,12 @@ solutionLabelValues.pop()
 solutionLabelValues=[int(i) for i in solutionLabelValues]
 counter+=1
 
+pyplot.figure(figsize=(10,6))
 pyplot.bar(solutionLabels,solutionLabelValues)
 pyplot.xlabel("Flight Delay in Hours(""Average Flight Delay = " + 
     str(averageDelay)+")")
 pyplot.ylabel("Number of PNRs")
 pyplot.title("Flight Delay Distribution")
-pyplot.figure(figsize=(10,6))
 
 pyplot.savefig(outputFolderPath+"/PassengerDelay.png")
 pyplot.close()
