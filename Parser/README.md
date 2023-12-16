@@ -30,7 +30,7 @@
 - `NoOfDepartures` Total number of departures between `StartDate` and `EndDate`
 - `DepartureDates` List of dates corresponding to the aircraft's flight schedule
 
-![-----------------------------------------------------](../Images/rainbow.png)
+![-----------------------------------------------------](../Assets/rainbow.png)
 <h2 align = "left"> Inventory </h2>
 
 <span style="font-size: 15px;"> In `inventory.xlsx`, we received data regarding distribution of flight inventory,consisting of:</span> 
@@ -95,7 +95,7 @@
 - `DEP_DTMZ` Global Departure DateTime specified in __MM/DD/YYYY HH:MM__ format
 - `ARR_DTMZ` Global Arrival DateTime specified in __MM/DD/YYYY HH:MM__ format
 
-![-----------------------------------------------------](../Images/rainbow.png)
+![-----------------------------------------------------](../Assets/rainbow.png)
 <h2 align = "left"> Passenger </h2>
 
 <span style="font-size: 15px;"> In `passenger.xlsx` we received data regarding passenger details,consisting of:</span> 

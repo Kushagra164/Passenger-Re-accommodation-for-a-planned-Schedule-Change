@@ -14,7 +14,7 @@
  3. [Analysis](#Analysis)
  4. [Usage Instructions](#usage)
 
-![-----------------------------------------------------](./Images/rainbow.png)
+![-----------------------------------------------------](./Assets/rainbow.png)
 
 <h2 id="problem"> 🌟 Problem Statement </h2>
 
@@ -43,7 +43,7 @@ We can streamline our problem-solving approach by reducing the complexity in the
 ## Problem Reduced to Graph Representation
 
 <p align="center"> 
-<img src="Images/pentagraph.png" alt="Graph Representaion" height="500px" width="600px">
+<img src="Assets/pentagraph.png" alt="Graph Representaion" height="500px" width="600px">
 </p>
 
 Here,
@@ -121,7 +121,7 @@ Adiabatic quantum computing, a broader approach encompassing quantum annealing, 
 This comprehensive approach enables efficient problem-solving by concurrently exploring various possibilities.
 
 
-![-----------------------------------------------------](./Images/rainbow.png)
+![-----------------------------------------------------](./Assets/rainbow.png)
 
 <h2 id="solution"> :iphone: Analysis </h2>
 
@@ -130,7 +130,7 @@ This comprehensive approach enables efficient problem-solving by concurrently ex
 
 <h2 id="usage"> 📋 Workflow </h2>
 
-<img src="./Images/workflow.png">  
+<img src="./Assets/workflow.png">  
 
 
 ![-----------------------------------------------------](./Assets/rainbow.png)
@@ -149,7 +149,7 @@ Refer to the "Makefile" for specific commands on how to run the program:
 - `make-run` Used to execute the complete workflow in order 
 
 
-![-----------------------------------------------------](./Images/rainbow.png)
+![-----------------------------------------------------](./Assets/rainbow.png)
 
 <h2 id="usage"> ✨ Contributors </h2>
 

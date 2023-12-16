@@ -19,7 +19,7 @@
 <strong>function</strong> `mapInput` Used to take input edges<br>
 <strong>function</strong> `printSelectedEdges` Used to output selected edges<br>
 
-![-----------------------------------------------------](../Images/rainbow.png)
+![-----------------------------------------------------](../Assets/rainbow.png)
 
 <h2 align = "left"> qubo.h </h2>
 
@@ -48,7 +48,7 @@ Functions used by these classes :<br>
 - <strong>function</strong> `addInq` Adding inequality constraint<br>
 - <strong>function</strong> `adjustToQubo` Adjusting QUBO according to constraint<br>
 
-![-----------------------------------------------------](../Images/rainbow.png)
+![-----------------------------------------------------](../Assets/rainbow.png)
 
 <h2 align = "left"> graphToQubo.cpp </h2>
 <span style="font-size: 15px;"> graphToQubo.cpp file consists of </span> 
@@ -63,7 +63,7 @@ In graphToQubo, we start by constructing a 5-partite graph:<br>
 
 Then we have converted the 5-partite graph into QUBO instances for our quantum algorithm.<br>
 
-![-----------------------------------------------------](../Images/rainbow.png)
+![-----------------------------------------------------](../Assets/rainbow.png)
 
 <h2 align = "left"> binaryToEdges.cpp </h2>
 
