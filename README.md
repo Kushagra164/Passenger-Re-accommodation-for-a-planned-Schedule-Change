@@ -118,12 +118,6 @@ Adiabatic quantum computing, a broader approach encompassing quantum annealing, 
 
 This comprehensive approach enables efficient problem-solving by concurrently exploring various possibilities.
 
-
-![-----------------------------------------------------](./Assets/rainbow.png)
-
-<h2 id="solution"> :iphone: Analysis </h2>
-
-
 ![-----------------------------------------------------](./Assets/rainbow.png)
 
 <h2 id="usage"> 📋 Workflow </h2>
