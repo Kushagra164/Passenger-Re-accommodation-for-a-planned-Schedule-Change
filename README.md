@@ -60,10 +60,10 @@ Here,
 1. At most one alternative flight solution is selected for each passenger in U, representing all impacted PNR(s) which ensures an effective reallocation of alternate flights for every affected passenger. Here $x_{u,v}$ and $x_{u,c}$ are boolean representations of existence of edge in $(U, V)$ and $(U, C)$ respectively.
 
 
-2. It is imperative to ensure that seat allocations do not exceed the available number of seats, maintaining a meticulous alignment between the number of seats allocated and the actual capacity.
+1. It is imperative to ensure that seat allocations do not exceed the available number of seats, maintaining a meticulous alignment between the number of seats allocated and the actual capacity.
 
 
-3. Let D denote the set comprising all proposed flights for rescheduling, and W represent the set of cancelled flights. We must ensure that each cancelled flight, residing within set W, be exclusively assigned to a single new rescheduled flight from the set D.
+1. Let D denote the set comprising all proposed flights for rescheduling, and W represent the set of cancelled flights. We must ensure that each cancelled flight, residing within set W, be exclusively assigned to a single new rescheduled flight from the set D.
 
 
 ## Proposed Scoring Function
@@ -85,27 +85,25 @@ Here, $N$, $M$ are scaling factors for each individual property used to quantify
 The key steps are:
 
 1. **Transform the Constraint Inequality:**
-
-    Transform the inequality \(Ax \leq b\) by dividing both sides by a user-defined integer \(\rho > 0\) to get:
-    \[
+    &nbsp; &nbsp; Transform the inequality ($Ax \leq b$) by dividing both sides by a user-defined integer ($\rho > 0$) to get:
+    $$[
     \frac{Ax}{\rho} \leq \frac{b}{\rho}
-    \]
+    ]$$
 
-2. **Approximate the Right Hand Side:**
-
-    Approximate the right-hand side \(\frac{b}{\rho}\) using a single slack variable \(s_1\). Formulate as equality constraint: \(A_{\text{mod}} x = s_1\). This reduces the number of slack variables from \(O(\log(s_1+1))\) to just 1.
+1. **Approximate the Right Hand Side:**
+    &nbsp; &nbsp; Approximate the right-hand side ($\frac{b}{\rho}$) using a single slack variable ($s_1$). Formulate as equality constraint: $A_{\text{mod}} x = s_1$. This *reduces* the number of slack variables from $O(log(s_1+1))$ to just 1.
 
 3. **Binary Expand Slack Variable**
 
-    Apply binary expansion to represent integer slack variables as binaries. This increases the number of slack variables to \(O(\log(b+1))\) but note that these are binary variables.
+    &nbsp; &nbsp; Apply binary expansion to represent integer slack variables as binaries. This increases the number of slack variables to $O(log(b+1))$ but note that these are binary variables.
 
-4. **Adjust the Penalty Coefficient:**
+1. **Adjust the Penalty Coefficient:**
 
-    Adjust the penalty coefficient \(M\) to \(M' = \rho^2 \cdot M\) to account for the transformation. This maintains a similar penalty scale.
+    &nbsp; &nbsp; Adjust the penalty coefficient $M$ to $M' = rho^2 \cdot M$ to account for the transformation. This maintains a similar penalty scale.
 
-5. **Construct QUBO**
+1. **Construct QUBO**
 
-    Construct QUBO: \(Q_{\text{qubo}} = Q + \text{penalty}(A_{\text{mod}} x - b)^2\)
+    &nbsp; &nbsp; Construct QUBO: $Q_{\text{qubo}} = Q + \text{penalty}(A_{\text{mod}} x - b)^2$
 
 
 ## Using Quantum Computing to Solve QUBO
@@ -141,10 +139,10 @@ Refer to the "Makefile" for specific commands on how to run the program:
 
 - `excel-to-csv` Converts given excel files into csv format.
 - `csv-to-graph` Parses the csv files and creates our resulting 5 partite graph.
-- `graph-to-qubo` Formulates graph constraint into a QUBO matrix  
+- `graph-to-qubo` Formulates graph constraint and contraints into a QUBO matrix  
 - `qubo-to-binary` Solves the QUBO using an API to call D-Wave's cloud-based quantum computers
 - `edges-to-txt` Converts resulting QUBO solution into the resulting flight assignment for affected passengers
-- `txt-to-excel` Creates output excel files giving reassigned flights for affected passengers, along with flight solution statistics
+- `txt-to-excel` Creates output excel files along with flight solution statistics
 
   To run entire code do the following:
 - `make-install` Used to install requirements
