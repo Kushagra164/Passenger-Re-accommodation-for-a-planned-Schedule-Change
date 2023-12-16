@@ -10,7 +10,7 @@
   - [Annealing and Adiabatic Quantum Computing](#annealing-and-adiabatic-quantum-computing)
   - [Optimization Using Multithreading to Solve Subgraphs Simultaneously](#optimization-using-multithreading-to-solve-subgraphs-simultaneously)
 
-![-----------------------------------------------------](../Images/rainbow.png)
+![-----------------------------------------------------](../Assets/rainbow.png)
 
 ## Quadratic Unconstrained Binary Optimization (QUBO)
 

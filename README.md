@@ -1,7 +1,7 @@
 <h1 align = "center"> Passenger Re-accommodation for a planned Schedule Change </h1>
 
 <p align="center"> 
-<img src="Images/Logo.jpeg" alt="One Page Report of Proposed Solution" height="300px" width="400px">
+<img src="./Assets/Logo.jpeg" alt="One Page Report of Proposed Solution" height="300px" width="400px">
 </p>
 
 
@@ -34,7 +34,7 @@ Our objectives are to:
 
 :point_right: Click <a href="https://drive.google.com/file/d/1Ppkx6Iz7R2zpg1qSGHCDRIupKZ-0LBpM/view">here</a> to get the detailed problem statement. 
 
-![-----------------------------------------------------](./Images/rainbow.png)
+![-----------------------------------------------------](./Assets/rainbow.png)
 
 <h2 id="solution"> :brain: Proposed Solution </h2>
 
@@ -68,7 +68,7 @@ Here,
 
 ## Proposed Scoring Function
 
-![Scoring Function](Images/ScoringFunction.png)
+![Scoring Function](./Assets/ScoringFunction.png)
 
 The proposed scoring function for Optimization is shown above :
 
@@ -126,14 +126,14 @@ This comprehensive approach enables efficient problem-solving by concurrently ex
 <h2 id="solution"> :iphone: Analysis </h2>
 
 
-![-----------------------------------------------------](./Images/rainbow.png)
+![-----------------------------------------------------](./Assets/rainbow.png)
 
 <h2 id="usage"> 📋 Workflow </h2>
 
 <img src="./Images/workflow.png">  
 
 
-![-----------------------------------------------------](./Images/rainbow.png)
+![-----------------------------------------------------](./Assets/rainbow.png)
 
 <h2 id="usage"> 📋 Usage Instructions </h2>
 

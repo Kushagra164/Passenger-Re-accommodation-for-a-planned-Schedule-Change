@@ -7,7 +7,7 @@
 - [<span style="font-size: 18px; color: orange"> Booking </span>](../Input/booking.xlsx)
 - [<span style="font-size: 18px; color: orange"> Passenger </span>](../Input/passenger.xlsx)
 
-![-----------------------------------------------------](../Images/rainbow.png)
+![-----------------------------------------------------](../Assets/rainbow.png)
 
 <h2 align = "left"> Schedule </h2>
 
@@ -73,7 +73,7 @@
 - `PC_CD` Distribution of seats cabin wise in premium economy class
 - `EC_CD` Distribution of seats cabin wise in economy class
 
-![-----------------------------------------------------](../Images/rainbow.png)
+![-----------------------------------------------------](../Assets/rainbow.png)
 <h2 align = "left"> Booking </h2>
 
 <span style="font-size: 15px;"> In `booking.xlsx`, we received data regarding pasenger bookings,consisting of:</span> 
@@ -113,7 +113,7 @@
 - `SPECIAL_NAME_CD2` Any of NRPS, NRSA
 - `SSR_CODE_CD1` Any of WCHR, BLND, DEAF
 
-![-----------------------------------------------------](../Images/rainbow.png)
+![-----------------------------------------------------](../Assets/rainbow.png)
 
 
 

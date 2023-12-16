@@ -7,7 +7,7 @@
 - [<span style="font-size: 18px; color: orange"> graphToQubo.cpp </span>](./graphToQubo.cpp)
 - [<span style="font-size: 18px; color: orange"> binaryToEdges.cpp </span>](./binaryToEdges.cpp)
 
-![-----------------------------------------------------](../Images/rainbow.png)
+![-----------------------------------------------------](../Assets/rainbow.png)
 
 <h2 align = "left"> graph.h </h2>
 
@@ -31,7 +31,7 @@
 &nbsp; &nbsp; &nbsp; &nbsp; <strong>function</strong> `add` Adds value to a particular term<br>
 &nbsp; &nbsp; &nbsp; &nbsp; <strong>function</strong> `size` Returns size of QUBO<br>
 
-![-----------------------------------------------------](../Images/rainbow.png)
+![-----------------------------------------------------](../Assets/rainbow.png)
 
 <h2 align = "left"> constraints.h </h2>
 
@@ -53,7 +53,7 @@ Functions used by these classes :<br>
 <h2 align = "left"> graphToQubo.cpp </h2>
 <span style="font-size: 15px;"> graphToQubo.cpp file consists of </span> 
 
-![5-partite graph](../Images/pentagraph.png)
+![5-partite graph](../Assets/pentagraph.png)
 
 In graphToQubo, we start by constructing a 5-partite graph:<br>
 
