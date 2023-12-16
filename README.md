@@ -146,6 +146,8 @@ Refer to the "Makefile" for specific commands on how to run the program:
 - `edges-to-txt` Converts resulting QUBO solution into the resulting flight assignment for affected passengers
 - `txt-to-excel` Creates output excel files giving reassigned flights for affected passengers, along with flight solution statistics
 
+  To run entire code do the following:
+- `make-install` Used to install requirements
 - `make-run` Used to execute the complete workflow in order 
 
 
