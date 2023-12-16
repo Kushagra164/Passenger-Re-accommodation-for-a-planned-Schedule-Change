@@ -52,6 +52,7 @@ binary-to-edges:
 	./Processing/Executables/binaryToEdges.out \
 	./Processing/Intermediates/graphMapping.txt \
 	./Processing/Intermediates/quboOutput.txt \
+	./Processing/Intermediates/graph.txt \
 	./Processing/Intermediates/edges.txt > ./Processing/Logs/binaryToEdges.txt
 
 graph-to-edges:

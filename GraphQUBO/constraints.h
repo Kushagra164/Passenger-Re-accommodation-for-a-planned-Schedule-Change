@@ -9,48 +9,29 @@ class ineqConstraints{
         void add(vector<int> inq, long long val){
             q.push_back(mp(inq,val));
         }
+        void atMaxOne(vector<int> indices){
+            vector<int> inq;
+            for(int ind: indices){
+                if(inq.size()<=ind){
+                    inq.resize(ind+1);
+                }
+                inq[ind] = 1;
+            }
+            q.push_back(mp(inq,1));
+        }
         int size(){
             return q.size();
         }
-    friend class eqConstraints;
+        friend ofstream& operator << (ofstream&, ineqConstraints& q);
 };
-class eqConstraints{
-    vector<pair<vector<int>,long long> > q;
-    vector<vector<int> > atMaxOneCond;
-    public:
-        void atMaxOneAdd(vector<int> indices){
-            atMaxOneCond.push_back(indices);
+ofstream& operator << (ofstream &out, ineqConstraints &inq){
+    out<<inq.size()<<"\n";
+    for(auto q:inq.q){
+        out<<q.S<<"\n";
+        for(auto x:q.F){
+            out<<x<<" ";
         }
-        void addInq(ineqConstraints& inq,qubo &Q){
-            //return;
-            for(pair<vector<int>,long long> curInq: inq.q){
-                curInq.F.resize(Q.size());
-                for (int i = 1; i <= curInq.S; i <<= 1)
-                {
-                    Q.addVariable(0,(curInq.S&i));
-                    curInq.F.push_back(i);
-                }
-                q.push_back(curInq);
-            }
-        }
-        void adjustToQubo(qubo &Q,long long inf){
-            // less weightage to inequality constraints
-            long long inf2 = (inf/50)*2;
-            long long negInf = -(inf/50);
-            for(pair<vector<int>,int> curEq: q){
-                for(int i=0;i<curEq.F.size();++i){
-                    Q.add(i,i,curEq.F[i]*inf2*curEq.S);
-                    for(int j=0;j<curEq.F.size();++j){
-                        Q.add(i,j,curEq.F[i]*negInf*curEq.F[j]);
-                    }
-                }
-            }
-            for(vector<int> indices: atMaxOneCond){
-                for(int i=0;i<indices.size();++i){
-                    for(int j=i+1;j<indices.size();++j){
-                        Q.add(indices[i],indices[j],-inf);
-                    }
-                }
-            }
-        }
-};
+        out<<"\n";
+    }
+    return out;
+}

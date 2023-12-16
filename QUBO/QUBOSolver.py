@@ -1,4 +1,5 @@
-from dwave.system import LeapHybridSampler
+from dwave.system import LeapHybridCQMSampler
+import dimod
 import os
 from dotenv import load_dotenv
 import concurrent.futures
@@ -14,28 +15,43 @@ def read_test_cases(file_path):
         for _ in range(t):
             test_case_number = int(lines[i].strip())
             i+=1
-            initial_state_list = list(map(int, lines[i].split()))
-            initial_state = {i: initial_state_list[i] for i in range(len(initial_state_list))}
-            matrix_size = int(lines[i + 1].strip())
-            qubo_matrix = [list(map(int, lines[j + i + 2].split())) for j in range(matrix_size)]
-            test_cases.append((test_case_number, matrix_size, initial_state,qubo_matrix))
-            i += matrix_size + 2  # Move to the next test case
+            size_constraints = int(lines[i].strip())
+            i+=1
+            constraints = []
+            for j in range(size_constraints):
+                w = int(lines[i].strip())
+                i += 1
+                constraints.append([list(map(int, lines[i].split())),w])
+                i += 1
+            matrix_size = int(lines[i].strip())
+            qubo_matrix = [list(map(int, lines[j + i + 1].split())) for j in range(matrix_size)]
+            test_cases.append((test_case_number, matrix_size, constraints, qubo_matrix))
+            i += matrix_size + 1  # Move to the next test case
     return test_cases
 
-# Solve the QUBO using D-Wave Leap Hybrid Solver for a single test case
-def solve_qubo(test_case, api_key):
-    test_case_number, matrix_size, initial_state,qubo_matrix = test_case
+# Solve the Optimisation using D-Wave Leap Hybrid Solver for a single test case
+def solve(test_case, api_key):
+    test_case_number, matrix_size, constraints, qubo_matrix = test_case
     QUBO = {(i, j): qubo_matrix[i][j] for i in range(matrix_size) for j in range(matrix_size) if qubo_matrix[i][j]!=0}
-    sampler = LeapHybridSampler(token = api_key, initial_states = [initial_state])
-    response = sampler.sample_qubo(QUBO, time_limit = 15)
+    t = [dimod.Binary(f"{i}") for i in range(matrix_size)]
+    cqm = dimod.ConstrainedQuadraticModel()
+    cqm.set_objective(
+        dimod.quicksum(
+            t[i]*t[j]*qubo_matrix[i][j] 
+                for (i,j) in QUBO.keys()
+        )
+    )
+    # print(cqm)
+    for constraint in constraints:
+        cqm.add_constraint(dimod.quicksum(t[i]*constraint[0][i] for i in range(len(constraint[0])) if constraint[0][i]>0) <= constraint[1])
+    sampler = LeapHybridCQMSampler(token = api_key)
+    sampleset = sampler.sample_cqm(cqm, time_limit = 15)                
+    feasible_sampleset = sampleset.filter(lambda row: row.is_feasible)   
+    print(test_case_number, "{} feasible solutions of {}.".format(len(feasible_sampleset), len(sampleset)))    
 
-    initial_energy = sum([qubo_matrix[i][j] for i in range(matrix_size) for j in range(matrix_size) if initial_state[i]==1 and initial_state[j]==1] )
-    result = [response.first.sample[i] for i in range(matrix_size)]
-    calculated_energy = sum([qubo_matrix[i][j] for i in range(matrix_size) for j in range(matrix_size) if result[i]==1 and result[j]==1])
+    # print(test_case_number, feasible_sampleset.first.energy)
     
-    print(test_case_number, initial_energy, calculated_energy, response.first.energy, initial_energy>calculated_energy)
-    
-    return test_case_number, response.first.sample
+    return test_case_number, feasible_sampleset.first.sample
 
 def main():
     parser = argparse.ArgumentParser(description="Solve QUBO problems using D-Wave Leap Hybrid Solver.")
@@ -53,7 +69,7 @@ def main():
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Submit each test case solver task concurrently
-        futures = [executor.submit(solve_qubo, test_case, api_key) for test_case in test_cases]
+        futures = [executor.submit(solve, test_case, api_key) for test_case in test_cases]
 
         # Wait for all tasks to complete
         concurrent.futures.wait(futures)
@@ -67,8 +83,10 @@ def main():
             for test_case_number, result in results:
                 n = len(result)
                 file.write(str(n)+"\n")
+                print(result)
                 for j in range(n):
-                    file.write(str(result[j]))
+                    print(test_case_number, j)
+                    file.write(str(int(result[str(j)])))
                 file.write("\n")
             file.close()
 

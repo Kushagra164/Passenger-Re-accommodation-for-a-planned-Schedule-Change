@@ -90,6 +90,7 @@ int main(int argc, char *argv[])
 
     vector<bool> visit(T);
     vector<qubo> quboInstances;
+    vector<ineqConstraints> inqInstances;
 
     for (int i = 0; i < T; ++i)
     {
@@ -99,19 +100,8 @@ int main(int argc, char *argv[])
             vector<int> cur;
 
             dfs(i, g, visit, cur);
-            // non relocatable node
-            if(cur.size()==1){
-                int x = cur[0];
-                if(x<U)cout<<"U"<<endl;
-                else if(x<offsetV)cout<<"C"<<endl;
-                else if(x<offsetD)cout<<"V"<<endl;
-                else if(x<offsetW)cout<<"D"<<endl;
-                else if(x<T)cout<<"W"<<endl;
-                else cout<<"error"<<endl;
-                continue;
-            }
+
             qubo Q;
-            eqConstraints eq;
             ineqConstraints inq;
             map<pair<int, int>, int> mappingUC, mappingUV, mappingWD;
 
@@ -136,7 +126,7 @@ int main(int argc, char *argv[])
                         int v = getV(e.F);
                         if(v!=-1)
                         {
-                            val += (e.S);
+                            val += e.S;
                             curInd.push_back(mappingUV[mp(u, v)] = Q.addVariable(e.S));
                         }
                     }
@@ -145,7 +135,7 @@ int main(int argc, char *argv[])
                     for(int ind:curInd)
                         Q.add(ind,ind,N);
                     // at max passenger can be seated once
-                    eq.atMaxOneAdd(curInd);
+                    inq.atMaxOne(curInd);
                 }
             }
 
@@ -217,20 +207,20 @@ int main(int argc, char *argv[])
                         }
                     }
                     // at max flight can be reschedule to one other flight
-                    eq.atMaxOneAdd(curVar);
+
+                    inq.atMaxOne(curVar);
                 }
             }
 
-            eq.addInq(inq, Q);
-            long long inf = ((Q.size()+1000)/1000)*val*Q.size()*Q.size();
-            eq.adjustToQubo(Q, inf);
-            if(Q.size()==0){
+            if(val==0){
+                cout<<"Unassignable: "<<(cur.size())<<endl;
                 continue;
             }
             
             quboInstances.push_back(Q);
-
-            cout<<"Inf: "<<inf<<" QuboSize: "<<Q.size()<<endl;
+            inqInstances.push_back(inq);
+            
+            cout<<"QuboSize: "<<Q.size()<<endl;
 
             mappingOutput(graphMapping, mappingUC);
             mappingOutput(graphMapping, mappingUV);
@@ -242,6 +232,7 @@ int main(int argc, char *argv[])
     for (int i = 1; i <= quboInstances.size(); ++i)
     {
         quboInput << i << "\n";
+        quboInput << inqInstances[i - 1];
         quboInput << quboInstances[i - 1];
     }
 }
