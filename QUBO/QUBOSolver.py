@@ -27,13 +27,13 @@ def solve_qubo(test_case, api_key):
     test_case_number, matrix_size, initial_state,qubo_matrix = test_case
     QUBO = {(i, j): qubo_matrix[i][j] for i in range(matrix_size) for j in range(matrix_size) if qubo_matrix[i][j]!=0}
     sampler = LeapHybridSampler(token = api_key, initial_states = [initial_state])
-    response = sampler.sample_qubo(QUBO, time_limit = 30)
+    response = sampler.sample_qubo(QUBO, time_limit = 15)
 
     initial_energy = sum([qubo_matrix[i][j] for i in range(matrix_size) for j in range(matrix_size) if initial_state[i]==1 and initial_state[j]==1] )
     result = [response.first.sample[i] for i in range(matrix_size)]
     calculated_energy = sum([qubo_matrix[i][j] for i in range(matrix_size) for j in range(matrix_size) if result[i]==1 and result[j]==1])
     
-    print(test_case_number, initial_energy, calculated_energy, response.first.energy)
+    print(test_case_number, initial_energy, calculated_energy, response.first.energy, initial_energy>calculated_energy)
     
     return test_case_number, response.first.sample
 
