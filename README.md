@@ -82,6 +82,31 @@ where,
 Here, $N$, $M$ are scaling factors for each individual property used to quantify its priority.
 
 ## Reduction To QUBO
+The key steps are:
+
+1. **Transform the Constraint Inequality:**
+
+    Transform the inequality \(Ax \leq b\) by dividing both sides by a user-defined integer \(\rho > 0\) to get:
+    \[
+    \frac{Ax}{\rho} \leq \frac{b}{\rho}
+    \]
+
+2. **Approximate the Right Hand Side:**
+
+    Approximate the right-hand side \(\frac{b}{\rho}\) using a single slack variable \(s_1\). Formulate as equality constraint: \(A_{\text{mod}} x = s_1\). This reduces the number of slack variables from \(O(\log(s_1+1))\) to just 1.
+
+3. **Binary Expand Slack Variable**
+
+    Apply binary expansion to represent integer slack variables as binaries. This increases the number of slack variables to \(O(\log(b+1))\) but note that these are binary variables.
+
+4. **Adjust the Penalty Coefficient:**
+
+    Adjust the penalty coefficient \(M\) to \(M' = \rho^2 \cdot M\) to account for the transformation. This maintains a similar penalty scale.
+
+5. **Construct QUBO**
+
+    Construct QUBO: \(Q_{\text{qubo}} = Q + \text{penalty}(A_{\text{mod}} x - b)^2\)
+
 
 ## Using Quantum Computing to Solve QUBO
 
