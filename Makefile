@@ -14,8 +14,8 @@ convert-booking:
 		> ./Processing/Logs/excelToCsvBooking.txt
 
 convert-passenger:
-	python Parser/Drivers/excelToCsv.py	--input_file_path="./Input/booking.xlsx"	\
-		--output_file_path="./Processing/Intermediates/booking.csv" \
+	python Parser/Drivers/excelToCsv.py	--input_file_path="./Input/passenger.xlsx"	\
+		--output_file_path="./Processing/Intermediates/passenger.csv" \
 		> ./Processing/Logs/excelToCsvPassenger.txt
 
 excel-to-csv:
@@ -25,7 +25,7 @@ excel-to-csv:
 	$(MAKE) convert-passenger
 
 csv-to-graph:
-	g++ ./Parser/Drivers/parser.cpp -o ./Processing/Executables/parser.out -std=c++20
+	g++ ./Parser/Drivers/parser.cpp -o ./Processing/Executables/parser.out -std=c++17
 	./Processing/Executables/parser.out \
 	./Processing/Intermediates/schedule.csv \
 	./Processing/Intermediates/inventory.csv \
@@ -35,7 +35,7 @@ csv-to-graph:
 	./Processing/Intermediates/cancelledAndDelayedFlights.txt > ./Processing/Logs/parser.txt
 
 graph-to-qubo:
-	g++ ./GraphQUBO/graphToQubo.cpp -o ./Processing/Executables/graphToQubo.out -std=c++20
+	g++ ./GraphQUBO/graphToQubo.cpp -o ./Processing/Executables/graphToQubo.out -std=c++17
 	./Processing/Executables/graphToQubo.out \
 	./Processing/Intermediates/graphMapping.txt \
 	./Processing/Intermediates/quboInput.txt \
@@ -48,7 +48,7 @@ qubo-to-binary:
 	> ./Processing/Logs/quboToBinary.txt
 
 binary-to-edges:
-	g++ ./GraphQUBO/binaryToEdges.cpp -o ./Processing/Executables/binaryToEdges.out -std=c++20
+	g++ ./GraphQUBO/binaryToEdges.cpp -o ./Processing/Executables/binaryToEdges.out -std=c++17
 	./Processing/Executables/binaryToEdges.out \
 	./Processing/Intermediates/graphMapping.txt \
 	./Processing/Intermediates/quboOutput.txt \
@@ -61,7 +61,7 @@ graph-to-edges:
 	$(MAKE) binary-to-edges 
 
 edges-to-txt:
-	g++ ./Parser/Drivers/output.cpp -o ./Processing/Executables/output.out -std=c++20
+	g++ ./Parser/Drivers/output.cpp -o ./Processing/Executables/output.out -std=c++17
 	./Processing/Executables/output.out \
 	./Processing/Intermediates/schedule.csv \
 	./Processing/Intermediates/inventory.csv \
@@ -77,22 +77,26 @@ txt-to-excel:
 	--tmp_folder ./Processing/Intermediates \
 	--output_folder ./Output > ./Processing/Logs/txtToExcel.txt
 
+make-dir:
+	mkdir Processing
+	mkdir Processing/Executables
+	mkdir Processing/Intermediates
+	mkdir Processing/Logs
+
 clean-Executables:
 	rm -rf ./Processing/Executables
-	mkdir ./Processing/Executables
 
 clean-Intermediates:
 	rm -rf ./Processing/Intermediates
-	mkdir ./Processing/Intermediates
 
 clean-Logs:
 	rm -rf ./Processing/Logs
-	mkdir ./Processing/Logs
 
 clean:
 	$(MAKE) clean-Executables
 	$(MAKE) clean-Intermediates
 	$(MAKE) clean-Logs
+	$(MAKE) make-dir
 
 install-dep-parser:
 	pip install -r ./Parser/requirements.txt
@@ -103,6 +107,7 @@ install-dep-qubo:
 install:
 	$(MAKE) install-dep-parser
 	$(MAKE) install-dep-qubo
+	$(MAKE) make-dir
 
 run:
 	$(MAKE) excel-to-csv
