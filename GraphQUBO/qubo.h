@@ -1,52 +1,41 @@
 #include<iostream>
 #include<fstream>
 #include<vector>
+#include<map>
+#define F first
+#define S second
 using namespace std;
 class qubo{
-    vector<vector<long long> > Q;
+    int sz;
+    map<int,map<int,long long>> Q;
     //upper triangulation
-    void adjust(){
-        for(int i=0;i<Q.size();++i){
-            for(int j=0;j<i;++j){
-                Q[j][i]+=Q[i][j];
-                Q[i][j]=0;
-            }
-        }
-    }
     public:
-        qubo(int _n){
-            Q.resize(_n);
-            for(auto &row:Q){
-                row.resize(_n);
-            }
-        }
-        qubo(){}
-        int addVariable(long long val = 0, bool curValue = false){
-            for(auto &row:Q){
-                row.push_back(0);
-            }
-            vector<long long> temp(Q.size());
-            temp.push_back(val);
-            Q.push_back(temp);
-            return Q.size()-1;
+        qubo():sz(0){}
+        int addVariable(long long val = 0){
+            Q[sz][sz] += val;
+            ++sz;
+            return sz-1;
         }
         void add(int i,int j,long long val){
             Q[i][j]+=val;
         }
         int size(){
-            return Q.size();
+            return sz;
         }
         friend ofstream& operator << (ofstream&,qubo& q);
 };
 ofstream& operator << (ofstream &out, qubo &q){
-    q.adjust();
     //printing -Q
     out<<q.Q.size()<<"\n";
-    for(auto &row: q.Q){
-        for(auto &elem: row){
-            out<<(-elem)<<" ";
+    map<pair<int,int>,long long> res;
+    for(auto [i,row]:q.Q){
+        for(auto [j,w]: row){
+            res[make_pair(min(i,j),max(i,j))] -= w;
         }
-        out<<"\n";
+    }
+    out<<res.size()<<"\n";
+    for(auto x:res){
+        out<<x.F.F<<" "<<x.F.S<<" "<<x.S<<"\n";
     }
     return out;
 }

@@ -15,37 +15,47 @@ def read_test_cases(file_path):
         for _ in range(t):
             test_case_number = int(lines[i].strip())
             i+=1
-            size_constraints = int(lines[i].strip())
+            n_constraints = int(lines[i].strip())
             i+=1
             constraints = []
-            for j in range(size_constraints):
+            for j in range(n_constraints):
                 w = int(lines[i].strip())
                 i += 1
-                constraints.append([list(map(int, lines[i].split())),w])
+                n = int(lines[i].strip())
                 i += 1
-            matrix_size = int(lines[i].strip())
-            qubo_matrix = [list(map(int, lines[j + i + 1].split())) for j in range(matrix_size)]
-            test_cases.append((test_case_number, matrix_size, constraints, qubo_matrix))
-            i += matrix_size + 1  # Move to the next test case
+                constraint = dict()
+                for k in range(n):
+                    cur = list(map(int,lines[i].split()))
+                    constraint[cur[0]] = cur[1]
+                    i += 1
+                constraints.append([constraint,w])
+            qubo_size = int(lines[i].strip())
+            i += 1
+            n = int(lines[i].strip())
+            i += 1
+            qubo = dict()
+            for j in range(n):
+                cur = list(map(int,lines[i].split()))
+                qubo[(cur[0],cur[1])] = cur[2]
+                i += 1
+            test_cases.append((test_case_number, qubo_size, constraints, qubo))
     return test_cases
 
 # Solve the Optimisation using D-Wave Leap Hybrid Solver for a single test case
 def solve(test_case, api_key):
-    test_case_number, matrix_size, constraints, qubo_matrix = test_case
-    QUBO = {(i, j): qubo_matrix[i][j] for i in range(matrix_size) for j in range(matrix_size) if qubo_matrix[i][j]!=0}
-    t = [dimod.Binary(f"{i}") for i in range(matrix_size)]
+    test_case_number, qubo_size, constraints, qubo = test_case
+    t = [dimod.Binary(f"{i}") for i in range(qubo_size)]
     cqm = dimod.ConstrainedQuadraticModel()
     cqm.set_objective(
         dimod.quicksum(
-            t[i]*t[j]*qubo_matrix[i][j] 
-                for (i,j) in QUBO.keys()
+            t[i]*t[j]*qubo[(i,j)] 
+                for (i,j) in qubo.keys()
         )
     )
-    # print(cqm)
     for constraint in constraints:
-        cqm.add_constraint(dimod.quicksum(t[i]*constraint[0][i] for i in range(len(constraint[0])) if constraint[0][i]>0) <= constraint[1])
+        cqm.add_constraint(dimod.quicksum(t[i]*constraint[0][i] for i in constraint[0].keys()) <= constraint[1])
     sampler = LeapHybridCQMSampler(token = api_key)
-    sampleset = sampler.sample_cqm(cqm, time_limit = 15)                
+    sampleset = sampler.sample_cqm(cqm)                
     feasible_sampleset = sampleset.filter(lambda row: row.is_feasible)   
     print(test_case_number, "{} feasible solutions of {}.".format(len(feasible_sampleset), len(sampleset)))    
 
@@ -83,9 +93,9 @@ def main():
             for test_case_number, result in results:
                 n = len(result)
                 file.write(str(n)+"\n")
-                print(result)
+                # print(result)
                 for j in range(n):
-                    print(test_case_number, j)
+                    # print(test_case_number, j)
                     file.write(str(int(result[str(j)])))
                 file.write("\n")
             file.close()

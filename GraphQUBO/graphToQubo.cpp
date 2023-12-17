@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
                 int v = getV(x);
                 if (v!=-1)
                 {
-                    vector<int> curInq(Q.size());
+                    map<int,int> curInq;
                     for (auto e : g[x])
                     {
                         // handling c
