@@ -151,5 +151,5 @@ Refer to the "Makefile" for specific commands on how to run the program:
 - **Akshat Rampuria - Team Vice Lead**
 - **Sarthak Gupta**
 - **Arihant Garg**
-- **Thatparthi Ajay Reddy**
+- **Thatiparthi Ajay Reddy**
 - **Shreyan Bagchi**
